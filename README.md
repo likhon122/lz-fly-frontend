@@ -152,6 +152,8 @@ This is a full-featured frontend application for a design marketplace where user
    ```
 
 The app will be available at `http://localhost:3000`
+Backend Live Link `https://lz-fly-backend.vercel.app/`
+Backend Repository `https://github.com/likhon122/lz-fly-backend`
 
 ---
 
