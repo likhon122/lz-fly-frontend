@@ -25,6 +25,8 @@ import {
   FileText,
   Wrench,
   Sparkles,
+  MessageSquare,
+  User,
 } from "lucide-react";
 import { useDesignDownloadAccess } from "@/hooks/useDesignDownloadAccess";
 import {
@@ -307,18 +309,18 @@ export default function DesignDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse space-y-6">
-            <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-4">
-                <div className="h-96 bg-gray-200 rounded-lg"></div>
-                <div className="h-32 bg-gray-200 rounded-lg"></div>
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="animate-pulse space-y-8">
+            <div className="h-8 bg-muted rounded-xl w-1/3"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-6">
+                <div className="h-96 bg-muted rounded-3xl"></div>
+                <div className="h-48 bg-muted rounded-3xl"></div>
               </div>
-              <div className="space-y-4">
-                <div className="h-64 bg-gray-200 rounded-lg"></div>
-                <div className="h-32 bg-gray-200 rounded-lg"></div>
+              <div className="space-y-6">
+                <div className="h-80 bg-muted rounded-3xl"></div>
+                <div className="h-40 bg-muted rounded-3xl"></div>
               </div>
             </div>
           </div>
@@ -329,17 +331,19 @@ export default function DesignDetailPage() {
 
   if (error || !design) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center max-w-md px-6">
-          <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center max-w-xl px-6">
+          <div className="w-24 h-24 mx-auto mb-8 rounded-full bg-primary/10 flex items-center justify-center">
+            <Package className="w-12 h-12 text-primary" />
+          </div>
+          <h1 className="text-4xl font-black text-foreground mb-4">
             Design Not Found
           </h1>
-          <p className="text-gray-600 mb-6 text-sm">
+          <p className="text-muted-foreground mb-8 text-lg font-medium">
             The design you're looking for doesn't exist or has been removed.
           </p>
           <Link href="/designs">
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-primary hover:bg-primary/90 text-secondary font-black rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all px-8 py-6 text-lg">
               Back to Designs
             </Button>
           </Link>
@@ -349,45 +353,48 @@ export default function DesignDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Breadcrumb */}
-        <nav className="mb-6">
-          <div className="flex items-center space-x-2 text-sm">
+        <nav className="mb-8">
+          <div className="flex items-center space-x-3 text-sm">
             <Link
               href="/"
-              className="text-gray-600 hover:text-blue-600 transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors font-bold"
             >
               Home
             </Link>
-            <span className="text-gray-400">/</span>
+            <span className="text-muted-foreground">/</span>
             <Link
               href="/designs"
-              className="text-gray-600 hover:text-blue-600 transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors font-bold"
             >
               Designs
             </Link>
-            <span className="text-gray-400">/</span>
+            <span className="text-muted-foreground">/</span>
             <Link
               href={categoryQueryLink}
-              className="text-gray-600 hover:text-blue-600 transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors font-bold"
             >
               {mainCategory?.name || subCategory?.name || "Category"}
             </Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-gray-900 font-medium truncate max-w-xs">
+            <span className="text-muted-foreground">/</span>
+            <span className="text-foreground font-black truncate max-w-xs">
               {design.title}
             </span>
           </div>
         </nav>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Image & Details */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-8">
             {/* Main Image */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden group">
-              <div className="aspect-[16/10] relative overflow-hidden bg-gray-100">
+            <div className="bg-card rounded-3xl border-2 border-border overflow-hidden group relative shadow-2xl">
+              {/* Glowing Effect */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500" />
+              
+              <div className="relative aspect-[16/10] overflow-hidden bg-muted">
                 {heroImage ? (
                   <>
                     <Image
@@ -395,10 +402,10 @@ export default function DesignDetailPage() {
                       alt={`${design.title} preview ${currentImageIndex + 1}`}
                       fill
                       priority={true}
-                      className={`object-cover transition-all duration-500 ${
+                      className={`object-cover transition-all duration-700 group-hover:scale-105 ${
                         imageLoaded
-                          ? "opacity-100 scale-100"
-                          : "opacity-0 scale-105"
+                          ? "opacity-100"
+                          : "opacity-0"
                       }`}
                       onLoad={() => setImageLoaded(true)}
                       onError={(e) => {
@@ -419,9 +426,11 @@ export default function DesignDetailPage() {
                                 previewImages.length
                             )
                           }
-                          className="absolute left-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2 shadow-md"
+                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-card/95 backdrop-blur-xl rounded-full p-3 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300 z-10"
                         >
-                          ‹
+                          <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+                          </svg>
                         </button>
                         <button
                           aria-label="Next image"
@@ -430,32 +439,48 @@ export default function DesignDetailPage() {
                               (i) => (i + 1) % previewImages.length
                             )
                           }
-                          className="absolute right-3 top-1/2 -translate-y-1/2 bg-white bg-opacity-80 rounded-full p-2 shadow-md"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-card/95 backdrop-blur-xl rounded-full p-3 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300 z-10"
                         >
-                          ›
+                          <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                          </svg>
                         </button>
                       </>
                     )}
-                    {/* open lightbox on click */}
+                    
+                    {/* Fullscreen button */}
                     <button
                       aria-label="Open fullscreen"
                       onClick={() => setLightboxOpen(true)}
-                      className="absolute inset-0 w-full h-full bg-transparent"
-                    />
+                      className="absolute top-4 right-4 bg-card/95 backdrop-blur-xl rounded-xl p-3 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300 z-10"
+                    >
+                      <svg className="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                      </svg>
+                    </button>
+                    
+                    {/* Image counter */}
+                    {previewImages.length > 1 && (
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-xl px-4 py-2 rounded-xl text-sm font-black text-foreground shadow-2xl border-2 border-border">
+                        {currentImageIndex + 1} / {previewImages.length}
+                      </div>
+                    )}
                   </>
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Package className="w-24 h-24 text-gray-300" />
+                    <div className="w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center">
+                      <Package className="w-12 h-12 text-primary" />
+                    </div>
                   </div>
                 )}
 
                 {/* Floating Badge */}
                 <div className="absolute top-4 left-4">
                   <span
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
+                    className={`px-4 py-2 rounded-xl text-sm font-black backdrop-blur-xl shadow-2xl border-2 transition-all duration-300 ${
                       design.status === "Active"
-                        ? "bg-green-600 text-white"
-                        : "bg-red-600 text-white"
+                        ? "bg-primary/95 text-secondary border-primary"
+                        : "bg-destructive/95 text-white border-destructive"
                     }`}
                   >
                     {design.status}
@@ -470,14 +495,14 @@ export default function DesignDetailPage() {
                     variant="icon"
                     size="lg"
                     showCount={false}
-                    className="bg-white hover:bg-gray-50"
+                    className="bg-card/95 backdrop-blur-xl hover:bg-primary/20 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300"
                   />
                 </div>
               </div>
 
               {/* Image Thumbnails */}
               {previewImages.length > 1 && (
-                <div className="flex items-center gap-2 mt-3 overflow-x-auto p-2">
+                <div className="flex items-center gap-3 mt-6 overflow-x-auto p-2">
                   {previewImages.map((src, idx) => (
                     <button
                       key={src + idx}
@@ -485,10 +510,10 @@ export default function DesignDetailPage() {
                         setCurrentImageIndex(idx);
                         setImageLoaded(false);
                       }}
-                      className={`flex-shrink-0 w-20 h-12 rounded overflow-hidden border ${
+                      className={`group shrink-0 w-24 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                         idx === currentImageIndex
-                          ? "ring-2 ring-blue-500"
-                          : "border-gray-200"
+                          ? "ring-4 ring-primary/30 border-primary shadow-2xl scale-105"
+                          : "border-border hover:border-primary/50 hover:scale-105"
                       }`}
                     >
                       <Image
@@ -496,7 +521,7 @@ export default function DesignDetailPage() {
                         alt={`${design.title} thumb ${idx + 1}`}
                         width={160}
                         height={96}
-                        className="object-cover"
+                        className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                       />
                     </button>
                   ))}
@@ -514,53 +539,67 @@ export default function DesignDetailPage() {
               />
 
               {/* Stats Bar */}
-              <div className="grid grid-cols-4 gap-4 p-4 bg-gray-50 border-t border-gray-200">
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-1">
-                    <LikeButton
-                      designId={design._id!}
-                      initialLikesCount={design.likesCount}
-                      variant="compact"
-                      size="sm"
-                      showCount={true}
-                    />
+              <div className="grid grid-cols-4 gap-4 p-6 bg-card/50 backdrop-blur-sm border-t-2 border-border rounded-b-3xl">
+                <div className="text-center group">
+                  <div className="flex items-center justify-center mb-2">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <LikeButton
+                        designId={design._id!}
+                        initialLikesCount={design.likesCount}
+                        variant="compact"
+                        size="sm"
+                        showCount={false}
+                      />
+                    </div>
                   </div>
-                  <span className="text-xs text-gray-600">Likes</span>
+                  <p className="text-xl font-black text-foreground mb-1">{design.likesCount || 0}</p>
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Likes</span>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-gray-900">
+                <div className="text-center group">
+                  <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                    <Download className="w-5 h-5 text-primary" />
+                  </div>
+                  <p className="text-xl font-black text-foreground mb-1">
                     {design.downloadCount || 0}
                   </p>
-                  <span className="text-xs text-gray-600">Downloads</span>
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Downloads</span>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-gray-900">
+                <div className="text-center group">
+                  <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                    <Star className="w-5 h-5 text-primary fill-primary" />
+                  </div>
+                  <p className="text-xl font-black text-foreground mb-1">
                     {statistics?.averageRating
                       ? statistics.averageRating.toFixed(1)
                       : "0.0"}
                   </p>
-                  <span className="text-xs text-gray-600">Avg Rating</span>
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Avg Rating</span>
                 </div>
-                <div className="text-center">
-                  <p className="text-lg font-bold text-gray-900">
+                <div className="text-center group">
+                  <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                    <MessageSquare className="w-5 h-5 text-primary" />
+                  </div>
+                  <p className="text-xl font-black text-foreground mb-1">
                     {statistics?.totalReviews || 0}
                   </p>
-                  <span className="text-xs text-gray-600">Reviews</span>
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Reviews</span>
                 </div>
               </div>
             </div>
             {/* Tools */}
             {design.usedTools && design.usedTools.length > 0 && (
-              <div className="bg-white rounded-lg border border-gray-200 p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Wrench className="w-5 h-5 text-blue-600" />
-                  <h3 className="font-bold text-gray-900">Tools Used</h3>
+              <div className="group bg-card rounded-3xl border-2 border-border p-8 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Wrench className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-black text-foreground">Tools Used</h3>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {design.usedTools.map((tool, index) => (
                     <span
                       key={index}
-                      className="bg-blue-50 text-blue-700 text-xs px-2.5 py-1 rounded font-medium"
+                      className="bg-primary/10 text-primary text-sm px-4 py-2 rounded-xl font-black border-2 border-primary/20 hover:bg-primary hover:text-secondary hover:scale-105 transition-all duration-300 cursor-default"
                     >
                       {tool}
                     </span>
@@ -571,16 +610,18 @@ export default function DesignDetailPage() {
 
             {/* Effects */}
             {design.effectsUsed && design.effectsUsed.length > 0 && (
-              <div className="bg-white rounded-lg border border-gray-200 p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="w-5 h-5 text-purple-600" />
-                  <h3 className="font-bold text-gray-900">Effects</h3>
+              <div className="group bg-card rounded-3xl border-2 border-border p-8 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Sparkles className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-black text-foreground">Effects</h3>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {design.effectsUsed.map((effect, index) => (
                     <span
                       key={index}
-                      className="bg-purple-50 text-purple-700 text-xs px-2.5 py-1 rounded font-medium"
+                      className="bg-primary/10 text-primary text-sm px-4 py-2 rounded-xl font-black border-2 border-primary/20 hover:bg-primary hover:text-secondary hover:scale-105 transition-all duration-300 cursor-default"
                     >
                       {effect}
                     </span>
@@ -591,9 +632,14 @@ export default function DesignDetailPage() {
 
             {/* Process */}
             {design.processDescription && (
-              <div className="bg-white rounded-lg border border-gray-200 p-5 md:col-span-2">
-                <h3 className="font-bold text-gray-900 mb-3">Design Process</h3>
-                <p className="text-sm text-gray-700 leading-relaxed">
+              <div className="group bg-card rounded-3xl border-2 border-border p-8 md:col-span-2 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <FileText className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-black text-foreground">Design Process</h3>
+                </div>
+                <p className="text-base text-foreground/80 leading-relaxed font-medium">
                   {design.processDescription}
                 </p>
               </div>
@@ -602,30 +648,35 @@ export default function DesignDetailPage() {
             {/* Reviews Section */}
             <div
               id="reviews"
-              className="bg-white rounded-lg border border-gray-200 p-5"
+              className="bg-card rounded-3xl border-2 border-border p-8 shadow-2xl"
             >
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-lg font-bold text-gray-900">
-                  Customer Reviews
-                </h2>
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <MessageSquare className="w-6 h-6 text-primary" />
+                  </div>
+                  <h2 className="text-3xl font-black text-foreground">
+                    Customer Reviews
+                  </h2>
+                </div>
                 {statistics && statistics.totalReviews > 0 && (
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center">
+                  <div className="flex items-center gap-3 px-4 py-2 bg-primary/10 rounded-xl border-2 border-primary/20">
+                    <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-5 h-5 ${
+                          className={`w-5 h-5 transition-all duration-300 ${
                             i < Math.round(statistics.averageRating)
-                              ? "text-yellow-400 fill-yellow-400"
-                              : "text-gray-300"
+                              ? "text-primary fill-primary"
+                              : "text-muted-foreground/30"
                           }`}
                         />
                       ))}
                     </div>
-                    <span className="text-base font-bold text-gray-900">
+                    <span className="text-xl font-black text-foreground">
                       {statistics.averageRating.toFixed(1)}
                     </span>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm font-bold text-muted-foreground">
                       ({statistics.totalReviews}{" "}
                       {statistics.totalReviews === 1 ? "review" : "reviews"})
                     </span>
@@ -635,7 +686,7 @@ export default function DesignDetailPage() {
                   <div>
                     <button
                       onClick={openWriteModal}
-                      className="ml-3 inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-base font-black rounded-xl shadow-2xl hover:scale-105 transition-all duration-300"
                     >
                       {editingReview ? "Edit your review" : "Write a review"}
                     </button>
@@ -763,12 +814,12 @@ export default function DesignDetailPage() {
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-gray-900">
+                            <span className="font-semibold text-foreground">
                               {review.reviewer.name}
                             </span>
                             {(review.reviewer?._id === currentUserId ||
                               review.reviewer?.id === currentUserId) && (
-                              <span className="ml-2 inline-flex items-center text-xs font-medium bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
+                              <span className="ml-2 inline-flex items-center text-xs font-medium bg-primary/10 text-primary px-2 py-0.5 rounded-full">
                                 You reviewed
                               </span>
                             )}
@@ -786,7 +837,7 @@ export default function DesignDetailPage() {
                             </div>
                           </div>
                           {review.title && (
-                            <h4 className="font-medium text-gray-900 text-sm mb-1">
+                            <h4 className="font-medium text-foreground text-sm mb-1">
                               {review.title}
                             </h4>
                           )}
@@ -826,7 +877,7 @@ export default function DesignDetailPage() {
                     </div>
                   ))}
                   {reviews.length > 5 && (
-                    <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                    <button className="text-sm text-primary hover:text-primary/90 font-medium">
                       Show all {reviews.length} reviews
                     </button>
                   )}
@@ -834,8 +885,8 @@ export default function DesignDetailPage() {
               ) : (
                 <div className="text-center py-8">
                   <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-sm text-gray-600">No reviews yet</p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-sm text-muted-foreground">No reviews yet</p>
+                  <p className="text-xs text-muted-foreground mt-1">
                     Be the first to review this design
                   </p>
                 </div>
@@ -844,74 +895,81 @@ export default function DesignDetailPage() {
           </div>
           {/* Right Column - Purchase Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg border border-gray-200 p-5 sticky top-20 space-y-4">
+            <div className="group bg-card rounded-3xl border-2 border-border p-8 sticky top-20 space-y-6 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
               {/* Title & Category */}
               <div>
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-4">
                   <Link href={categoryQueryLink}>
-                    <span className="bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded">
+                    <span className="bg-primary/95 hover:bg-primary text-secondary text-sm font-black px-4 py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
                       {mainCategory?.name || subCategory?.name || "Category"}
                     </span>
                   </Link>
                   {design.complexityLevel && (
-                    <span className="bg-green-600 text-white text-xs font-semibold px-2.5 py-1 rounded">
+                    <span className="bg-primary/10 text-primary text-sm font-black px-4 py-2 rounded-xl border-2 border-primary/20">
                       {design.complexityLevel}
                     </span>
                   )}
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 leading-tight mb-2">
+                <h1 className="text-3xl font-black text-foreground leading-tight mb-3 group-hover:text-primary transition-colors duration-300">
                   {design.title}
                 </h1>
                 {designerName && (
-                  <p className="text-sm text-gray-600">
-                    by{" "}
-                    <span className="font-semibold text-blue-600">
-                      {designerName}
-                    </span>
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-primary" />
+                    <p className="text-base text-foreground/80 font-medium">
+                      by{" "}
+                      <span className="font-black text-primary">
+                        {designerName}
+                      </span>
+                    </p>
+                  </div>
                 )}
               </div>
 
               {/* discounted price */}
-              <div className="flex justify-start items-center gap-4 py-4 border-y border-gray-200">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-4xl font-bold text-blue-600">
-                    {design?.currencyDisplay}
-                    {design?.discountedPrice?.toFixed(2) || 0}
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {design.currencyCode}
-                  </span>
+              <div className="flex flex-col gap-3 py-6 border-y-2 border-border">
+                <div className="flex items-baseline gap-3">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-5xl font-black text-primary drop-shadow-lg">
+                      {design?.currencyDisplay}
+                      {design?.discountedPrice?.toFixed(2) || 0}
+                    </span>
+                    <span className="text-lg font-bold text-muted-foreground">
+                      {design.currencyCode}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-lg font-medium text-gray-500 line-through">
+                  <span className="text-xl font-bold text-muted-foreground/50 line-through">
                     {design?.currencyDisplay}
                     {design?.basePrice.toFixed(2) || 0}
                   </span>
-                  <span className="text-sm text-gray-500">
-                    {design.currencyCode}
+                  <span className="text-sm font-black text-destructive bg-destructive/10 px-3 py-1 rounded-lg">
+                    SAVE {Math.round(((design?.basePrice - (design?.discountedPrice || 0)) / design?.basePrice) * 100)}%
                   </span>
                 </div>
               </div>
 
               {/* Purchase Actions */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {accessLoading ? (
-                  <div className="w-full h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                  <div className="w-full h-16 bg-primary/5 rounded-2xl flex items-center justify-center border-2 border-dashed border-primary/20">
+                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
                   </div>
                 ) : access.canDownload ||
                   access.status === "pending" ||
                   access.status === "completed" ? (
                   <>
-                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                    <div className="p-5 bg-primary/10 border-2 border-primary/30 rounded-2xl backdrop-blur-sm">
+                      <div className="flex items-start gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+                          <CheckCircle className="w-6 h-6 text-primary" />
+                        </div>
                         <div>
-                          <p className="font-semibold text-green-900 text-sm">
+                          <p className="font-black text-foreground text-base mb-1">
                             {access.message}
                           </p>
-                          <p className="text-xs text-green-700">
+                          <p className="text-sm text-foreground/70 font-medium">
                             {access.reason === "subscription" &&
                             access.status === "completed"
                               ? "Included with subscription access"
@@ -933,16 +991,16 @@ export default function DesignDetailPage() {
                       <Button
                         onClick={handleDownload}
                         disabled={isDownloading}
-                        className="w-full bg-green-600 hover:bg-green-700 text-sm font-semibold"
+                        className="w-full bg-primary hover:bg-primary/90 text-secondary text-base font-black h-14 rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300"
                       >
                         {isDownloading ? (
                           <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                             Preparing Download...
                           </>
                         ) : (
                           <>
-                            <Download className="w-4 h-4 mr-2" />
+                            <Download className="w-5 h-5 mr-2" />
                             Download Now
                           </>
                         )}
@@ -953,17 +1011,17 @@ export default function DesignDetailPage() {
                   <>
                     <Button
                       onClick={handlePurchaseClick}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-sm font-semibold"
+                      className="w-full bg-primary hover:bg-primary/90 text-secondary text-base font-black h-14 rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300"
                     >
-                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      <ShoppingCart className="w-5 h-5 mr-2" />
                       Purchase for {design?.currencyDisplay}
                       {design?.discountedPrice?.toFixed(2) || 0}
                     </Button>
-                    <p className="text-center text-xs text-gray-600">
+                    <p className="text-center text-sm text-muted-foreground font-medium">
                       or{" "}
                       <Link
                         href="/pricing"
-                        className="text-blue-600 font-semibold hover:underline"
+                        className="text-primary font-black hover:underline"
                       >
                         subscribe
                       </Link>{" "}
@@ -973,33 +1031,33 @@ export default function DesignDetailPage() {
                 )}
               </div>
 
-              <div className="flex justify-start items-center gap-4 py-4 border-y border-gray-200">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 bg-blue-50 rounded-md">
-                    <FileText className="w-6 h-6 text-blue-600" />
+              <div className="flex flex-col gap-4 py-6 border-y-2 border-border">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <FileText className="w-6 h-6 text-primary" />
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-gray-900">
+                  <div className="flex-1">
+                    <p className="text-lg font-black text-foreground mb-3">
                       Download details
                     </p>
                     {design?.downloadableFile ? (
-                      <dl className="mt-2 text-sm text-gray-600 grid grid-cols-1 gap-1">
-                        <div className="flex items-center gap-2">
-                          <dt className="w-28 text-gray-500">File name</dt>
-                          <dd className="truncate">
+                      <dl className="text-sm text-foreground/80 grid grid-cols-1 gap-3">
+                        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
+                          <dt className="w-24 font-bold text-muted-foreground">File name</dt>
+                          <dd className="truncate font-medium">
                             {(design.downloadableFile as any).file_name || "—"}
                           </dd>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <dt className="w-28 text-gray-500">Format</dt>
-                          <dd className="uppercase">
+                        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
+                          <dt className="w-24 font-bold text-muted-foreground">Format</dt>
+                          <dd className="uppercase font-black text-primary">
                             {(design.downloadableFile as any).file_format ||
                               "—"}
                           </dd>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <dt className="w-28 text-gray-500">Size</dt>
-                          <dd>
+                        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
+                          <dt className="w-24 font-bold text-muted-foreground">Size</dt>
+                          <dd className="font-black text-foreground">
                             {formatBytes(
                               (design.downloadableFile as any).file_size
                             )}
@@ -1007,7 +1065,7 @@ export default function DesignDetailPage() {
                         </div>
                       </dl>
                     ) : (
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-muted-foreground font-medium mt-2">
                         No downloadable file information available
                       </p>
                     )}
@@ -1017,10 +1075,12 @@ export default function DesignDetailPage() {
 
               {/* Tags */}
               {design.tags && design.tags.length > 0 && (
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Tag className="w-4 h-4 text-gray-600" />
-                    <h3 className="font-semibold text-gray-900 text-sm">
+                <div className="pt-6 border-t-2 border-border">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <Tag className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="font-black text-foreground text-lg">
                       Tags
                     </h3>
                   </div>
@@ -1028,7 +1088,7 @@ export default function DesignDetailPage() {
                     {design.tags.map((tag, index) => (
                       <span
                         key={index}
-                        className="bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded font-medium"
+                        className="bg-primary/10 text-primary text-sm px-4 py-2 rounded-xl font-black border-2 border-primary/20 hover:bg-primary hover:text-secondary hover:scale-105 transition-all duration-300 cursor-default"
                       >
                         #{tag}
                       </span>
@@ -1038,25 +1098,25 @@ export default function DesignDetailPage() {
               )}
 
               {/* Timeline */}
-              <div className="pt-4 border-t border-gray-200">
+              <div className="pt-4 border-t border-border">
                 <div className="flex items-center gap-2 mb-3">
-                  <Calendar className="w-4 h-4 text-gray-600" />
-                  <h3 className="font-semibold text-gray-900 text-sm">
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                  <h3 className="font-semibold text-foreground text-sm">
                     Timeline
                   </h3>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Created</span>
-                    <span className="font-medium text-gray-900">
+                    <span className="text-muted-foreground">Created</span>
+                    <span className="font-medium text-foreground">
                       {design?.createdAt
                         ? new Date(design.createdAt).toLocaleDateString()
                         : "-"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Updated</span>
-                    <span className="font-medium text-gray-900">
+                    <span className="text-muted-foreground">Updated</span>
+                    <span className="font-medium text-foreground">
                       {design?.updatedAt
                         ? new Date(design.updatedAt).toLocaleDateString()
                         : "-"}

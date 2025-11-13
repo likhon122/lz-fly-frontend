@@ -101,7 +101,7 @@ export default function DashboardPage() {
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
         <div className="flex items-center space-x-4">
-          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-card/20 backdrop-blur-sm flex items-center justify-center">
             <User className="w-8 h-8" />
           </div>
           <div>
@@ -120,14 +120,14 @@ export default function DashboardPage() {
           return (
             <div
               key={stat.name}
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-shadow"
+              className="bg-card rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">
+                  <p className="text-sm font-medium text-muted-foreground">
                     {stat.name}
                   </p>
-                  <p className="mt-2 text-3xl font-bold text-gray-900">
+                  <p className="mt-2 text-3xl font-bold text-foreground">
                     {stat.value}
                   </p>
                 </div>
@@ -144,12 +144,12 @@ export default function DashboardPage() {
 
       {/* Subscription Info Card - Enhanced */}
       {hasActiveSubscription && subscription && (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+        <div className="bg-card rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
           {/* Header Section */}
           <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <div className="w-16 h-16 rounded-2xl bg-card/20 backdrop-blur-sm flex items-center justify-center">
                   <Award className="w-8 h-8" />
                 </div>
                 <div>
@@ -181,27 +181,27 @@ export default function DashboardPage() {
               {/* Plan Information */}
               <div className="space-y-4">
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">
+                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
                     Plan Details
                   </h4>
-                  <div className="bg-white rounded-xl p-4 space-y-3 shadow-sm">
+                  <div className="bg-card rounded-xl p-4 space-y-3 shadow-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Plan Name</span>
-                      <span className="font-semibold text-gray-900 capitalize">
+                      <span className="text-sm text-muted-foreground">Plan Name</span>
+                      <span className="font-semibold text-foreground capitalize">
                         {subscription.pricingPlan?.name}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Duration</span>
-                      <span className="font-semibold text-gray-900">
+                      <span className="text-sm text-muted-foreground">Duration</span>
+                      <span className="font-semibold text-foreground">
                         {subscription.pricingPlan?.duration}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-muted-foreground">
                         Max Downloads
                       </span>
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-foreground">
                         {subscription.pricingPlan?.maxDownloads === -1
                           ? "Unlimited"
                           : subscription.pricingPlan?.maxDownloads}
@@ -214,18 +214,18 @@ export default function DashboardPage() {
                 {subscription.pricingPlan?.features &&
                   subscription.pricingPlan.features.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">
+                      <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
                         Plan Features
                       </h4>
-                      <div className="bg-white rounded-xl p-4 space-y-2 shadow-sm">
+                      <div className="bg-card rounded-xl p-4 space-y-2 shadow-sm">
                         {subscription.pricingPlan.features.map(
                           (feature: string, index: number) => (
                             <div
                               key={index}
                               className="flex items-center space-x-2"
                             >
-                              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                              <span className="text-sm text-gray-700">
+                              <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                              <span className="text-sm text-foreground">
                                 {feature}
                               </span>
                             </div>
@@ -240,23 +240,23 @@ export default function DashboardPage() {
               <div className="space-y-4">
                 {/* Download Statistics */}
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">
+                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
                     Download Statistics
                   </h4>
-                  <div className="bg-white rounded-xl p-4 space-y-4 shadow-sm">
+                  <div className="bg-card rounded-xl p-4 space-y-4 shadow-sm">
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-muted-foreground">
                           Total Downloaded
                         </span>
 
-                        <span className="text-2xl font-bold text-blue-600">
+                        <span className="text-2xl font-bold text-primary">
                           {downloadStats?.totalDownloaded || 0}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Remaining</span>
-                        <span className="text-2xl font-bold text-green-600">
+                        <span className="text-sm text-muted-foreground">Remaining</span>
+                        <span className="text-2xl font-bold text-primary">
                           {downloadStats?.remainingDownloads === -1
                             ? "∞"
                             : downloadStats?.remainingDownloads || 0}
@@ -268,10 +268,10 @@ export default function DashboardPage() {
                     {downloadStats?.remainingDownloads !== -1 && (
                       <div>
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-muted-foreground">
                             Usage Progress
                           </span>
-                          <span className="text-xs font-semibold text-gray-700">
+                          <span className="text-xs font-semibold text-foreground">
                             {(
                               ((downloadStats?.totalDownloaded || 0) /
                                 (subscription.pricingPlan?.maxDownloads || 1)) *
@@ -310,24 +310,24 @@ export default function DashboardPage() {
 
                 {/* Timeline */}
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3">
+                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
                     Subscription Timeline
                   </h4>
-                  <div className="bg-white rounded-xl p-4 space-y-3 shadow-sm">
+                  <div className="bg-card rounded-xl p-4 space-y-3 shadow-sm">
                     <div className="flex items-start space-x-3">
-                      <Calendar className="w-5 h-5 text-blue-600 mt-0.5" />
+                      <Calendar className="w-5 h-5 text-primary mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-xs text-gray-500">Purchase Date</p>
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="text-xs text-muted-foreground">Purchase Date</p>
+                        <p className="text-sm font-semibold text-foreground">
                           {formatDate(subscription.purchaseDate)}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">
-                      <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                      <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-xs text-gray-500">Start Date</p>
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="text-xs text-muted-foreground">Start Date</p>
+                        <p className="text-sm font-semibold text-foreground">
                           {formatDate(subscription.subscriptionStartDate)}
                         </p>
                       </div>
@@ -335,8 +335,8 @@ export default function DashboardPage() {
                     <div className="flex items-start space-x-3">
                       <Clock className="w-5 h-5 text-orange-600 mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-xs text-gray-500">End Date</p>
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="text-xs text-muted-foreground">End Date</p>
+                        <p className="text-sm font-semibold text-foreground">
                           {formatDate(subscription.subscriptionEndDate)}
                         </p>
                         <p className="text-xs text-orange-600 mt-1">
@@ -354,30 +354,30 @@ export default function DashboardPage() {
           </div>
 
           {/* Payment & Billing Information */}
-          <div className="p-6 border-t border-gray-200">
+          <div className="p-6 border-t border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Payment Information */}
               <div>
-                <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3 flex items-center">
+                <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3 flex items-center">
                   <CreditCard className="w-4 h-4 mr-2" />
                   Payment Information
                 </h4>
-                <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <div className="bg-muted/50 rounded-xl p-4 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Method</span>
-                    <span className="font-semibold text-gray-900 capitalize">
+                    <span className="text-sm text-muted-foreground">Method</span>
+                    <span className="font-semibold text-foreground capitalize">
                       {subscription.paymentMethod?.replace("_", " ")}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Status</span>
+                    <span className="text-sm text-muted-foreground">Status</span>
                     <span
                       className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                         subscription.status === "completed"
                           ? "bg-green-100 text-green-700"
                           : subscription.status === "pending"
                           ? "bg-yellow-100 text-yellow-700"
-                          : "bg-gray-100 text-gray-700"
+                          : "bg-muted text-foreground"
                       }`}
                     >
                       {subscription.status}
@@ -385,10 +385,10 @@ export default function DashboardPage() {
                   </div>
                   {subscription.activatedAt && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-muted-foreground">
                         Activated At
                       </span>
-                      <span className="text-sm text-gray-900">
+                      <span className="text-sm text-foreground">
                         {formatDate(subscription.activatedAt)}
                       </span>
                     </div>
@@ -398,22 +398,22 @@ export default function DashboardPage() {
 
               {/* Billing Address */}
               <div>
-                <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-3 flex items-center">
+                <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3 flex items-center">
                   <MapPin className="w-4 h-4 mr-2" />
                   Billing Address
                 </h4>
-                <div className="bg-gray-50 rounded-xl p-4 space-y-1">
-                  <p className="text-sm text-gray-900 font-medium">
+                <div className="bg-muted/50 rounded-xl p-4 space-y-1">
+                  <p className="text-sm text-foreground font-medium">
                     {subscription.billingAddress?.street}
                   </p>
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-foreground">
                     {subscription.billingAddress?.city},{" "}
                     {subscription.billingAddress?.state}
                   </p>
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-foreground">
                     {subscription.billingAddress?.zipCode}
                   </p>
-                  <p className="text-sm text-gray-900 font-medium">
+                  <p className="text-sm text-foreground font-medium">
                     {subscription.billingAddress?.country}
                   </p>
                 </div>
@@ -426,7 +426,7 @@ export default function DashboardPage() {
                 {subscription.notes && (
                   <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                     <div className="flex items-start space-x-2">
-                      <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                      <Info className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                       <div>
                         <h5 className="text-sm font-semibold text-blue-900 mb-1">
                           Your Notes
@@ -441,7 +441,7 @@ export default function DashboardPage() {
                 {subscription.adminNotes && (
                   <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
                     <div className="flex items-start space-x-2">
-                      <Sparkles className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                      <Sparkles className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
                       <div>
                         <h5 className="text-sm font-semibold text-purple-900 mb-1">
                           Admin Message
@@ -458,9 +458,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Action Footer */}
-          <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+          <div className="bg-muted/50 px-6 py-4 border-t border-border">
             <div className="flex items-center justify-between">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Need help with your subscription?
               </p>
               <Link href="/contact">
@@ -487,14 +487,14 @@ export default function DashboardPage() {
                 exclusive features.
               </p>
               <Link href="/pricing">
-                <button className="inline-flex items-center px-6 py-3 bg-white text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-all transform hover:scale-105">
+                <button className="inline-flex items-center px-6 py-3 bg-card text-orange-600 font-semibold rounded-lg hover:bg-orange-50 transition-all transform hover:scale-105">
                   View Pricing Plans
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </button>
               </Link>
             </div>
             <div className="hidden md:block">
-              <div className="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <div className="w-32 h-32 rounded-full bg-card/20 backdrop-blur-sm flex items-center justify-center">
                 <Sparkles className="w-16 h-16" />
               </div>
             </div>
@@ -507,7 +507,7 @@ export default function DashboardPage() {
         <Link href="/dashboard/liked-designs">
           <div className="bg-gradient-to-br from-red-500 to-pink-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-2xl transform hover:scale-[1.02] transition-all">
             <div className="flex items-center space-x-4">
-              <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <div className="w-14 h-14 rounded-xl bg-card/20 backdrop-blur-sm flex items-center justify-center">
                 <Heart className="w-7 h-7 fill-white" />
               </div>
               <div>
@@ -523,7 +523,7 @@ export default function DashboardPage() {
         <Link href="/dashboard/available-downloads">
           <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-2xl transform hover:scale-[1.02] transition-all">
             <div className="flex items-center space-x-4">
-              <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <div className="w-14 h-14 rounded-xl bg-card/20 backdrop-blur-sm flex items-center justify-center">
                 <Download className="w-7 h-7" />
               </div>
               <div>
@@ -539,7 +539,7 @@ export default function DashboardPage() {
         <Link href="/designs">
           <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-6 text-white cursor-pointer hover:shadow-2xl transform hover:scale-[1.02] transition-all">
             <div className="flex items-center space-x-4">
-              <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <div className="w-14 h-14 rounded-xl bg-card/20 backdrop-blur-sm flex items-center justify-center">
                 <Package className="w-7 h-7" />
               </div>
               <div>
@@ -554,12 +554,12 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Purchases */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-card rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Recent Purchases</h2>
+          <h2 className="text-xl font-bold text-foreground">Recent Purchases</h2>
           <Link
             href="/dashboard/purchases"
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center"
+            className="text-sm text-primary hover:text-blue-700 font-medium flex items-center"
           >
             View All
             <ArrowRight className="w-4 h-4 ml-1" />
@@ -581,20 +581,20 @@ export default function DashboardPage() {
                 }) => (
                   <div
                     key={purchase._id}
-                    className="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors"
+                    className="flex items-center justify-between p-4 rounded-xl bg-muted/50 hover:bg-muted transition-colors"
                   >
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">
+                      <p className="font-medium text-foreground">
                         {purchase.purchaseType === "subscription"
                           ? `${purchase.pricingPlan?.name || "Subscription"}`
                           : purchase.design?.title || "Individual Purchase"}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         {new Date(purchase.createdAt).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-gray-900">
+                      <p className="font-bold text-foreground">
                         ${purchase.amount?.toFixed(2)}
                       </p>
                       <span
@@ -603,7 +603,7 @@ export default function DashboardPage() {
                             ? "bg-green-100 text-green-700"
                             : purchase.status === "pending"
                             ? "bg-yellow-100 text-yellow-700"
-                            : "bg-gray-100 text-gray-700"
+                            : "bg-muted text-foreground"
                         }`}
                       >
                         {purchase.status}
@@ -614,31 +614,31 @@ export default function DashboardPage() {
               )}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">
+          <p className="text-center text-muted-foreground py-8">
             No purchases yet. Start exploring our designs!
           </p>
         )}
       </div>
 
       {/* Recent Downloads - Enhanced */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-card rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
               <FileDown className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-foreground">
                 Recent Downloads
               </h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 {downloads?.pagination?.totalItems || 0} total downloads
               </p>
             </div>
           </div>
           <Link
             href="/dashboard/downloads-history"
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center"
+            className="text-sm text-primary hover:text-blue-700 font-medium flex items-center"
           >
             View All
             <ArrowRight className="w-4 h-4 ml-1" />
@@ -668,7 +668,7 @@ export default function DashboardPage() {
               }) => (
                 <div
                   key={download._id}
-                  className="group relative bg-gradient-to-r from-gray-50 to-blue-50/30 hover:from-blue-50 hover:to-purple-50/50 rounded-xl p-4 border border-gray-200 hover:border-blue-300 transition-all"
+                  className="group relative bg-gradient-to-r from-gray-50 to-blue-50/30 hover:from-blue-50 hover:to-purple-50/50 rounded-xl p-4 border border-border hover:border-blue-300 transition-all"
                 >
                   <div className="flex items-start space-x-4">
                     {/* Design Preview Image */}
@@ -686,7 +686,7 @@ export default function DashboardPage() {
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-300 to-gray-400">
-                            <Image className="w-8 h-8 text-gray-500" />
+                            <Image className="w-8 h-8 text-muted-foreground" />
                           </div>
                         )}
                       </div>
@@ -700,11 +700,11 @@ export default function DashboardPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1 min-w-0 pr-4">
-                          <h3 className="font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                          <h3 className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                             {download.design.title}
                           </h3>
-                          <p className="text-sm text-gray-600 flex items-center mt-1">
-                            <span className="text-gray-500">by</span>
+                          <p className="text-sm text-muted-foreground flex items-center mt-1">
+                            <span className="text-muted-foreground">by</span>
                             <span className="ml-1 font-medium">
                               {(download.design as any)?.designer?.name ||
                                 download.design.designerName}
@@ -715,8 +715,8 @@ export default function DashboardPage() {
                           href={`/designs/${download.design._id}`}
                           className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          <button className="p-2 rounded-lg bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-300 transition-all">
-                            <ExternalLink className="w-4 h-4 text-blue-600" />
+                          <button className="p-2 rounded-lg bg-card hover:bg-blue-50 border border-border hover:border-blue-300 transition-all">
+                            <ExternalLink className="w-4 h-4 text-primary" />
                           </button>
                         </Link>
                       </div>
@@ -725,12 +725,12 @@ export default function DashboardPage() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                         {/* Download Type */}
                         <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center">
-                            <Package className="w-4 h-4 text-gray-600" />
+                          <div className="w-8 h-8 rounded-lg bg-card border border-border flex items-center justify-center">
+                            <Package className="w-4 h-4 text-muted-foreground" />
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">Type</p>
-                            <p className="text-sm font-medium text-gray-900 capitalize">
+                            <p className="text-xs text-muted-foreground">Type</p>
+                            <p className="text-sm font-medium text-foreground capitalize">
                               {download.downloadType.replace("_", " ")}
                             </p>
                           </div>
@@ -738,12 +738,12 @@ export default function DashboardPage() {
 
                         {/* Price */}
                         <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center">
-                            <DollarSign className="w-4 h-4 text-green-600" />
+                          <div className="w-8 h-8 rounded-lg bg-card border border-border flex items-center justify-center">
+                            <DollarSign className="w-4 h-4 text-primary" />
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">Price</p>
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-xs text-muted-foreground">Price</p>
+                            <p className="text-sm font-medium text-foreground">
                               $
                               {((download.design as any).discountedPrice != null
                                 ? (download.design as any).discountedPrice
@@ -757,12 +757,12 @@ export default function DashboardPage() {
 
                         {/* Download Date */}
                         <div className="flex items-center space-x-2">
-                          <div className="w-8 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center">
-                            <Calendar className="w-4 h-4 text-blue-600" />
+                          <div className="w-8 h-8 rounded-lg bg-card border border-border flex items-center justify-center">
+                            <Calendar className="w-4 h-4 text-primary" />
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500">Downloaded</p>
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-xs text-muted-foreground">Downloaded</p>
+                            <p className="text-sm font-medium text-foreground">
                               {formatDateTime(download.downloadDate)}
                             </p>
                           </div>
@@ -771,17 +771,17 @@ export default function DashboardPage() {
 
                       {/* Purchase Info */}
                       {download.purchase && (
-                        <div className="mt-3 pt-3 border-t border-gray-200">
+                        <div className="mt-3 pt-3 border-t border-border">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground">
                               Purchase Type:{" "}
-                              <span className="font-medium text-gray-700 capitalize">
+                              <span className="font-medium text-foreground capitalize">
                                 {download.purchase.purchaseType}
                               </span>
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground">
                               Amount:{" "}
-                              <span className="font-semibold text-green-600">
+                              <span className="font-semibold text-primary">
                                 ${download.purchase.amount?.toFixed(2)}
                               </span>
                             </span>
@@ -796,11 +796,11 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <div className="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center mb-4">
-              <FileDown className="w-10 h-10 text-gray-400" />
+            <div className="w-20 h-20 mx-auto rounded-full bg-muted flex items-center justify-center mb-4">
+              <FileDown className="w-10 h-10 text-muted-foreground" />
             </div>
-            <p className="text-gray-500 font-medium mb-2">No downloads yet</p>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-muted-foreground font-medium mb-2">No downloads yet</p>
+            <p className="text-sm text-muted-foreground mb-4">
               Start downloading designs to see them here
             </p>
             <Link href="/designs">
@@ -814,8 +814,8 @@ export default function DashboardPage() {
 
         {/* Pagination Info */}
         {downloads?.data && downloads.data.length > 0 && (
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="mt-6 pt-4 border-t border-border">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>
                 Showing {downloads.data.length} of{" "}
                 {downloads.pagination?.totalItems || 0} downloads
@@ -823,7 +823,7 @@ export default function DashboardPage() {
               {downloads.pagination?.hasNextPage && (
                 <Link
                   href="/dashboard/downloads-history"
-                  className="text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-primary hover:text-blue-700 font-medium"
                 >
                   Load More →
                 </Link>
@@ -834,26 +834,26 @@ export default function DashboardPage() {
       </div>
 
       {/* Account Info */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">
+      <div className="bg-card rounded-2xl shadow-sm border border-gray-100 p-6">
+        <h2 className="text-xl font-bold text-foreground mb-6">
           Account Information
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <p className="text-sm font-medium text-gray-600">Name</p>
-            <p className="mt-1 text-gray-900">{user?.name}</p>
+            <p className="text-sm font-medium text-muted-foreground">Name</p>
+            <p className="mt-1 text-foreground">{user?.name}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-600">Email</p>
-            <p className="mt-1 text-gray-900">{user?.email}</p>
+            <p className="text-sm font-medium text-muted-foreground">Email</p>
+            <p className="mt-1 text-foreground">{user?.email}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-600">Role</p>
-            <p className="mt-1 text-gray-900 capitalize">{user?.role}</p>
+            <p className="text-sm font-medium text-muted-foreground">Role</p>
+            <p className="mt-1 text-foreground capitalize">{user?.role}</p>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-600">Member Since</p>
-            <p className="mt-1 text-gray-900">
+            <p className="text-sm font-medium text-muted-foreground">Member Since</p>
+            <p className="mt-1 text-foreground">
               {new Date().toLocaleDateString()}
             </p>
           </div>

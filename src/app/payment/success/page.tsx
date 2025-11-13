@@ -19,8 +19,8 @@ function PaymentSuccessContent() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div className="container mx-auto px-4 py-12 min-h-screen bg-background">
+      <div className="max-w-2xl mx-auto bg-card rounded-3xl shadow-2xl border-2 border-border p-8">
         {paymentIntentId ? (
           <>
             <PaymentStatusChecker
@@ -30,19 +30,19 @@ function PaymentSuccessContent() {
             <div className="mt-8 flex gap-4 justify-center flex-wrap">
               <Link
                 href="/dashboard/purchases"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 shadow-xl"
               >
                 View Purchases
               </Link>
               <Link
                 href="/dashboard/available-downloads"
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 shadow-xl"
               >
                 Download Files
               </Link>
               <Link
                 href="/designs"
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-colors"
+                className="bg-muted hover:bg-muted/80 text-foreground px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 border-2 border-border"
               >
                 Continue Shopping
               </Link>
@@ -50,15 +50,15 @@ function PaymentSuccessContent() {
           </>
         ) : (
           <div className="text-center py-12">
-            <p className="text-red-600 text-xl font-bold mb-4">
+            <p className="text-destructive text-xl font-black mb-4">
               No payment information found
             </p>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6 font-medium">
               The payment intent ID is missing from the URL.
             </p>
             <Link
               href="/pricing"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="inline-block bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 shadow-xl"
             >
               Back to Pricing
             </Link>
@@ -73,11 +73,11 @@ export default function PaymentSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="container mx-auto px-4 py-12">
-          <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        <div className="container mx-auto px-4 py-12 min-h-screen bg-background">
+          <div className="max-w-2xl mx-auto bg-card rounded-3xl shadow-2xl border-2 border-border p-8">
             <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="w-12 h-12 animate-spin text-blue-600 mb-4" />
-              <p className="text-gray-700 font-medium">Loading...</p>
+              <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
+              <p className="text-foreground font-black">Loading...</p>
             </div>
           </div>
         </div>

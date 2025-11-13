@@ -264,27 +264,27 @@ export default function CategoriesPage() {
           <div className="flex items-center space-x-2 text-sm">
             <Link
               href="/"
-              className="text-gray-600 hover:text-blue-600 transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors"
             >
               Home
             </Link>
             <span className="text-gray-400">/</span>
-            <span className="text-gray-900 font-medium">Categories</span>
+            <span className="text-foreground font-medium">Categories</span>
           </div>
         </nav>
 
         {/* Page Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-1">
+          <h1 className="text-3xl font-bold text-foreground mb-1">
             Design Categories
           </h1>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Explore {categories.length} design categories
           </p>
         </div>
 
         {/* Search & View Controls */}
-        <div className="mb-6 bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+        <div className="mb-6 bg-card rounded-lg p-4 shadow-sm border border-border">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             {/* Search Input */}
             <div className="relative flex-1 w-full">
@@ -308,12 +308,12 @@ export default function CategoriesPage() {
                 placeholder="Search categories..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-colors text-gray-900 placeholder-gray-500"
+                className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-lg focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-colors text-foreground placeholder-gray-500"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-muted-foreground"
                 >
                   <svg
                     className="w-5 h-5"
@@ -338,8 +338,8 @@ export default function CategoriesPage() {
                 onClick={() => setViewMode("grid")}
                 className={`p-2 rounded transition-all ${
                   viewMode === "grid"
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-card text-primary shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
                 title="Grid view"
               >
@@ -361,8 +361,8 @@ export default function CategoriesPage() {
                 onClick={() => setViewMode("list")}
                 className={`p-2 rounded transition-all ${
                   viewMode === "list"
-                    ? "bg-white text-blue-600 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-card text-primary shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
                 title="List view"
               >
@@ -394,10 +394,10 @@ export default function CategoriesPage() {
         {categoriesLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="relative">
-              <div className="w-16 h-16 border-4 border-gray-200 rounded-full"></div>
+              <div className="w-16 h-16 border-4 border-border rounded-full"></div>
               <div className="w-16 h-16 border-4 border-blue-600 rounded-full animate-spin border-t-transparent absolute top-0 left-0"></div>
             </div>
-            <p className="mt-6 text-lg text-gray-600 font-semibold">
+            <p className="mt-6 text-lg text-muted-foreground font-semibold">
               Loading categories...
             </p>
           </div>
@@ -409,7 +409,7 @@ export default function CategoriesPage() {
                 {filteredCategories.map((category, index) => (
                   <div
                     key={category.id}
-                    className="group bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
+                    className="group bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
                   >
                     {/* Icon Header with Gradient */}
                     <div
@@ -425,33 +425,33 @@ export default function CategoriesPage() {
                     {/* Content */}
                     <div className="p-4">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                           {category.name}
                         </h3>
                         {category.isActive && (
-                          <span className="flex items-center gap-1 text-xs font-medium text-green-600">
+                          <span className="flex items-center gap-1 text-xs font-medium text-primary">
                             <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                             Active
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
                         {category.description}
                       </p>
                       {category.subcategories.length > 0 && (
                         <div className="mt-2">
-                          <span className="text-xs font-semibold text-gray-500">
+                          <span className="text-xs font-semibold text-muted-foreground">
                             Subcategories:
                           </span>
                           <ul className="list-disc ml-4 mt-1">
                             {category.subcategories.map((subcat) => (
                               <li
                                 key={subcat.id}
-                                className="text-xs text-gray-600"
+                                className="text-xs text-muted-foreground"
                               >
                                 <Link
                                   href={`/designs?subCategory=${subcat.id}`}
-                                  className="hover:underline text-blue-600"
+                                  className="hover:underline text-primary"
                                 >
                                   {subcat.name}
                                 </Link>
@@ -460,7 +460,7 @@ export default function CategoriesPage() {
                           </ul>
                         </div>
                       )}
-                      <div className="flex items-center text-blue-600 text-sm font-medium group-hover:text-blue-700 mt-2">
+                      <div className="flex items-center text-primary text-sm font-medium group-hover:text-primary/90 mt-2">
                         <Link
                           href={`/designs?mainCategory=${category.id}`}
                           className="flex items-center gap-1"
@@ -496,7 +496,7 @@ export default function CategoriesPage() {
                     href={`/designs?mainCategory=${category.id}`}
                     className="group block"
                   >
-                    <div className="bg-white rounded-lg p-4 shadow-sm hover:shadow-md border border-gray-200 transition-all duration-200">
+                    <div className="bg-card rounded-lg p-4 shadow-sm hover:shadow-md border border-border transition-all duration-200">
                       <div className="flex items-center gap-4">
                         {/* Icon */}
                         <div
@@ -510,7 +510,7 @@ export default function CategoriesPage() {
                         {/* Content */}
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                            <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
                               {category.name}
                             </h3>
                             {category.isActive && (
@@ -520,7 +520,7 @@ export default function CategoriesPage() {
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 line-clamp-1">
+                          <p className="text-sm text-muted-foreground line-clamp-1">
                             {category.description}
                           </p>
                         </div>
@@ -556,7 +556,7 @@ export default function CategoriesPage() {
           </>
         ) : (
           <div className="text-center py-20">
-            <div className="bg-white rounded-lg p-12 max-w-lg mx-auto border border-gray-200 shadow-sm">
+            <div className="bg-card rounded-lg p-12 max-w-lg mx-auto border border-border shadow-sm">
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-100 flex items-center justify-center">
                 <svg
                   className="w-10 h-10 text-gray-400"
@@ -572,10 +572,10 @@ export default function CategoriesPage() {
                   />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              <h3 className="text-2xl font-bold text-foreground mb-3">
                 {searchQuery ? "No Results Found" : "No Categories Available"}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-muted-foreground mb-6">
                 {searchQuery
                   ? `No categories match "${searchQuery}". Try a different search term.`
                   : "No design categories are currently available."}
@@ -615,7 +615,7 @@ export default function CategoriesPage() {
             <Link href="/designs">
               <Button
                 size="lg"
-                className="bg-white text-blue-600 hover:bg-gray-50 shadow-sm font-semibold rounded-lg"
+                className="bg-card text-primary hover:bg-gray-50 shadow-sm font-semibold rounded-lg"
               >
                 View All Designs
                 <svg

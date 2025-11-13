@@ -146,10 +146,10 @@ export default function AdminDownloadsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-foreground">
             Download Management
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             Monitor and analyze design downloads across the platform
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function AdminDownloadsPage() {
                 e.target.value as "daily" | "weekly" | "monthly" | "yearly"
               )
             }
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+            className="px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
           >
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>
@@ -180,10 +180,10 @@ export default function AdminDownloadsPage() {
       </div>
 
       {/* Analytics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:p-5">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <Download className="w-6 h-6" />
             </div>
             <TrendingUp className="w-5 h-5 opacity-75" />
@@ -194,9 +194,9 @@ export default function AdminDownloadsPage() {
           <p className="text-blue-100 text-sm">Total Downloads</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <Users className="w-6 h-6" />
             </div>
             <UserCircle className="w-5 h-5 opacity-75" />
@@ -207,9 +207,9 @@ export default function AdminDownloadsPage() {
           <p className="text-green-100 text-sm">Unique Users</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <FileDown className="w-6 h-6" />
             </div>
             <Package className="w-5 h-5 opacity-75" />
@@ -220,9 +220,9 @@ export default function AdminDownloadsPage() {
           <p className="text-purple-100 text-sm">Individual Purchases</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <Package className="w-6 h-6" />
             </div>
             <TrendingUp className="w-5 h-5 opacity-75" />
@@ -236,10 +236,10 @@ export default function AdminDownloadsPage() {
 
       {/* Download Trends Chart */}
       {downloadTrends.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-blue-600" />
+            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-primary" />
               Download Trends
             </h2>
           </div>
@@ -252,10 +252,10 @@ export default function AdminDownloadsPage() {
               return (
                 <div key={index}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-foreground">
                       {trend._id}
                     </span>
-                    <span className="text-sm font-bold text-gray-900">
+                    <span className="text-sm font-bold text-foreground">
                       {trend.count} downloads
                     </span>
                   </div>
@@ -273,10 +273,10 @@ export default function AdminDownloadsPage() {
       )}
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search by user, design, or download details..."
@@ -285,7 +285,7 @@ export default function AdminDownloadsPage() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
           </div>
           <Button
@@ -304,9 +304,9 @@ export default function AdminDownloadsPage() {
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-border">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Download Type
               </label>
               <select
@@ -320,7 +320,7 @@ export default function AdminDownloadsPage() {
                   );
                   setPage(1);
                 }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="">All Types</option>
                 <option value="individual_purchase">Individual Purchase</option>
@@ -328,7 +328,7 @@ export default function AdminDownloadsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Sort By
               </label>
               <select
@@ -336,27 +336,27 @@ export default function AdminDownloadsPage() {
                 onChange={(e) =>
                   setSortBy(e.target.value as "downloadDate" | "createdAt")
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="downloadDate">Download Date</option>
                 <option value="createdAt">Created Date</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Order
               </label>
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="desc">Newest First</option>
                 <option value="asc">Oldest First</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Actions
               </label>
               <Button
@@ -368,7 +368,7 @@ export default function AdminDownloadsPage() {
               </Button>
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Start Date
               </label>
               <input
@@ -378,11 +378,11 @@ export default function AdminDownloadsPage() {
                   setDateRange({ ...dateRange, startDate: e.target.value });
                   setPage(1);
                 }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 End Date
               </label>
               <input
@@ -392,7 +392,7 @@ export default function AdminDownloadsPage() {
                   setDateRange({ ...dateRange, endDate: e.target.value });
                   setPage(1);
                 }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
           </div>
@@ -402,59 +402,59 @@ export default function AdminDownloadsPage() {
       {/* Downloads List */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : downloads.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-12 text-center">
           <Download className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No downloads found
           </h3>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             {search || downloadType || dateRange.startDate
               ? "Try adjusting your filters"
               : "Downloads will appear here once users start downloading designs"}
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     User
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Design
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Type
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Download Date
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     IP Address
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-muted-foreground uppercase">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {downloads && downloads.map((download: AdminDownload) => (
-                  <tr key={download._id} className="hover:bg-gray-50">
+                  <tr key={download._id} className="hover:bg-muted/50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
                           {download.user?.name?.charAt(0).toUpperCase() || "U"}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-foreground">
                             {download.user?.name || "Anonymous"}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {download.user?.email || "N/A"}
                           </p>
                         </div>
@@ -462,7 +462,7 @@ export default function AdminDownloadsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden relative">
+                        <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center overflow-hidden relative">
                           {(download.design as Record<string, string>)
                             ?.previewImageUrl ? (
                             <Image
@@ -478,14 +478,14 @@ export default function AdminDownloadsPage() {
                               className="object-cover"
                             />
                           ) : (
-                            <ImageIcon className="w-6 h-6 text-gray-400" />
+                            <ImageIcon className="w-6 h-6 text-muted-foreground" />
                           )}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-foreground">
                             {download.design?.title || "Unknown Design"}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {download.design?.category?.name || "No category"}
                           </p>
                         </div>
@@ -496,7 +496,7 @@ export default function AdminDownloadsPage() {
                         className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
                           download.downloadType === "subscription"
                             ? "bg-purple-100 text-purple-700"
-                            : "bg-blue-100 text-blue-700"
+                            : "bg-blue-100 text-primary"
                         }`}
                       >
                         {download.downloadType === "subscription" ? (
@@ -510,8 +510,8 @@ export default function AdminDownloadsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-900">
-                        <Calendar className="w-4 h-4 text-gray-400" />
+                      <div className="flex items-center gap-2 text-sm text-foreground">
+                        <Calendar className="w-4 h-4 text-muted-foreground" />
                         {download.downloadDate && new Date(download.downloadDate).toLocaleDateString(
                           "en-US",
                           {
@@ -521,7 +521,7 @@ export default function AdminDownloadsPage() {
                           }
                         )}
                       </div>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {download.downloadDate && new Date(download.downloadDate).toLocaleTimeString(
                           "en-US",
                           {
@@ -532,7 +532,7 @@ export default function AdminDownloadsPage() {
                       </p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-gray-600 font-mono">
+                      <p className="text-sm text-muted-foreground font-mono">
                         {download.ipAddress || "N/A"}
                       </p>
                     </td>
@@ -560,9 +560,9 @@ export default function AdminDownloadsPage() {
 
       {/* Pagination */}
       {pagination.totalPages > 1 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               Showing <strong>{(page - 1) * limit + 1}</strong> to{" "}
               <strong>
                 {Math.min(page * limit, pagination.totalItems || 0)}
@@ -595,10 +595,10 @@ export default function AdminDownloadsPage() {
                     <button
                       key={pageNum}
                       onClick={() => handlePageChange(pageNum)}
-                      className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                      className={`px-3 py-1 rounded-xl text-sm font-medium transition-colors ${
                         page === pageNum
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-600 hover:bg-gray-100"
+                          ? "bg-primary text-white"
+                          : "text-muted-foreground hover:bg-muted"
                       }`}
                     >
                       {pageNum}
@@ -621,21 +621,21 @@ export default function AdminDownloadsPage() {
 
       {/* Top Downloaded Designs */}
       {topDesigns.length > 0 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+          <h2 className="text-xl font-bold text-foreground mb-4">
             Top Downloaded Designs
           </h2>
           <div className="space-y-3">
             {topDesigns.slice(0, 10).map((design: TopDesign, index: number) => (
               <div
                 key={design._id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-between p-4 bg-muted/50 rounded-xl hover:bg-muted transition-colors"
               >
                 <div className="flex items-center gap-4">
                   <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm">
                     #{index + 1}
                   </div>
-                  <div className="w-16 h-16 rounded-lg bg-gray-200 flex items-center justify-center overflow-hidden relative">
+                  <div className="w-16 h-16 rounded-xl bg-gray-200 flex items-center justify-center overflow-hidden relative">
                     {design.previewImageUrl ? (
                       <Image
                         src={design.previewImageUrl}
@@ -644,14 +644,14 @@ export default function AdminDownloadsPage() {
                         className="object-cover"
                       />
                     ) : (
-                      <ImageIcon className="w-8 h-8 text-gray-400" />
+                      <ImageIcon className="w-8 h-8 text-muted-foreground" />
                     )}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">
+                    <h3 className="font-semibold text-foreground">
                       {design.title}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       {design.downloadCount} downloads
                       {design.price?.toFixed(2)}
                     </p>
@@ -671,3 +671,5 @@ export default function AdminDownloadsPage() {
     </div>
   );
 }
+
+

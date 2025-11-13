@@ -3,19 +3,19 @@ import { Button } from "@/components/ui/button";
 
 export default function TermsOfServicePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-200 shadow-sm">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-card/95 border-b border-border shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl"></div>
-              <span className="text-xl font-black text-gray-900">
+              <div className="w-10 h-10 bg-primary rounded-xl"></div>
+              <span className="text-xl font-black gradient-text">
                 Design Store
               </span>
             </Link>
             <Link href="/">
-              <Button variant="outline" className="font-semibold">
+              <Button variant="outline" className="font-black border-2 border-border hover:border-primary rounded-xl">
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="none"
@@ -38,13 +38,13 @@ export default function TermsOfServicePage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+        <div className="bg-card rounded-3xl shadow-2xl border-2 border-border overflow-hidden">
           {/* Hero Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-12 text-white">
+          <div className="bg-primary px-8 py-12 text-secondary">
             <h1 className="text-4xl sm:text-5xl font-black mb-4">
               Terms of Service
             </h1>
-            <p className="text-lg text-white/90">
+            <p className="text-lg text-secondary/90 font-medium">
               Last updated: November 10, 2025
             </p>
           </div>
@@ -52,10 +52,10 @@ export default function TermsOfServicePage() {
           {/* Content */}
           <div className="px-8 py-12 prose prose-blue max-w-none">
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 1. Acceptance of Terms
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground leading-relaxed mb-4 font-medium">
                 By accessing and using this website ("Service"), you accept and
                 agree to be bound by the terms and provision of this agreement.
                 If you do not agree to these Terms of Service, please do not use
@@ -64,14 +64,14 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 2. Description of Service
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 We provide an online marketplace for buying and selling digital
                 design assets including but not limited to:
               </p>
-              <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
+              <ul className="list-disc list-inside text-muted-foreground font-medium space-y-2 ml-4">
                 <li>Website templates</li>
                 <li>UI/UX design files</li>
                 <li>Graphics and illustrations</li>
@@ -80,14 +80,14 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 3. User Accounts
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 To access certain features of our Service, you must register for
                 an account. You agree to:
               </p>
-              <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
+              <ul className="list-disc list-inside text-muted-foreground font-medium space-y-2 ml-4">
                 <li>
                   Provide accurate, current, and complete information during
                   registration
@@ -108,20 +108,20 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 4. Purchases and Payments
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 <strong>4.1 Pricing:</strong> All prices are listed in USD and
                 are subject to change without notice. We reserve the right to
                 modify pricing at any time.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 <strong>4.2 Payment:</strong> We accept payments through Stripe.
                 By providing payment information, you represent and warrant that
                 you are authorized to use the payment method.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 <strong>4.3 Refunds:</strong> Due to the digital nature of our
                 products, all sales are final. Refunds may be granted at our
                 sole discretion in cases of technical issues or defective
@@ -130,15 +130,15 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 5. License and Usage Rights
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 Upon successful purchase, you receive a non-exclusive,
                 non-transferable license to use the digital assets according to
                 the specific license type purchased:
               </p>
-              <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
+              <ul className="list-disc list-inside text-muted-foreground font-medium space-y-2 ml-4">
                 <li>
                   <strong>Personal License:</strong> For personal,
                   non-commercial projects
@@ -152,7 +152,7 @@ export default function TermsOfServicePage() {
                   projects
                 </li>
               </ul>
-              <p className="text-gray-700 leading-relaxed mt-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mt-4">
                 You may NOT redistribute, resell, lease, license, sub-license,
                 or offer the digital assets for download without explicit
                 written permission.
@@ -160,16 +160,16 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 6. Intellectual Property
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 All content on this Service, including but not limited to text,
                 graphics, logos, images, and software, is the property of Design
                 Store or its content suppliers and protected by international
                 copyright laws.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 Designers retain ownership of their original work. By uploading
                 content to our platform, designers grant us a license to
                 display, promote, and sell their work.
@@ -177,13 +177,13 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 7. Prohibited Activities
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 You agree not to:
               </p>
-              <ul className="list-disc list-inside text-gray-700 space-y-2 ml-4">
+              <ul className="list-disc list-inside text-muted-foreground font-medium space-y-2 ml-4">
                 <li>Violate any applicable laws or regulations</li>
                 <li>
                   Infringe upon the intellectual property rights of others
@@ -199,10 +199,10 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 8. Content Moderation
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 We reserve the right to review, monitor, and remove any content
                 that violates these Terms or is otherwise objectionable at our
                 sole discretion. We may suspend or terminate accounts that
@@ -211,10 +211,10 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 9. Disclaimer of Warranties
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT
                 WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. WE DO NOT
                 WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR
@@ -223,10 +223,10 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 10. Limitation of Liability
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 TO THE MAXIMUM EXTENT PERMITTED BY LAW, WE SHALL NOT BE LIABLE
                 FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
                 PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER
@@ -235,10 +235,10 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 11. Termination
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 We may terminate or suspend your account and access to the
                 Service immediately, without prior notice or liability, for any
                 reason, including breach of these Terms. Upon termination, your
@@ -247,10 +247,10 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 12. Changes to Terms
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 We reserve the right to modify these Terms at any time. We will
                 notify users of any material changes via email or through the
                 Service. Your continued use of the Service after such
@@ -259,10 +259,10 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 13. Governing Law
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 These Terms shall be governed by and construed in accordance
                 with the laws of the United States, without regard to its
                 conflict of law provisions.
@@ -270,19 +270,19 @@ export default function TermsOfServicePage() {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-black text-foreground mb-4">
                 14. Contact Information
               </h2>
-              <p className="text-gray-700 leading-relaxed mb-4">
+              <p className="text-muted-foreground font-medium leading-relaxed mb-4">
                 If you have any questions about these Terms of Service, please
                 contact us at:
               </p>
               <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                <p className="text-gray-900 font-semibold mb-2">
+                <p className="text-foreground font-semibold mb-2">
                   Design Store Support
                 </p>
-                <p className="text-gray-700">Email: support@designstore.com</p>
-                <p className="text-gray-700">
+                <p className="text-muted-foreground font-medium">Email: support@designstore.com</p>
+                <p className="text-muted-foreground font-medium">
                   Address: 123 Design Street, Creative City, CA 90210
                 </p>
               </div>

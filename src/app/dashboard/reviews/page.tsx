@@ -43,7 +43,7 @@ function DesignReviewCard({
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
+    <div className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
       {/* Design Header with Image */}
       <div className="flex items-start gap-4 p-6 border-b border-gray-100">
         {((design as any)?.previewImageUrls?.[0] || design.previewImageUrl) && (
@@ -60,12 +60,12 @@ function DesignReviewCard({
         )}
         <div className="flex-1 min-w-0">
           <Link href={`/designs/${design._id}`}>
-            <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors">
+            <h3 className="text-lg font-bold text-foreground hover:text-primary transition-colors">
               {design.title}
             </h3>
           </Link>
           <div className="flex items-center gap-3 mt-1">
-            <span className="text-sm font-semibold text-gray-900">
+            <span className="text-sm font-semibold text-foreground">
               {design.currencyDisplay || "৳"}
               {
              
@@ -92,10 +92,10 @@ function DesignReviewCard({
                     />
                   ))}
                 </div>
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-foreground">
                   {statistics.averageRating?.toFixed(1)}
                 </span>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-muted-foreground">
                   ({statistics.totalReviews}{" "}
                   {statistics.totalReviews === 1 ? "review" : "reviews"})
                 </span>
@@ -104,7 +104,7 @@ function DesignReviewCard({
               {/* Rating Distribution */}
               {statistics.ratingDistribution &&
                 statistics.ratingDistribution.length > 0 && (
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <BarChart3 className="w-3 h-3" />
                     {Object.entries(statistics.ratingDistribution[0]).map(
                       ([rating, count]) => (
@@ -122,7 +122,7 @@ function DesignReviewCard({
           <div className="flex gap-2 flex-shrink-0">
             <button
               onClick={() => onEditReview(existingReview, design._id)}
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              className="p-2 text-primary hover:bg-blue-50 rounded-lg transition-colors"
               title="Edit review"
             >
               <Edit className="w-4 h-4" />
@@ -143,7 +143,7 @@ function DesignReviewCard({
         <div className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-b border-gray-100">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-full">
+              <div className="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
                 Your Review
               </div>
               {[...Array(5)].map((_, i) => (
@@ -156,11 +156,11 @@ function DesignReviewCard({
                   }`}
                 />
               ))}
-              <span className="ml-1 text-base font-bold text-gray-900">
+              <span className="ml-1 text-base font-bold text-foreground">
                 {existingReview.rating}/5
               </span>
             </div>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               {new Date(existingReview.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -169,24 +169,24 @@ function DesignReviewCard({
             </span>
           </div>
           {existingReview.title && (
-            <h4 className="font-bold text-gray-900 mb-2 text-base">
+            <h4 className="font-bold text-foreground mb-2 text-base">
               {existingReview.title}
             </h4>
           )}
-          <p className="text-gray-700 text-sm leading-relaxed">
+          <p className="text-foreground text-sm leading-relaxed">
             {existingReview.comment}
           </p>
           {existingReview.updatedAt !== existingReview.createdAt && (
-            <p className="text-xs text-gray-500 mt-3 italic">
+            <p className="text-xs text-muted-foreground mt-3 italic">
               Edited on{" "}
               {new Date(existingReview.updatedAt).toLocaleDateString()}
             </p>
           )}
         </div>
       ) : (
-        <div className="p-6 text-center bg-gray-50 border-b border-gray-100">
+        <div className="p-6 text-center bg-muted/50 border-b border-gray-100">
           <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-600 text-sm mb-4">
+          <p className="text-muted-foreground text-sm mb-4">
             You haven&apos;t reviewed this design yet
           </p>
           <button
@@ -203,12 +203,12 @@ function DesignReviewCard({
       {allReviews.length > 0 && (
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
+            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">
               All Reviews ({allReviews.length})
             </h4>
             <Link
               href={`/designs/${design._id}#reviews`}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="text-sm text-primary hover:text-blue-700 font-medium"
             >
               View All
             </Link>
@@ -217,7 +217,7 @@ function DesignReviewCard({
             {allReviews.slice(0, 3).map((review: any) => (
               <div
                 key={review._id}
-                className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors"
+                className="bg-muted/50 rounded-lg p-4 hover:bg-muted transition-colors"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -225,7 +225,7 @@ function DesignReviewCard({
                       {review.reviewer.name.charAt(0).toUpperCase()}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900 text-sm">
+                      <p className="font-medium text-foreground text-sm">
                         {review.reviewer.name}
                       </p>
                       <div className="flex items-center gap-1 mt-0.5">
@@ -242,7 +242,7 @@ function DesignReviewCard({
                       </div>
                     </div>
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-muted-foreground">
                     {new Date(review.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -250,11 +250,11 @@ function DesignReviewCard({
                   </span>
                 </div>
                 {review.title && (
-                  <h5 className="font-semibold text-gray-900 text-sm mb-1">
+                  <h5 className="font-semibold text-foreground text-sm mb-1">
                     {review.title}
                   </h5>
                 )}
-                <p className="text-gray-700 text-sm line-clamp-2">
+                <p className="text-foreground text-sm line-clamp-2">
                   {review.comment}
                 </p>
               </div>
@@ -396,8 +396,8 @@ export default function MyReviewsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">My Reviews</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-foreground">My Reviews</h1>
+          <p className="mt-2 text-muted-foreground">
             Share your thoughts on purchased designs
           </p>
         </div>
@@ -424,12 +424,12 @@ export default function MyReviewsPage() {
         ))}
 
         {purchasedDesigns.length === 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+          <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-medium text-foreground mb-2">
               No purchased designs
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-muted-foreground mb-6">
               Purchase designs to leave reviews!
             </p>
             <Link
@@ -445,15 +445,15 @@ export default function MyReviewsPage() {
       {/* Review Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full">
+          <div className="bg-card rounded-2xl shadow-xl max-w-md w-full">
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-6">
                 {editingReview ? "Edit Review" : "Write Review"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {!formData.designId && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Select Design *
                     </label>
                     <select
@@ -462,7 +462,7 @@ export default function MyReviewsPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, designId: e.target.value })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     >
                       <option value="">Choose a design</option>
                       {purchasedDesigns.map((design: any) => (
@@ -474,7 +474,7 @@ export default function MyReviewsPage() {
                   </div>
                 )}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Rating *
                   </label>
                   <div className="flex items-center space-x-2">
@@ -498,7 +498,7 @@ export default function MyReviewsPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Comment *
                   </label>
                   <textarea
@@ -510,10 +510,10 @@ export default function MyReviewsPage() {
                     }
                     minLength={10}
                     maxLength={1000}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     placeholder="Share your experience with this design (min 10 chars)"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {formData.comment.length}/1000 characters
                   </p>
                 </div>

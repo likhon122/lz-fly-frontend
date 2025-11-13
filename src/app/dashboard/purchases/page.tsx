@@ -70,16 +70,16 @@ export default function MyPurchasesPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "completed":
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-primary" />;
       case "pending":
         return <Clock className="w-5 h-5 text-yellow-600" />;
       case "cancelled":
       case "refunded":
         return <XCircle className="w-5 h-5 text-red-600" />;
       case "expired":
-        return <AlertCircle className="w-5 h-5 text-gray-600" />;
+        return <AlertCircle className="w-5 h-5 text-muted-foreground" />;
       default:
-        return <Package className="w-5 h-5 text-gray-600" />;
+        return <Package className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
@@ -93,9 +93,9 @@ export default function MyPurchasesPage() {
       case "refunded":
         return "bg-red-100 text-red-700 border-red-200";
       case "expired":
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-muted text-foreground border-border";
       default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-muted text-foreground border-border";
     }
   };
 
@@ -104,8 +104,8 @@ export default function MyPurchasesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Purchases</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-foreground">My Purchases</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             View and manage all your purchases (
             {data?.pagination?.totalItems || 0} total)
           </p>
@@ -114,7 +114,7 @@ export default function MyPurchasesPage() {
           <button
             onClick={() => refetch()}
             disabled={isLoading}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 disabled:opacity-50 text-sm font-medium"
+            className="px-4 py-2 bg-card border border-border rounded-lg hover:bg-muted/50 transition-colors flex items-center gap-2 disabled:opacity-50 text-sm font-medium"
           >
             <RefreshCw
               className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
@@ -125,11 +125,11 @@ export default function MyPurchasesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="bg-card rounded-lg border border-border p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-gray-600" />
-            <h3 className="font-semibold text-gray-900 text-sm">Filters</h3>
+            <Filter className="w-4 h-4 text-muted-foreground" />
+            <h3 className="font-semibold text-foreground text-sm">Filters</h3>
           </div>
           {(statusFilter ||
             purchaseTypeFilter ||
@@ -137,7 +137,7 @@ export default function MyPurchasesPage() {
             sortOrder !== "desc") && (
             <button
               onClick={clearFilters}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="text-sm text-primary hover:text-blue-700 font-medium"
             >
               Clear All
             </button>
@@ -146,7 +146,7 @@ export default function MyPurchasesPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Status Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Status
             </label>
             <select
@@ -154,7 +154,7 @@ export default function MyPurchasesPage() {
               onChange={(e) =>
                 setStatusFilter(e.target.value as PurchaseStatus | "")
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             >
               <option value="">All Status</option>
               <option value="pending">Pending</option>
@@ -167,7 +167,7 @@ export default function MyPurchasesPage() {
 
           {/* Purchase Type Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Purchase Type
             </label>
             <select
@@ -177,7 +177,7 @@ export default function MyPurchasesPage() {
                   e.target.value as "individual" | "subscription" | ""
                 )
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             >
               <option value="">All Types</option>
               <option value="individual">Individual</option>
@@ -187,7 +187,7 @@ export default function MyPurchasesPage() {
 
           {/* Sort By */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Sort By
             </label>
             <select
@@ -197,7 +197,7 @@ export default function MyPurchasesPage() {
                   e.target.value as "purchaseDate" | "createdAt" | "updatedAt"
                 )
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             >
               <option value="purchaseDate">Purchase Date</option>
               <option value="createdAt">Created Date</option>
@@ -207,13 +207,13 @@ export default function MyPurchasesPage() {
 
           {/* Sort Order */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Order
             </label>
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             >
               <option value="desc">Newest First</option>
               <option value="asc">Oldest First</option>
@@ -225,8 +225,8 @@ export default function MyPurchasesPage() {
       {/* Purchases List */}
       {isLoading ? (
         <div className="flex flex-col items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-gray-600 text-sm">Loading your purchases...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+          <p className="text-muted-foreground text-sm">Loading your purchases...</p>
         </div>
       ) : purchases.length > 0 ? (
         <div className="grid grid-cols-1 gap-4">
@@ -249,11 +249,11 @@ export default function MyPurchasesPage() {
             }) => (
               <div
                 key={purchase._id}
-                className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow"
+                className="bg-card rounded-lg border border-border p-5 hover:shadow-md transition-shadow"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start space-x-3">
-                    <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
                       {purchase.purchaseType === "subscription" ? (
                         <Package className="w-5 h-5 text-white" />
                       ) : (
@@ -262,18 +262,18 @@ export default function MyPurchasesPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-base font-bold text-gray-900">
+                        <h3 className="text-base font-bold text-foreground">
                           {purchase.purchaseType === "subscription"
                             ? purchase.pricingPlan?.name || "Subscription Plan"
                             : purchase.design?.title || "Design Purchase"}
                         </h3>
                       </div>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         Order ID: {purchase._id.slice(-8).toUpperCase()}
                       </p>
                       {purchase.purchaseType === "subscription" &&
                         purchase.pricingPlan?.duration && (
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             Duration: {purchase.pricingPlan.duration}
                           </p>
                         )}
@@ -288,20 +288,20 @@ export default function MyPurchasesPage() {
                       {getStatusIcon(purchase.status)}
                       <span className="capitalize">{purchase.status}</span>
                     </div>
-                    <span className="text-xs text-gray-500 capitalize">
+                    <span className="text-xs text-muted-foreground capitalize">
                       {purchase.purchaseType}
                     </span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 p-3 bg-gray-50 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 p-3 bg-muted/50 rounded-lg">
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-                      <DollarSign className="w-4 h-4 text-green-600" />
+                      <DollarSign className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Amount</p>
-                      <p className="font-bold text-gray-900 text-sm">
+                      <p className="text-xs text-muted-foreground">Amount</p>
+                      <p className="font-bold text-foreground text-sm">
                         {purchase.currency || "BDT"} {purchase.currencyDisplay}
                         {purchase.amount?.toFixed(2)}
                       </p>
@@ -309,11 +309,11 @@ export default function MyPurchasesPage() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Calendar className="w-4 h-4 text-blue-600" />
+                      <Calendar className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Purchase Date</p>
-                      <p className="font-medium text-gray-900 text-sm">
+                      <p className="text-xs text-muted-foreground">Purchase Date</p>
+                      <p className="font-medium text-foreground text-sm">
                         {new Date(
                           purchase.purchaseDate || purchase.createdAt
                         ).toLocaleDateString()}
@@ -322,11 +322,11 @@ export default function MyPurchasesPage() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <Package className="w-4 h-4 text-purple-600" />
+                      <Package className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <p className="text-xs text-gray-500">Type</p>
-                      <p className="font-medium text-gray-900 text-sm capitalize">
+                      <p className="text-xs text-muted-foreground">Type</p>
+                      <p className="font-medium text-foreground text-sm capitalize">
                         {purchase.purchaseType}
                       </p>
                     </div>
@@ -347,7 +347,7 @@ export default function MyPurchasesPage() {
                               purchase.subscriptionEndDate
                             ).toLocaleDateString()}
                           </p>
-                          <p className="text-xs text-blue-600 mt-1">
+                          <p className="text-xs text-primary mt-1">
                             {Math.ceil(
                               (new Date(
                                 purchase.subscriptionEndDate
@@ -376,10 +376,10 @@ export default function MyPurchasesPage() {
 
                 {/* Payment Method */}
                 {purchase.paymentMethod && (
-                  <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="text-xs text-gray-500">
+                  <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs text-muted-foreground">
                       Payment Method:{" "}
-                      <span className="font-medium text-gray-700 capitalize">
+                      <span className="font-medium text-foreground capitalize">
                         {purchase.paymentMethod.replace(/_/g, " ")}
                       </span>
                     </p>
@@ -393,7 +393,7 @@ export default function MyPurchasesPage() {
                     <div className="mt-3">
                       <Link
                         href={`/designs/${purchase.design._id}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-sm"
                       >
                         <ShoppingBag className="w-4 h-4" />
                         View Design
@@ -405,14 +405,14 @@ export default function MyPurchasesPage() {
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+        <div className="bg-card rounded-lg border border-border p-12 text-center">
           <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             {statusFilter || purchaseTypeFilter
               ? "No purchases found"
               : "No purchases yet"}
           </h3>
-          <p className="text-gray-500 mb-6 text-sm">
+          <p className="text-muted-foreground mb-6 text-sm">
             {statusFilter || purchaseTypeFilter
               ? "Try adjusting your filters to see more results."
               : "Start exploring our designs and pricing plans!"}
@@ -421,13 +421,13 @@ export default function MyPurchasesPage() {
             <div className="flex items-center justify-center gap-4">
               <Link
                 href="/designs"
-                className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                className="inline-block px-6 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-sm"
               >
                 Browse Designs
               </Link>
               <Link
                 href="/pricing"
-                className="inline-block px-6 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                className="inline-block px-6 py-2.5 border border-border text-foreground font-medium rounded-lg hover:bg-muted/50 transition-colors text-sm"
               >
                 View Plans
               </Link>
@@ -442,17 +442,17 @@ export default function MyPurchasesPage() {
           <button
             onClick={() => setPage(page - 1)}
             disabled={page === 1 || isLoading}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+            className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
           >
             Previous
           </button>
-          <span className="px-4 py-2 text-gray-700 text-sm">
+          <span className="px-4 py-2 text-foreground text-sm">
             Page {page} of {data.pagination.totalPages}
           </span>
           <button
             onClick={() => setPage(page + 1)}
             disabled={page >= data.pagination.totalPages || isLoading}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+            className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
           >
             Next
           </button>

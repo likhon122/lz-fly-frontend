@@ -353,8 +353,8 @@ export default function DesignsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Designs</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-2xl font-bold text-foreground">Designs</h1>
+          <p className="mt-2 text-muted-foreground">
             Manage design portfolio ({data?.pagination?.totalItems || 0} total)
           </p>
         </div>
@@ -387,24 +387,24 @@ export default function DesignsPage() {
       </div>
 
       {/* Basic Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+      <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search designs..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
           </div>
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none"
             >
               <option value="">All Status</option>
               <option value="Active">Active</option>
@@ -418,7 +418,7 @@ export default function DesignsPage() {
               setMainCategoryFilter(e.target.value);
               setSubCategoryFilter(""); // Reset sub when main changes
             }}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none"
+            className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none"
           >
             <option value="">All Main Categories</option>
             {categories
@@ -433,7 +433,7 @@ export default function DesignsPage() {
             value={subCategoryFilter}
             onChange={(e) => setSubCategoryFilter(e.target.value)}
             disabled={!mainCategoryFilter}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+            className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent appearance-none disabled:bg-muted disabled:cursor-not-allowed"
           >
             <option value="">All Sub Categories</option>
             {categories
@@ -453,14 +453,14 @@ export default function DesignsPage() {
 
       {/* Advanced Filters */}
       {showFilters && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-foreground">
               Advanced Filters
             </h3>
             <button
               onClick={clearFilters}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              className="text-sm text-primary hover:text-primary font-medium"
             >
               Clear All
             </button>
@@ -468,13 +468,13 @@ export default function DesignsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Complexity Level Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Complexity Level
               </label>
               <select
                 value={complexityFilter}
                 onChange={(e) => setComplexityFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="">All Levels</option>
                 <option value="Basic">Basic</option>
@@ -485,7 +485,7 @@ export default function DesignsPage() {
 
             {/* Min Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Min Price 
               </label>
               <input
@@ -498,13 +498,13 @@ export default function DesignsPage() {
                 }
                 placeholder="0.00"
                 step="0.01"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
 
             {/* Max Price */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Max Price 
               </label>
               <input
@@ -517,7 +517,7 @@ export default function DesignsPage() {
                 }
                 placeholder="999.99"
                 step="0.01"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               />
             </div>
           </div>
@@ -527,15 +527,15 @@ export default function DesignsPage() {
       {/* Designs Grid */}
       {isLoading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : designs.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-12 text-center">
           <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold text-foreground mb-2">
             No designs found
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="text-muted-foreground mb-4">
             {searchTerm ||
             statusFilter ||
             mainCategoryFilter ||
@@ -560,13 +560,13 @@ export default function DesignsPage() {
             )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:p-5">
           {designs.map((design: any) => (
             <div
               key={design._id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow"
+              className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl dark:shadow-primary/10 transition-shadow"
             >
-              <div className="relative h-48 bg-gray-100">
+              <div className="relative h-48 bg-muted">
                 {design.previewImageUrls &&
                 design.previewImageUrls.length > 0 ? (
                   <Image
@@ -584,10 +584,10 @@ export default function DesignsPage() {
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium ${
                       design.status === "Active"
-                        ? "bg-green-100 text-green-700"
+                        ? "bg-green-100 text-emerald-600 dark:text-emerald-400"
                         : design.status === "Draft"
                         ? "bg-yellow-100 text-yellow-700"
-                        : "bg-gray-100 text-gray-700"
+                        : "bg-muted text-foreground"
                     }`}
                   >
                     {design.status}
@@ -595,17 +595,17 @@ export default function DesignsPage() {
                 </div>
               </div>
               <div className="p-4">
-                <h3 className="font-bold text-gray-900 mb-1 truncate">
+                <h3 className="font-bold text-foreground mb-1 truncate">
                   {design.title}
                 </h3>
-                <p className="text-sm text-gray-500 mb-2">
+                <p className="text-sm text-muted-foreground mb-2">
                   {design.mainCategory?.name || "No category"}
                   {design.subCategory && ` > ${design.subCategory.name}`}
                 </p>
-                <p className="text-sm text-gray-600 line-clamp-2 mb-3">
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
                   {design.description}
                 </p>
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+                <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
                   <div className="flex items-center gap-3">
                     <span className="flex items-center gap-1">
                       <Heart className="w-3 h-3 text-red-500 fill-red-500" />
@@ -631,7 +631,7 @@ export default function DesignsPage() {
                   {design.likesCount > 0 && (
                     <Link
                       href={`/admin/designs/${design._id}/likers`}
-                      className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                      className="text-primary hover:text-primary font-medium flex items-center gap-1"
                     >
                       <Heart className="w-3 h-3" />
                       View Likers
@@ -640,7 +640,7 @@ export default function DesignsPage() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
-                    <span className="text-lg font-bold text-blue-600">
+                    <span className="text-lg font-bold text-primary">
                       <span className="text-2xl font-bold"> {
                         design.currencyDisplay
                       }</span>
@@ -651,7 +651,7 @@ export default function DesignsPage() {
                     </span>
                     {design.discountedPrice &&
                       design.discountedPrice < design.basePrice && (
-                        <span className="text-sm text-gray-500 line-through">
+                        <span className="text-sm text-muted-foreground line-through">
                           {design.currencyDisplay}
                           {design.basePrice}
                         </span>
@@ -660,13 +660,13 @@ export default function DesignsPage() {
                   <div className="flex space-x-2">
                     <button
                       onClick={() => handleEdit(design)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-2 text-primary hover:bg-primary/10 dark:bg-primary/15 rounded-xl transition-colors"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(design._id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-red-500 hover:bg-red-500/10 dark:bg-red-500/15 rounded-xl transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -688,7 +688,7 @@ export default function DesignsPage() {
           >
             Previous
           </Button>
-          <span className="px-4 py-2 text-gray-700">
+          <span className="px-4 py-2 text-foreground">
             Page {page} of {data.pagination.totalPages}
           </span>
           <Button
@@ -704,8 +704,8 @@ export default function DesignsPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full my-8 max-h-[90vh] overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+          <div className="bg-card rounded-3xl shadow-2xl max-w-4xl w-full my-8 max-h-[90vh] overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 sm:p-5 text-white">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold">
@@ -719,7 +719,7 @@ export default function DesignsPage() {
                 </div>
                 <button
                   onClick={handleCloseModal}
-                  className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
+                  className="w-8 h-8 bg-card/20 rounded-full flex items-center justify-center hover:bg-card/30 transition-colors"
                 >
                   <svg
                     className="w-5 h-5"
@@ -737,11 +737,11 @@ export default function DesignsPage() {
                 </button>
               </div>
             </div>
-            <div className="p-6 max-h-[calc(90vh-120px)] overflow-y-auto">
+            <div className="p-4 sm:p-5 max-h-[calc(90vh-120px)] overflow-y-auto">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Title *
                     </label>
                     <input
@@ -751,12 +751,12 @@ export default function DesignsPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, title: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                       placeholder="Enter design title..."
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Design Type *
                     </label>
                     <select
@@ -765,7 +765,7 @@ export default function DesignsPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, designType: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     >
                       <option value="">Select design type</option>
                       <option value="Logo">Logo</option>
@@ -783,7 +783,7 @@ export default function DesignsPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Main Category *
                     </label>
                     <select
@@ -796,7 +796,7 @@ export default function DesignsPage() {
                           subCategory: "", // Reset subCategory when mainCategory changes
                         });
                       }}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     >
                       <option value="">Select main category</option>
                       {categories.map((cat: any) => (
@@ -810,7 +810,7 @@ export default function DesignsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Sub Category *
                     </label>
                     <select
@@ -823,7 +823,7 @@ export default function DesignsPage() {
                         })
                       }
                       disabled={!formData.mainCategory}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card disabled:bg-muted disabled:cursor-not-allowed"
                     >
                       <option value="">Select sub category</option>
                       {formData.mainCategory &&
@@ -844,7 +844,7 @@ export default function DesignsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Description *
                   </label>
                   <textarea
@@ -854,13 +854,13 @@ export default function DesignsPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white resize-none"
+                    className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card resize-none"
                     placeholder="Describe your design in detail..."
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Complexity Level *
                     </label>
                     <select
@@ -872,7 +872,7 @@ export default function DesignsPage() {
                           complexityLevel: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     >
                       <option value="Basic">Basic</option>
                       <option value="Intermediate">Intermediate</option>
@@ -880,7 +880,7 @@ export default function DesignsPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Status *
                     </label>
                     <select
@@ -889,7 +889,7 @@ export default function DesignsPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, status: e.target.value })
                       }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     >
                       <option value="Active">Active</option>
                       <option value="Draft">Draft</option>
@@ -900,7 +900,7 @@ export default function DesignsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Base Price *
                     </label>
                     <input
@@ -915,12 +915,12 @@ export default function DesignsPage() {
                           basePrice: parseFloat(e.target.value) || 0,
                         })
                       }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                       placeholder="0.00"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Discounted Price
                     </label>
                     <input
@@ -934,13 +934,13 @@ export default function DesignsPage() {
                           discountedPrice: parseFloat(e.target.value) || 0,
                         })
                       }
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                       placeholder="0.00"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Included Formats *
                   </label>
                   <div className="space-y-2">
@@ -959,9 +959,9 @@ export default function DesignsPage() {
                         )
                       }
                       placeholder="e.g., PSD, AI, JPG, PNG, PDF..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     />
-                    <div className="text-xs text-gray-500 space-y-1">
+                    <div className="text-xs text-muted-foreground space-y-1">
                       <p className="font-medium">
                         Common design formats Example:
                       </p>
@@ -1002,7 +1002,7 @@ export default function DesignsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Preview Images *
                   </label>
                   <div className="space-y-3">
@@ -1107,13 +1107,13 @@ export default function DesignsPage() {
                         // Reset the input value to allow selecting the same file again
                         e.target.value = "";
                       }}
-                      className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent hover:border-blue-400 transition-colors"
+                      className="w-full px-4 py-3 border-2 border-dashed border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent hover:border-blue-400 transition-colors"
                     />
                     {imagePreviews.length > 0 && (
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-3">
                         {imagePreviews.map((preview, index) => (
                           <div key={index} className="relative group">
-                            <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+                            <div className="aspect-square rounded-xl overflow-hidden bg-muted border border-border">
                               <Image
                                 src={preview}
                                 alt={`Preview ${index + 1}`}
@@ -1168,14 +1168,14 @@ export default function DesignsPage() {
                       </div>
                     )}
                     {isGeneratingPreviews && (
-                      <div className="flex items-center justify-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                        <span className="ml-3 text-gray-600">
+                      <div className="flex items-center justify-center py-5 sm:py-6">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                        <span className="ml-3 text-muted-foreground">
                           Generating previews...
                         </span>
                       </div>
                     )}
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       {previewImages.length > 0
                         ? `${previewImages.length} image${
                             previewImages.length > 1 ? "s" : ""
@@ -1207,7 +1207,7 @@ export default function DesignsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Downloadable File *
                   </label>
                   <div className="space-y-3">
@@ -1218,16 +1218,16 @@ export default function DesignsPage() {
                         const file = e.target.files?.[0];
                         setDownloadableFile(file || null);
                       }}
-                      className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent hover:border-blue-400 transition-colors"
+                      className="w-full px-4 py-3 border-2 border-dashed border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent hover:border-blue-400 transition-colors"
                     />
                     {/* Show newly selected downloadable file (file input) */}
                     {downloadableFile && (
-                      <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <div className="flex items-center gap-3 p-3 bg-primary/10 dark:bg-primary/15 border border-primary/30 dark:border-primary/20 rounded-xl">
+                        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
                           {downloadableFile.type.includes("zip") ||
                           downloadableFile.type.includes("rar") ? (
                             <svg
-                              className="w-5 h-5 text-blue-600"
+                              className="w-5 h-5 text-primary"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -1241,7 +1241,7 @@ export default function DesignsPage() {
                             </svg>
                           ) : downloadableFile.type.includes("pdf") ? (
                             <svg
-                              className="w-5 h-5 text-red-600"
+                              className="w-5 h-5 text-red-500"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -1258,7 +1258,7 @@ export default function DesignsPage() {
                               .toLowerCase()
                               .endsWith(".psd") ? (
                             <svg
-                              className="w-5 h-5 text-purple-600"
+                              className="w-5 h-5 text-primary"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -1272,7 +1272,7 @@ export default function DesignsPage() {
                             </svg>
                           ) : (
                             <svg
-                              className="w-5 h-5 text-gray-600"
+                              className="w-5 h-5 text-muted-foreground"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -1287,10 +1287,10 @@ export default function DesignsPage() {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium text-gray-900 truncate">
+                          <p className="text-sm font-medium text-foreground truncate">
                             {downloadableFile.name}
                           </p>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-muted-foreground">
                             {downloadableFile.size / 1024 / 1024 < 1
                               ? `${(downloadableFile.size / 1024).toFixed(
                                   1
@@ -1311,7 +1311,7 @@ export default function DesignsPage() {
                             // ensure we don't accidentally send a delete flag for existing file when a new file was selected and then removed
                             setDeleteDownloadableFile(false);
                           }}
-                          className="text-red-500 hover:text-red-700 p-1"
+                          className="text-red-500 hover:text-red-600 dark:text-red-400 p-1"
                         >
                           <svg
                             className="w-4 h-4"
@@ -1334,10 +1334,10 @@ export default function DesignsPage() {
                     {!downloadableFile &&
                       editingDesign?.downloadableFile &&
                       !deleteDownloadableFile && (
-                        <div className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <div className="flex items-center gap-3 p-3 bg-primary/10 dark:bg-primary/15 border border-primary/30 dark:border-primary/20 rounded-xl">
+                          <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
                             <svg
-                              className="w-5 h-5 text-blue-600"
+                              className="w-5 h-5 text-primary"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -1351,13 +1351,13 @@ export default function DesignsPage() {
                             </svg>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
+                            <p className="text-sm font-medium text-foreground truncate">
                               {editingDesign.downloadableFile?.secure_url
                                 ?.split("/")
                                 .pop() ||
                                 editingDesign.downloadableFile?.public_id}
                             </p>
-                            <p className="text-xs text-gray-600">
+                            <p className="text-xs text-muted-foreground">
                               {editingDesign.downloadableFile?.file_size
                                 ? `${(
                                     Number(
@@ -1380,7 +1380,7 @@ export default function DesignsPage() {
                               // Also clear any newly selected file (shouldn't be present)
                               setDownloadableFile(null);
                             }}
-                            className="text-red-500 hover:text-red-700 p-1"
+                            className="text-red-500 hover:text-red-600 dark:text-red-400 p-1"
                           >
                             <svg
                               className="w-4 h-4"
@@ -1398,7 +1398,7 @@ export default function DesignsPage() {
                           </button>
                         </div>
                       )}
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       {!downloadableFile
                         ? "Select a downloadable file (ZIP, RAR, PSD, AI, PDF, PNG, JPG)"
                         : "File ready for upload"}
@@ -1406,7 +1406,7 @@ export default function DesignsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Tags *
                   </label>
                   <div className="space-y-2">
@@ -1418,7 +1418,7 @@ export default function DesignsPage() {
                         handleTagKeyDown(e, "tags", tagInput, setTagInput)
                       }
                       placeholder="Type a tag and press Enter or comma..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     />
                     {formData.tags.length > 0 && (
                       <div className="flex flex-wrap gap-2">
@@ -1431,7 +1431,7 @@ export default function DesignsPage() {
                             <button
                               type="button"
                               onClick={() => removeTag("tags", tag)}
-                              className="ml-1 text-blue-600 hover:text-blue-800"
+                              className="ml-1 text-primary hover:text-blue-800"
                             >
                               ×
                             </button>
@@ -1442,7 +1442,7 @@ export default function DesignsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Used Tools *
                   </label>
                   <div className="space-y-2">
@@ -1459,7 +1459,7 @@ export default function DesignsPage() {
                         )
                       }
                       placeholder="Type a tool and press Enter or comma..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     />
                     {formData.usedTools.length > 0 && (
                       <div className="flex flex-wrap gap-2">
@@ -1472,7 +1472,7 @@ export default function DesignsPage() {
                             <button
                               type="button"
                               onClick={() => removeTag("usedTools", tool)}
-                              className="ml-1 text-purple-600 hover:text-purple-800"
+                              className="ml-1 text-primary hover:text-purple-800"
                             >
                               ×
                             </button>
@@ -1483,7 +1483,7 @@ export default function DesignsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Effects Used *
                   </label>
                   <div className="space-y-2">
@@ -1500,20 +1500,20 @@ export default function DesignsPage() {
                         )
                       }
                       placeholder="Type an effect and press Enter or comma..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card"
                     />
                     {formData.effectsUsed.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {formData.effectsUsed.map((effect, index) => (
                           <span
                             key={index}
-                            className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full"
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-emerald-700 dark:text-emerald-300 text-sm rounded-full"
                           >
                             {effect}
                             <button
                               type="button"
                               onClick={() => removeTag("effectsUsed", effect)}
-                              className="ml-1 text-green-600 hover:text-green-800"
+                              className="ml-1 text-primary hover:text-emerald-700 dark:text-emerald-300"
                             >
                               ×
                             </button>
@@ -1524,7 +1524,7 @@ export default function DesignsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Process Description *
                   </label>
                   <textarea
@@ -1538,23 +1538,23 @@ export default function DesignsPage() {
                       })
                     }
                     placeholder="Describe the design process and techniques used..."
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 focus:bg-white resize-none"
+                    className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-blue-500 transition-all duration-200 bg-muted/50 focus:bg-card resize-none"
                   />
                 </div>
 
-                <div className="flex items-center justify-end gap-4 pt-6 border-t border-gray-200">
+                <div className="flex items-center justify-end gap-4 pt-6 border-t border-border">
                   <Button
                     type="button"
                     onClick={handleCloseModal}
                     variant="outline"
-                    className="px-6 py-2.5 border-gray-300 text-gray-700 hover:bg-gray-50"
+                    className="px-6 py-2.5 border-border text-foreground hover:bg-muted/50"
                     disabled={isCreating || isUpdating}
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
-                    className="px-8 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                    className="px-5 sm:px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-xl dark:shadow-primary/10 hover:shadow-2xl dark:shadow-primary/20 transform hover:-translate-y-0.5 transition-all duration-200"
                     disabled={isCreating || isUpdating}
                   >
                     {isCreating || isUpdating ? (
@@ -1582,3 +1582,5 @@ export default function DesignsPage() {
     </div>
   );
 }
+
+

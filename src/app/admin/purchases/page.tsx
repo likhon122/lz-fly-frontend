@@ -275,16 +275,16 @@ export default function PurchasesPage() {
   const getStatusColor = (status: PurchaseStatus | string) => {
     switch (status) {
       case "completed":
-        return "bg-green-100 text-green-700 border-green-200";
+        return "bg-green-100 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 dark:border-emerald-500/20";
       case "pending":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
+        return "bg-yellow-100 text-yellow-700 border-amber-500/30 dark:border-amber-500/20";
       case "cancelled":
       case "refunded":
-        return "bg-red-100 text-red-700 border-red-200";
+        return "bg-red-100 text-red-600 dark:text-red-400 border-red-500/30 dark:border-red-500/20";
       case "expired":
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-muted text-foreground border-border";
       default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-muted text-foreground border-border";
     }
   };
 
@@ -293,10 +293,10 @@ export default function PurchasesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
             Purchase Management
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             Manage all customer purchases and subscriptions
           </p>
         </div>
@@ -304,7 +304,7 @@ export default function PurchasesPage() {
           <button
             onClick={() => refetch()}
             disabled={isLoading}
-            className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 disabled:opacity-50"
+            className="px-4 py-2 bg-card border border-border rounded-xl hover:bg-muted/50 transition-colors flex items-center gap-2 disabled:opacity-50"
           >
             <RefreshCw
               className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
@@ -313,7 +313,7 @@ export default function PurchasesPage() {
           </button>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all flex items-center gap-2"
+            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:shadow-xl dark:shadow-primary/10 transition-all flex items-center gap-2"
           >
             <Filter className="w-4 h-4" />
             <span className="text-sm font-medium">
@@ -327,7 +327,7 @@ export default function PurchasesPage() {
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Total Revenue */}
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
             <div className="flex items-center justify-between mb-2">
               {/* < className="w-8 h-8 opacity-80" /> */}
               <ArrowUpRight className="w-5 h-5" />
@@ -340,7 +340,7 @@ export default function PurchasesPage() {
           </div>
 
           {/* Total Purchases */}
-          <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="bg-gradient-to-br from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
             <div className="flex items-center justify-between mb-2">
               <ShoppingCart className="w-8 h-8 opacity-80" />
               <span className="text-xl font-bold">
@@ -355,7 +355,7 @@ export default function PurchasesPage() {
           </div>
 
           {/* Completed */}
-          <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
             <div className="flex items-center justify-between mb-2">
               <CheckCircle className="w-8 h-8 opacity-80" />
               <span className="text-xl font-bold">
@@ -370,7 +370,7 @@ export default function PurchasesPage() {
           </div>
 
           {/* Pending */}
-          <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
             <div className="flex items-center justify-between mb-2">
               <Clock className="w-8 h-8 opacity-80" />
               <span className="text-xl font-bold">
@@ -385,7 +385,7 @@ export default function PurchasesPage() {
           </div>
 
           {/* Average Order Value */}
-          <div className="bg-gradient-to-br from-rose-500 to-red-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="bg-gradient-to-br from-rose-500 to-red-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
             <div className="flex items-center justify-between mb-2">
               <TrendingUp className="w-8 h-8 opacity-80" />
               <ArrowUpRight className="w-5 h-5" />
@@ -404,34 +404,34 @@ export default function PurchasesPage() {
         <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold text-purple-600">
+              <p className="text-2xl font-bold text-primary">
                 {purchases[0]?.currencyDisplay ?? "৳"}{stats.totalRevenue.toFixed(2)}
               </p>
-              <p className="text-xs text-gray-600">Page Revenue</p>
+              <p className="text-xs text-muted-foreground">Page Revenue</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-green-600">
+              <p className="text-2xl font-bold text-primary">
                 {stats.completed}
               </p>
-              <p className="text-xs text-gray-600">Completed</p>
+              <p className="text-xs text-muted-foreground">Completed</p>
             </div>
             <div>
               <p className="text-2xl font-bold text-yellow-600">
                 {stats.pending}
               </p>
-              <p className="text-xs text-gray-600">Pending</p>
+              <p className="text-xs text-muted-foreground">Pending</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-red-600">
+              <p className="text-2xl font-bold text-red-500">
                 {stats.cancelled}
               </p>
-              <p className="text-xs text-gray-600">Cancelled</p>
+              <p className="text-xs text-muted-foreground">Cancelled</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl font-bold text-primary">
                 {stats.conversionRate}%
               </p>
-              <p className="text-xs text-gray-600">Conversion</p>
+              <p className="text-xs text-muted-foreground">Conversion</p>
             </div>
           </div>
         </div>
@@ -439,14 +439,14 @@ export default function PurchasesPage() {
 
       {/* Advanced Filters Panel */}
       {showFilters && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-foreground">
               Advanced Filters
             </h3>
             <button
               onClick={clearFilters}
-              className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+              className="text-sm text-primary hover:text-purple-700 font-medium"
             >
               Clear All
             </button>
@@ -454,24 +454,24 @@ export default function PurchasesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Search */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Search Customer
               </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Name or email..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
             </div>
 
             {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Status
               </label>
               <select
@@ -479,7 +479,7 @@ export default function PurchasesPage() {
                 onChange={(e) =>
                   setStatusFilter(e.target.value as PurchaseStatus | "")
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="">All Statuses</option>
                 <option value="pending">Pending</option>
@@ -492,7 +492,7 @@ export default function PurchasesPage() {
 
             {/* Type Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Purchase Type
               </label>
               <select
@@ -500,7 +500,7 @@ export default function PurchasesPage() {
                 onChange={(e) =>
                   setTypeFilter(e.target.value as PurchaseType | "")
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="">All Types</option>
                 <option value="individual">Individual</option>
@@ -510,7 +510,7 @@ export default function PurchasesPage() {
 
             {/* Payment Method Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Payment Method
               </label>
               <select
@@ -518,7 +518,7 @@ export default function PurchasesPage() {
                 onChange={(e) =>
                   setPaymentMethodFilter(e.target.value as PaymentMethod | "")
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="">All Methods</option>
                 <option value="credit_card">Credit Card</option>
@@ -531,7 +531,7 @@ export default function PurchasesPage() {
 
             {/* Min Amount */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Min Amount 
               </label>
               <input
@@ -543,13 +543,13 @@ export default function PurchasesPage() {
                   )
                 }
                 placeholder="0.00"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
             </div>
 
             {/* Max Amount */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Max Amount 
               </label>
               <input
@@ -561,33 +561,33 @@ export default function PurchasesPage() {
                   )
                 }
                 placeholder="999.99"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
             </div>
 
             {/* Start Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Start Date
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
             </div>
 
             {/* End Date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 End Date
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -595,40 +595,40 @@ export default function PurchasesPage() {
       )}
 
       {/* Purchases Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
-            <p className="text-gray-600">Loading purchases...</p>
+            <p className="text-muted-foreground">Loading purchases...</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Order ID
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Type
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Customer
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Item
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Payment
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
                     Status
                   </th>
                   <th
-                    className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase cursor-pointer hover:text-purple-600"
+                    className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase cursor-pointer hover:text-primary"
                     onClick={() => handleSort("createdAt")}
                   >
                     <div className="flex items-center gap-1">
@@ -641,7 +641,7 @@ export default function PurchasesPage() {
                         ))}
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-right text-xs font-semibold text-muted-foreground uppercase">
                     Actions
                   </th>
                 </tr>
@@ -650,10 +650,10 @@ export default function PurchasesPage() {
                 {purchases.map((purchase: Purchase) => (
                   <tr
                     key={purchase._id}
-                    className="hover:bg-gray-50 transition-colors"
+                    className="hover:bg-muted/50 transition-colors"
                   >
                     <td className="px-6 py-4">
-                      <p className="font-mono text-sm text-gray-900 font-semibold">
+                      <p className="font-mono text-sm text-foreground font-semibold">
                         #{purchase._id.slice(-8).toUpperCase()}
                       </p>
                     </td>
@@ -662,7 +662,7 @@ export default function PurchasesPage() {
                         className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
                           purchase.purchaseType === "subscription"
                             ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
-                            : "bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700"
+                            : "bg-gradient-to-r from-blue-100 to-indigo-100 text-primary"
                         }`}
                       >
                         {purchase.purchaseType === "subscription" ? (
@@ -679,10 +679,10 @@ export default function PurchasesPage() {
                           {purchase.user?.name?.[0]?.toUpperCase() || "?"}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-foreground">
                             {purchase.user?.name || "N/A"}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {purchase.user?.email}
                           </p>
                         </div>
@@ -690,12 +690,12 @@ export default function PurchasesPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="text-sm text-gray-900">
+                        <p className="text-sm text-foreground">
                           {purchase.design?.title ||
                             purchase.pricingPlan?.name ||
                             "N/A"}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           {purchase.purchaseType === "subscription"
                             ? `${purchase.pricingPlan?.duration || "N/A"}`
                             : "One-time purchase"}
@@ -703,17 +703,17 @@ export default function PurchasesPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-lg font-bold text-foreground">
                         {purchase.currencyDisplay ?? "৳"}{purchase.amount?.toFixed(2) || "0.00"}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {purchase.currency?.toUpperCase() || "BDT"}
                       </p>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm text-gray-900 capitalize">
+                        <CreditCard className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-sm text-foreground capitalize">
                           {purchase.paymentMethod?.replace("_", " ") || "N/A"}
                         </span>
                       </div>
@@ -735,7 +735,7 @@ export default function PurchasesPage() {
                           }
                         }}
                         disabled={isUpdating}
-                        className={`px-3 py-1 rounded-lg text-xs font-medium border-2 cursor-pointer transition-all ${getStatusColor(
+                        className={`px-3 py-1 rounded-xl text-xs font-medium border-2 cursor-pointer transition-all ${getStatusColor(
                           purchase.status
                         )} hover:shadow-md disabled:opacity-50`}
                       >
@@ -747,10 +747,10 @@ export default function PurchasesPage() {
                       </select>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="text-sm text-gray-900">
+                      <p className="text-sm text-foreground">
                         {new Date(purchase.createdAt).toLocaleDateString()}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {new Date(purchase.createdAt).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
@@ -760,7 +760,7 @@ export default function PurchasesPage() {
                     <td className="px-6 py-4 text-right">
                       <button
                         onClick={() => setSelectedPurchase(purchase)}
-                        className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                        className="p-2 text-primary hover:bg-purple-50 rounded-xl transition-colors"
                         title="View Details"
                       >
                         <Eye className="w-5 h-5" />
@@ -773,7 +773,7 @@ export default function PurchasesPage() {
             {purchases.length === 0 && (
               <div className="text-center py-12">
                 <ShoppingCart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">No purchases found</p>
+                <p className="text-muted-foreground">No purchases found</p>
               </div>
             )}
           </div>
@@ -786,17 +786,17 @@ export default function PurchasesPage() {
           <button
             onClick={() => setPage(page - 1)}
             disabled={page === 1}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="px-4 py-2 border border-border rounded-xl hover:bg-muted/50 disabled:opacity-50"
           >
             Previous
           </button>
-          <span className="px-4 py-2 text-gray-700">
+          <span className="px-4 py-2 text-foreground">
             Page {page} of {data.pagination.pages}
           </span>
           <button
             onClick={() => setPage(page + 1)}
             disabled={page >= data.pagination.pages}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="px-4 py-2 border border-border rounded-xl hover:bg-muted/50 disabled:opacity-50"
           >
             Next
           </button>
@@ -810,11 +810,11 @@ export default function PurchasesPage() {
           onClick={() => setSelectedPurchase(null)}
         >
           <div
-            className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-card rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-t-2xl">
+            <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 sm:p-5 rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-2xl font-bold">Purchase Details</h2>
@@ -823,7 +823,7 @@ export default function PurchasesPage() {
                   </p>
                 </div>
                 <div
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg ${getStatusColor(
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl ${getStatusColor(
                     selectedPurchase.status
                   )}`}
                 >
@@ -835,25 +835,25 @@ export default function PurchasesPage() {
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-4 sm:p-5 space-y-6">
               {/* Customer Information */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-5 border border-primary/30 dark:border-primary/20">
                 <div className="flex items-center gap-3 mb-4">
-                  <Users className="w-6 h-6 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <Users className="w-6 h-6 text-primary" />
+                  <h3 className="text-lg font-semibold text-foreground">
                     Customer Information
                   </h3>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Name</p>
-                    <p className="text-gray-900 font-semibold mt-1">
+                    <p className="text-sm font-medium text-muted-foreground">Name</p>
+                    <p className="text-foreground font-semibold mt-1">
                       {selectedPurchase.user?.name || "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Email</p>
-                    <p className="text-gray-900 mt-1">
+                    <p className="text-sm font-medium text-muted-foreground">Email</p>
+                    <p className="text-foreground mt-1">
                       {selectedPurchase.user?.email || "N/A"}
                     </p>
                   </div>
@@ -861,58 +861,58 @@ export default function PurchasesPage() {
               </div>
 
               {/* Purchase Information */}
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-200">
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 sm:p-5 border border-purple-200">
                 <div className="flex items-center gap-3 mb-4">
-                  <ShoppingCart className="w-6 h-6 text-purple-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <ShoppingCart className="w-6 h-6 text-primary" />
+                  <h3 className="text-lg font-semibold text-foreground">
                     Purchase Information
                   </h3>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-muted-foreground">
                       Purchase Type
                     </p>
-                    <p className="text-gray-900 font-semibold mt-1 capitalize">
+                    <p className="text-foreground font-semibold mt-1 capitalize">
                       {selectedPurchase.purchaseType}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Item</p>
-                    <p className="text-gray-900 font-semibold mt-1">
+                    <p className="text-sm font-medium text-muted-foreground">Item</p>
+                    <p className="text-foreground font-semibold mt-1">
                       {selectedPurchase.design?.title ||
                         selectedPurchase.pricingPlan?.name ||
                         "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Amount</p>
-                    <p className="text-2xl font-bold text-purple-600 mt-1">
+                    <p className="text-sm font-medium text-muted-foreground">Amount</p>
+                    <p className="text-2xl font-bold text-primary mt-1">
                       {selectedPurchase.currencyDisplay}{selectedPurchase.amount?.toFixed(2) || "0.00"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-muted-foreground">
                       Currency
                     </p>
-                    <p className="text-gray-900 font-semibold mt-1">
+                    <p className="text-foreground font-semibold mt-1">
                       {selectedPurchase.currency?.toUpperCase() || "USD"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-muted-foreground">
                       Payment Method
                     </p>
-                    <p className="text-gray-900 font-semibold mt-1 capitalize">
+                    <p className="text-foreground font-semibold mt-1 capitalize">
                       {selectedPurchase.paymentMethod?.replace("_", " ") ||
                         "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-muted-foreground">
                       Purchase Date
                     </p>
-                    <p className="text-gray-900 mt-1">
+                    <p className="text-foreground mt-1">
                       {new Date(
                         selectedPurchase.purchaseDate ||
                           selectedPurchase.createdAt
@@ -924,35 +924,35 @@ export default function PurchasesPage() {
 
               {/* Subscription Details (if applicable) */}
               {selectedPurchase.purchaseType === "subscription" && (
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 border border-emerald-500/30 dark:border-emerald-500/20">
                   <div className="flex items-center gap-3 mb-4">
-                    <RefreshCw className="w-6 h-6 text-green-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <RefreshCw className="w-6 h-6 text-primary" />
+                    <h3 className="text-lg font-semibold text-foreground">
                       Subscription Details
                     </h3>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium text-gray-600">
+                      <p className="text-sm font-medium text-muted-foreground">
                         Plan Name
                       </p>
-                      <p className="text-gray-900 font-semibold mt-1">
+                      <p className="text-foreground font-semibold mt-1">
                         {selectedPurchase.pricingPlan?.name || "N/A"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-600">
+                      <p className="text-sm font-medium text-muted-foreground">
                         Duration
                       </p>
-                      <p className="text-gray-900 font-semibold mt-1">
+                      <p className="text-foreground font-semibold mt-1">
                         {selectedPurchase.pricingPlan?.duration || "N/A"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-600">
+                      <p className="text-sm font-medium text-muted-foreground">
                         Start Date
                       </p>
-                      <p className="text-gray-900 mt-1">
+                      <p className="text-foreground mt-1">
                         {selectedPurchase.subscriptionStartDate
                           ? new Date(
                               selectedPurchase.subscriptionStartDate
@@ -961,10 +961,10 @@ export default function PurchasesPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-600">
+                      <p className="text-sm font-medium text-muted-foreground">
                         End Date
                       </p>
-                      <p className="text-gray-900 mt-1">
+                      <p className="text-foreground mt-1">
                         {selectedPurchase.subscriptionEndDate
                           ? new Date(
                               selectedPurchase.subscriptionEndDate
@@ -973,18 +973,18 @@ export default function PurchasesPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-600">
+                      <p className="text-sm font-medium text-muted-foreground">
                         Downloads Remaining
                       </p>
-                      <p className="text-2xl font-bold text-green-600 mt-1">
+                      <p className="text-2xl font-bold text-primary mt-1">
                         {selectedPurchase.remainingDownloads ?? "Unlimited"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-600">
+                      <p className="text-sm font-medium text-muted-foreground">
                         Activated At
                       </p>
-                      <p className="text-gray-900 mt-1">
+                      <p className="text-foreground mt-1">
                         {selectedPurchase.activatedAt
                           ? new Date(
                               selectedPurchase.activatedAt
@@ -998,23 +998,23 @@ export default function PurchasesPage() {
 
               {/* Billing Address */}
               {selectedPurchase.billingAddress && (
-                <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-6 border border-orange-200">
+                <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 sm:p-5 border border-orange-200">
                   <div className="flex items-center gap-3 mb-4">
                     <Calendar className="w-6 h-6 text-orange-600" />
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-foreground">
                       Billing Address
                     </h3>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-gray-900">
+                    <p className="text-foreground">
                       {selectedPurchase.billingAddress.street}
                     </p>
-                    <p className="text-gray-900">
+                    <p className="text-foreground">
                       {selectedPurchase.billingAddress.city},{" "}
                       {selectedPurchase.billingAddress.state}{" "}
                       {selectedPurchase.billingAddress.zipCode}
                     </p>
-                    <p className="text-gray-900 font-semibold">
+                    <p className="text-foreground font-semibold">
                       {selectedPurchase.billingAddress.country}
                     </p>
                   </div>
@@ -1022,34 +1022,34 @@ export default function PurchasesPage() {
               )}
 
               {/* Notes Section */}
-              <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-6 border border-gray-200">
+              <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-4 sm:p-5 border border-border">
                 <div className="flex items-center gap-3 mb-4">
-                  <FileText className="w-6 h-6 text-gray-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Notes</h3>
+                  <FileText className="w-6 h-6 text-muted-foreground" />
+                  <h3 className="text-lg font-semibold text-foreground">Notes</h3>
                 </div>
                 <div className="space-y-4">
                   {selectedPurchase.notes && (
                     <div>
-                      <p className="text-sm font-medium text-gray-600 mb-2">
+                      <p className="text-sm font-medium text-muted-foreground mb-2">
                         Customer Notes
                       </p>
-                      <p className="text-gray-900 bg-white p-3 rounded-lg border border-gray-200">
+                      <p className="text-foreground bg-card p-3 rounded-xl border border-border">
                         {selectedPurchase.notes}
                       </p>
                     </div>
                   )}
                   {selectedPurchase.adminNotes && (
                     <div>
-                      <p className="text-sm font-medium text-gray-600 mb-2">
+                      <p className="text-sm font-medium text-muted-foreground mb-2">
                         Admin Notes
                       </p>
-                      <p className="text-gray-900 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                      <p className="text-foreground bg-amber-500/10 dark:bg-amber-500/15 p-3 rounded-xl border border-amber-500/30 dark:border-amber-500/20">
                         {selectedPurchase.adminNotes}
                       </p>
                     </div>
                   )}
                   {!selectedPurchase.notes && !selectedPurchase.adminNotes && (
-                    <p className="text-gray-500 italic">No notes available</p>
+                    <p className="text-muted-foreground italic">No notes available</p>
                   )}
                   <button
                     onClick={() => {
@@ -1058,7 +1058,7 @@ export default function PurchasesPage() {
                       setShowAdminNotesModal(true);
                       setSelectedPurchase(null);
                     }}
-                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors flex items-center gap-2"
+                    className="px-4 py-2 bg-primary hover:bg-purple-700 text-white rounded-xl transition-colors flex items-center gap-2"
                   >
                     <FileText className="w-4 h-4" />
                     Add Admin Notes
@@ -1068,10 +1068,10 @@ export default function PurchasesPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="sticky bottom-0 bg-gray-50 p-6 rounded-b-2xl border-t border-gray-200">
+            <div className="sticky bottom-0 bg-muted/50 p-4 sm:p-5 rounded-b-2xl border-t border-border">
               <button
                 onClick={() => setSelectedPurchase(null)}
-                className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl"
+                className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-semibold transition-all shadow-xl dark:shadow-primary/10 hover:shadow-2xl dark:shadow-primary/20"
               >
                 Close
               </button>
@@ -1094,10 +1094,10 @@ export default function PurchasesPage() {
             }}
           >
             <div
-              className="bg-white rounded-2xl shadow-2xl max-w-lg w-full"
+              className="bg-card rounded-2xl shadow-2xl max-w-lg w-full"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-t-2xl">
+              <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 sm:p-5 rounded-t-2xl">
                 <h2 className="text-2xl font-bold">Update Purchase Status</h2>
                 <p className="text-purple-100 text-sm mt-1">
                   Order #{selectedPurchaseForNotes._id.slice(-8).toUpperCase()}{" "}
@@ -1107,8 +1107,8 @@ export default function PurchasesPage() {
                   </span>
                 </p>
               </div>
-              <div className="p-6 space-y-4">
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="p-4 sm:p-5 space-y-4">
+                <div className="bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 dark:border-amber-500/20 rounded-xl p-4">
                   <p className="text-sm text-yellow-800">
                     You are changing the status to{" "}
                     <strong className="capitalize">
@@ -1118,7 +1118,7 @@ export default function PurchasesPage() {
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Admin Notes (Optional)
                   </label>
                   <textarea
@@ -1127,9 +1127,9 @@ export default function PurchasesPage() {
                     placeholder="Add any internal notes about this status change..."
                     rows={5}
                     maxLength={500}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                   />
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-muted-foreground mt-2">
                     {adminNotes.length}/500 characters
                   </p>
                 </div>
@@ -1141,7 +1141,7 @@ export default function PurchasesPage() {
                       setPendingStatusChange(null);
                       setAdminNotes("");
                     }}
-                    className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-lg font-semibold text-gray-700 transition-colors"
+                    className="flex-1 px-4 py-3 bg-muted hover:bg-gray-200 rounded-xl font-semibold text-foreground transition-colors"
                   >
                     Cancel
                   </button>
@@ -1157,7 +1157,7 @@ export default function PurchasesPage() {
                       }
                     }}
                     disabled={isUpdating}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-semibold transition-all disabled:opacity-50"
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-semibold transition-all disabled:opacity-50"
                   >
                     {isUpdating ? "Updating..." : "Update Status"}
                   </button>
@@ -1169,3 +1169,5 @@ export default function PurchasesPage() {
     </div>
   );
 }
+
+

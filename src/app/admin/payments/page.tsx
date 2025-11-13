@@ -113,25 +113,25 @@ export default function AdminPaymentsPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "succeeded":
-        return <CheckCircle className="w-5 h-5 text-green-600" />;
+        return <CheckCircle className="w-5 h-5 text-primary" />;
       case "failed":
       case "canceled":
-        return <XCircle className="w-5 h-5 text-red-600" />;
+        return <XCircle className="w-5 h-5 text-red-500" />;
       case "refunded":
-        return <RefreshCcw className="w-5 h-5 text-purple-600" />;
+        return <RefreshCcw className="w-5 h-5 text-primary" />;
       case "pending":
         return <Clock className="w-5 h-5 text-yellow-600" />;
       default:
-        return <Clock className="w-5 h-5 text-gray-600" />;
+        return <Clock className="w-5 h-5 text-muted-foreground" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     const styles = {
-      succeeded: "bg-green-100 text-green-800 border-green-200",
-      failed: "bg-red-100 text-red-800 border-red-200",
-      canceled: "bg-gray-100 text-gray-800 border-gray-200",
-      pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      succeeded: "bg-green-100 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 dark:border-emerald-500/20",
+      failed: "bg-red-100 text-red-700 dark:text-red-300 border-red-500/30 dark:border-red-500/20",
+      canceled: "bg-muted text-foreground border-border",
+      pending: "bg-yellow-100 text-yellow-800 border-amber-500/30 dark:border-amber-500/20",
       refunded: "bg-purple-100 text-purple-800 border-purple-200",
     };
 
@@ -166,8 +166,8 @@ export default function AdminPaymentsPage() {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col items-center justify-center py-20">
-          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mb-4" />
-          <p className="text-gray-600">Loading payment data...</p>
+          <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
+          <p className="text-muted-foreground">Loading payment data...</p>
         </div>
       </div>
     );
@@ -176,14 +176,14 @@ export default function AdminPaymentsPage() {
   if (isErrorPayments) {
     return (
       <div className="container mx-auto px-4 py-12">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <XCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
-          <p className="text-red-800 font-semibold mb-2">
+        <div className="bg-red-500/10 dark:bg-red-500/15 border border-red-500/30 dark:border-red-500/20 rounded-xl p-4 sm:p-5 text-center">
+          <XCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <p className="text-red-700 dark:text-red-300 font-semibold mb-2">
             Failed to load payments
           </p>
           <button
             onClick={() => refetchPayments()}
-            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors"
+            className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl font-semibold transition-colors"
           >
             Try Again
           </button>
@@ -220,20 +220,20 @@ export default function AdminPaymentsPage() {
   });
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-5 sm:py-6">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-foreground mb-2">
           💳 Payment Management
         </h1>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Monitor, analyze, and manage all customer payments and transactions
         </p>
       </div>
 
       {/* Alert for stuck payments */}
       {stuckPendingPayments.length > 0 && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+        <div className="bg-amber-500/10 dark:bg-amber-500/15 border-l-4 border-yellow-400 p-4 mb-6">
           <div className="flex items-start">
             <AlertTriangle className="w-5 h-5 text-yellow-600 mr-3 flex-shrink-0 mt-0.5" />
             <div>
@@ -252,36 +252,36 @@ export default function AdminPaymentsPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {/* Total Revenue */}
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg border border-green-200 p-6">
+        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-emerald-500/30 dark:border-emerald-500/20 p-4 sm:p-5">
           <div className="flex items-center justify-between mb-2">
-            <DollarSign className="w-8 h-8 text-green-600" />
-            <TrendingUp className="w-5 h-5 text-green-600" />
+            <DollarSign className="w-8 h-8 text-primary" />
+            <TrendingUp className="w-5 h-5 text-primary" />
           </div>
-          <p className="text-sm text-green-700 font-medium">Total Revenue</p>
-          <p className="text-3xl font-bold text-green-900">
+          <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">Total Revenue</p>
+          <p className="text-2xl font-bold text-green-900">
             ${(stats.totalRevenue || 0).toFixed(2)}
           </p>
-          <p className="text-xs text-green-600 mt-1">
+          <p className="text-xs text-primary mt-1">
             {stats.successfulPayments || 0} successful payments
           </p>
         </div>
 
         {/* Success Rate */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200 p-6">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-primary/30 dark:border-primary/20 p-4 sm:p-5">
           <div className="flex items-center justify-between mb-2">
-            <BarChart3 className="w-8 h-8 text-blue-600" />
+            <BarChart3 className="w-8 h-8 text-primary" />
           </div>
-          <p className="text-sm text-blue-700 font-medium">Success Rate</p>
-          <p className="text-3xl font-bold text-blue-900">
+          <p className="text-sm text-primary font-medium">Success Rate</p>
+          <p className="text-2xl font-bold text-blue-900">
             {stats.successRate || 0}%
           </p>
-          <p className="text-xs text-blue-600 mt-1">
+          <p className="text-xs text-primary mt-1">
             {stats.totalPayments || 0} total payments
           </p>
         </div>
 
         {/* Pending */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6 relative">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5 relative">
           {stuckPendingPayments.length > 0 && (
             <div className="absolute top-2 right-2">
               <span className="flex h-3 w-3">
@@ -293,8 +293,8 @@ export default function AdminPaymentsPage() {
           <div className="flex items-center justify-between mb-2">
             <Clock className="w-8 h-8 text-yellow-600" />
           </div>
-          <p className="text-sm text-gray-600">Pending</p>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-sm text-muted-foreground">Pending</p>
+          <p className="text-2xl font-bold text-foreground">
             {stats.pendingPayments || 0}
           </p>
           {stuckPendingPayments.length > 0 && (
@@ -305,15 +305,15 @@ export default function AdminPaymentsPage() {
         </div>
 
         {/* Refunded */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between mb-2">
-            <RefreshCcw className="w-8 h-8 text-purple-600" />
+            <RefreshCcw className="w-8 h-8 text-primary" />
           </div>
-          <p className="text-sm text-gray-600">Refunded</p>
-          <p className="text-3xl font-bold text-gray-900">
+          <p className="text-sm text-muted-foreground">Refunded</p>
+          <p className="text-2xl font-bold text-foreground">
             {stats.refundedPayments || 0}
           </p>
-          <p className="text-xs text-purple-600 mt-1">
+          <p className="text-xs text-primary mt-1">
             ${(statusBreakdown.refunded?.amount || 0).toFixed(2)} refunded
           </p>
         </div>
@@ -326,18 +326,18 @@ export default function AdminPaymentsPage() {
             ([type, data]: [string, any]) => (
               <div
                 key={type}
-                className="bg-white rounded-lg border border-gray-200 p-4"
+                className="bg-card rounded-xl border border-border p-4"
               >
                 <div className="flex items-center justify-between mb-2">
-                  <Package className="w-6 h-6 text-gray-600" />
-                  <span className="text-xs font-semibold text-gray-500 uppercase">
+                  <Package className="w-6 h-6 text-muted-foreground" />
+                  <span className="text-xs font-semibold text-muted-foreground uppercase">
                     {type}
                   </span>
                 </div>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-bold text-foreground">
                   ${(data.amount || 0).toFixed(2)}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted-foreground">
                   {data.count || 0} payments
                 </p>
               </div>
@@ -347,30 +347,30 @@ export default function AdminPaymentsPage() {
       )}
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">
+      <div className="bg-card rounded-xl border border-border p-4 mb-6">
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search by product, user, email, or payment ID..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
             />
           </div>
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
             className={`px-6 py-2 ${
               statusFilter || productTypeFilter || startDate || endDate
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-700"
-            } hover:bg-blue-700 hover:text-white rounded-lg font-medium flex items-center transition-colors`}
+                ? "bg-primary text-white"
+                : "bg-muted text-foreground"
+            } hover:bg-primary/90 hover:text-white rounded-xl font-medium flex items-center transition-colors`}
           >
             <Filter className="w-4 h-4 mr-2" />
             Filters
             {(statusFilter || productTypeFilter || startDate || endDate) && (
-              <span className="ml-2 bg-white text-blue-600 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+              <span className="ml-2 bg-card text-primary rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                 {
                   [statusFilter, productTypeFilter, startDate, endDate].filter(
                     Boolean
@@ -383,11 +383,11 @@ export default function AdminPaymentsPage() {
 
         {/* Filter Panel */}
         {isFilterOpen && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
+          <div className="mt-4 pt-4 border-t border-border">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Status Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Status
                 </label>
                 <select
@@ -395,7 +395,7 @@ export default function AdminPaymentsPage() {
                   onChange={(e) =>
                     setStatusFilter(e.target.value as PaymentStatus | "")
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 >
                   <option value="">All Statuses</option>
                   <option value="succeeded">Succeeded</option>
@@ -408,7 +408,7 @@ export default function AdminPaymentsPage() {
 
               {/* Product Type Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Product Type
                 </label>
                 <select
@@ -416,7 +416,7 @@ export default function AdminPaymentsPage() {
                   onChange={(e) =>
                     setProductTypeFilter(e.target.value as ProductType | "")
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 >
                   <option value="">All Types</option>
                   <option value="design">Design</option>
@@ -427,33 +427,33 @@ export default function AdminPaymentsPage() {
 
               {/* Start Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Start Date
                 </label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 />
               </div>
 
               {/* End Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   End Date
                 </label>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 />
               </div>
 
               {/* Sort By */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Sort By
                 </label>
                 <select
@@ -463,7 +463,7 @@ export default function AdminPaymentsPage() {
                       e.target.value as "createdAt" | "amount" | "status"
                     )
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 >
                   <option value="createdAt">Date</option>
                   <option value="amount">Amount</option>
@@ -473,7 +473,7 @@ export default function AdminPaymentsPage() {
 
               {/* Sort Order */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Sort Order
                 </label>
                 <select
@@ -481,7 +481,7 @@ export default function AdminPaymentsPage() {
                   onChange={(e) =>
                     setSortOrder(e.target.value as "asc" | "desc")
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-3 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 >
                   <option value="desc">Newest First</option>
                   <option value="asc">Oldest First</option>
@@ -493,13 +493,13 @@ export default function AdminPaymentsPage() {
             <div className="flex gap-3 mt-4">
               <button
                 onClick={applyFilters}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+                className="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl font-semibold transition-colors"
               >
                 Apply Filters
               </button>
               <button
                 onClick={resetFilters}
-                className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-foreground rounded-xl font-semibold transition-colors"
               >
                 Reset All
               </button>
@@ -510,50 +510,50 @@ export default function AdminPaymentsPage() {
 
       {/* Payments Table */}
       {filteredPayments.length === 0 ? (
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
-          <CreditCard className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 font-medium">No payments found</p>
-          <p className="text-sm text-gray-500 mt-1">
+        <div className="bg-card rounded-xl border border-border p-12 text-center">
+          <CreditCard className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground font-medium">No payments found</p>
+          <p className="text-sm text-muted-foreground mt-1">
             Try adjusting your search or filters
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-foreground uppercase">
                     Date
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-foreground uppercase">
                     Customer
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-foreground uppercase">
                     Product
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-foreground uppercase">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-foreground uppercase">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-foreground uppercase">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredPayments.map((payment: any) => (
-                  <tr key={payment._id} className="hover:bg-gray-50">
+                  <tr key={payment._id} className="hover:bg-muted/50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         {getStatusIcon(payment.status)}
                         <div className="ml-3">
-                          <p className="text-sm font-medium text-gray-900">
+                          <p className="text-sm font-medium text-foreground">
                             {new Date(payment.createdAt).toLocaleDateString()}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {new Date(payment.createdAt).toLocaleTimeString()}
                           </p>
                         </div>
@@ -561,29 +561,29 @@ export default function AdminPaymentsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-foreground">
                           {payment.userId?.name || "Unknown"}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           {payment.userId?.email || "No email"}
                         </p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-foreground">
                           {payment.designId?.title ||
                             payment.courseId?.title ||
                             payment.pricingPlanId?.name ||
                             "Unknown"}
                         </p>
-                        <p className="text-xs text-gray-500 capitalize">
+                        <p className="text-xs text-muted-foreground capitalize">
                           {payment.productType}
                         </p>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-foreground">
                         {payment.currency} ${payment.amount.toFixed(2)}
                       </p>
                     </td>
@@ -597,7 +597,7 @@ export default function AdminPaymentsPage() {
                             setSelectedPayment(payment);
                             setIsDetailsModalOpen(true);
                           }}
-                          className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center"
+                          className="text-primary hover:text-blue-800 font-medium text-sm flex items-center"
                           title="View Details"
                         >
                           <Eye className="w-4 h-4" />
@@ -610,7 +610,7 @@ export default function AdminPaymentsPage() {
                               setRefundReason("");
                               setIsRefundModalOpen(true);
                             }}
-                            className="text-red-600 hover:text-red-800 font-medium text-sm flex items-center"
+                            className="text-red-500 hover:text-red-700 dark:text-red-300 font-medium text-sm flex items-center"
                             title="Refund"
                           >
                             <RefreshCcw className="w-4 h-4" />
@@ -627,8 +627,8 @@ export default function AdminPaymentsPage() {
           {/* Pagination */}
           {paymentsData?.pagination &&
             paymentsData.pagination.totalPages > 1 && (
-              <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-                <div className="text-sm text-gray-600">
+              <div className="px-6 py-4 border-t border-border flex items-center justify-between">
+                <div className="text-sm text-muted-foreground">
                   Page {paymentsData.pagination.currentPage} of{" "}
                   {paymentsData.pagination.totalPages} (
                   {paymentsData.pagination.totalItems} total)
@@ -637,7 +637,7 @@ export default function AdminPaymentsPage() {
                   <button
                     onClick={() => setPage(page - 1)}
                     disabled={page === 1 || isLoadingPayments}
-                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-lg font-medium transition-colors"
+                    className="px-4 py-2 bg-muted hover:bg-gray-200 disabled:bg-muted/50 disabled:text-muted-foreground text-foreground rounded-xl font-medium transition-colors"
                   >
                     Previous
                   </button>
@@ -647,7 +647,7 @@ export default function AdminPaymentsPage() {
                       page >= paymentsData.pagination.totalPages ||
                       isLoadingPayments
                     }
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-50 disabled:text-gray-400 text-white rounded-lg font-medium transition-colors"
+                    className="px-4 py-2 bg-primary hover:bg-primary/90 disabled:bg-muted/50 disabled:text-muted-foreground text-white rounded-xl font-medium transition-colors"
                   >
                     Next
                   </button>
@@ -660,23 +660,23 @@ export default function AdminPaymentsPage() {
       {/* Payment Details Modal */}
       {isDetailsModalOpen && selectedPayment && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-gray-900">
+          <div className="bg-card rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-foreground">
                 Payment Details
               </h3>
               <button
                 onClick={() => setIsDetailsModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-muted-foreground hover:text-muted-foreground"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-4 sm:p-5 space-y-6">
               {/* Status */}
               <div>
-                <label className="text-sm font-medium text-gray-600">
+                <label className="text-sm font-medium text-muted-foreground">
                   Status
                 </label>
                 <div className="mt-1">
@@ -687,18 +687,18 @@ export default function AdminPaymentsPage() {
               {/* Payment Info */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">
+                  <label className="text-sm font-medium text-muted-foreground">
                     Payment ID
                   </label>
-                  <p className="text-sm text-gray-900 font-mono mt-1 break-all">
+                  <p className="text-sm text-foreground font-mono mt-1 break-all">
                     {selectedPayment.paymentIntentId}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">
+                  <label className="text-sm font-medium text-muted-foreground">
                     Amount
                   </label>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-foreground mt-1">
                     {selectedPayment.currency} $
                     {selectedPayment.amount.toFixed(2)}
                   </p>
@@ -706,24 +706,24 @@ export default function AdminPaymentsPage() {
               </div>
 
               {/* Customer Info */}
-              <div className="border-t border-gray-200 pt-4">
-                <h4 className="font-semibold text-gray-900 mb-3">
+              <div className="border-t border-border pt-4">
+                <h4 className="font-semibold text-foreground mb-3">
                   Customer Information
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600">
+                    <label className="text-sm font-medium text-muted-foreground">
                       Name
                     </label>
-                    <p className="text-sm text-gray-900 mt-1">
+                    <p className="text-sm text-foreground mt-1">
                       {selectedPayment.userId?.name || "N/A"}
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">
+                    <label className="text-sm font-medium text-muted-foreground">
                       Email
                     </label>
-                    <p className="text-sm text-gray-900 mt-1">
+                    <p className="text-sm text-foreground mt-1">
                       {selectedPayment.userId?.email || "N/A"}
                     </p>
                   </div>
@@ -731,16 +731,16 @@ export default function AdminPaymentsPage() {
               </div>
 
               {/* Product Info */}
-              <div className="border-t border-gray-200 pt-4">
-                <h4 className="font-semibold text-gray-900 mb-3">
+              <div className="border-t border-border pt-4">
+                <h4 className="font-semibold text-foreground mb-3">
                   Product Information
                 </h4>
                 <div className="space-y-2">
                   <div>
-                    <label className="text-sm font-medium text-gray-600">
+                    <label className="text-sm font-medium text-muted-foreground">
                       Product
                     </label>
-                    <p className="text-sm text-gray-900 mt-1">
+                    <p className="text-sm text-foreground mt-1">
                       {selectedPayment.designId?.title ||
                         selectedPayment.courseId?.title ||
                         selectedPayment.pricingPlanId?.name ||
@@ -748,10 +748,10 @@ export default function AdminPaymentsPage() {
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-600">
+                    <label className="text-sm font-medium text-muted-foreground">
                       Type
                     </label>
-                    <p className="text-sm text-gray-900 mt-1 capitalize">
+                    <p className="text-sm text-foreground mt-1 capitalize">
                       {selectedPayment.productType}
                     </p>
                   </div>
@@ -759,23 +759,23 @@ export default function AdminPaymentsPage() {
               </div>
 
               {/* Timestamps */}
-              <div className="border-t border-gray-200 pt-4">
-                <h4 className="font-semibold text-gray-900 mb-3">Timestamps</h4>
+              <div className="border-t border-border pt-4">
+                <h4 className="font-semibold text-foreground mb-3">Timestamps</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-600">
+                    <label className="text-sm font-medium text-muted-foreground">
                       Created
                     </label>
-                    <p className="text-sm text-gray-900 mt-1">
+                    <p className="text-sm text-foreground mt-1">
                       {new Date(selectedPayment.createdAt).toLocaleString()}
                     </p>
                   </div>
                   {selectedPayment.succeededAt && (
                     <div>
-                      <label className="text-sm font-medium text-gray-600">
+                      <label className="text-sm font-medium text-muted-foreground">
                         Succeeded
                       </label>
-                      <p className="text-sm text-gray-900 mt-1">
+                      <p className="text-sm text-foreground mt-1">
                         {new Date(selectedPayment.succeededAt).toLocaleString()}
                       </p>
                     </div>
@@ -785,11 +785,11 @@ export default function AdminPaymentsPage() {
 
               {/* Purchase ID */}
               {selectedPayment.purchaseId && (
-                <div className="border-t border-gray-200 pt-4">
-                  <label className="text-sm font-medium text-gray-600">
+                <div className="border-t border-border pt-4">
+                  <label className="text-sm font-medium text-muted-foreground">
                     Purchase ID
                   </label>
-                  <p className="text-sm text-gray-900 font-mono mt-1">
+                  <p className="text-sm text-foreground font-mono mt-1">
                     {selectedPayment.purchaseId._id ||
                       selectedPayment.purchaseId}
                   </p>
@@ -797,10 +797,10 @@ export default function AdminPaymentsPage() {
               )}
             </div>
 
-            <div className="border-t border-gray-200 px-6 py-4 flex justify-end">
+            <div className="border-t border-border px-6 py-4 flex justify-end">
               <button
                 onClick={() => setIsDetailsModalOpen(false)}
-                className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-foreground rounded-xl font-semibold transition-colors"
               >
                 Close
               </button>
@@ -812,24 +812,24 @@ export default function AdminPaymentsPage() {
       {/* Refund Modal */}
       {isRefundModalOpen && selectedPayment && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-card rounded-2xl shadow-2xl max-w-md w-full p-4 sm:p-5">
+            <h3 className="text-xl font-bold text-foreground mb-4">
               Process Refund
             </h3>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <p className="text-sm text-gray-600 mb-1">Payment Amount:</p>
-              <p className="text-2xl font-bold text-gray-900">
+            <div className="bg-muted/50 rounded-xl p-4 mb-4">
+              <p className="text-sm text-muted-foreground mb-1">Payment Amount:</p>
+              <p className="text-2xl font-bold text-foreground">
                 {selectedPayment.currency} ${selectedPayment.amount.toFixed(2)}
               </p>
-              <p className="text-xs text-gray-500 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 Payment ID: {selectedPayment.paymentIntentId}
               </p>
             </div>
 
             <div className="space-y-4 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Refund Amount in Dollars (Optional - full refund if empty)
                 </label>
                 <input
@@ -838,15 +838,15 @@ export default function AdminPaymentsPage() {
                   value={refundAmount}
                   onChange={(e) => setRefundAmount(e.target.value)}
                   placeholder={`Max: ${selectedPayment.amount.toFixed(2)}`}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-4 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Leave empty for full refund
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Refund Reason (Optional)
                 </label>
                 <textarea
@@ -854,7 +854,7 @@ export default function AdminPaymentsPage() {
                   onChange={(e) => setRefundReason(e.target.value)}
                   placeholder="Enter reason for refund..."
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full px-4 py-2 border border-border rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-primary dark:ring-primary/60/20"
                 />
               </div>
             </div>
@@ -863,14 +863,14 @@ export default function AdminPaymentsPage() {
               <button
                 onClick={() => setIsRefundModalOpen(false)}
                 disabled={isRefunding}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-semibold transition-colors"
+                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-foreground rounded-xl font-semibold transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleRefund}
                 disabled={isRefunding}
-                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-lg font-semibold transition-colors flex items-center justify-center"
+                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white rounded-xl font-semibold transition-colors flex items-center justify-center"
               >
                 {isRefunding ? (
                   <>
@@ -891,3 +891,5 @@ export default function AdminPaymentsPage() {
     </div>
   );
 }
+
+

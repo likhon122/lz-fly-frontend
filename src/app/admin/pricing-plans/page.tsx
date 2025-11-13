@@ -135,65 +135,82 @@ export default function PricingPlansPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Pricing Plans</h1>
-          <p className="mt-2 text-gray-600">Manage subscription plans</p>
+      {/* Header - Premium Glassmorphic */}
+      <div className="relative overflow-hidden rounded-3xl bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl shadow-xl dark:shadow-primary/20 border border-border/70 dark:border-[#1e1e1e]">
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent pointer-events-none"></div>
+        
+        <div className="relative p-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground dark:text-foreground">
+                Pricing Plans
+              </h1>
+              <p className="mt-2 text-muted-foreground dark:text-muted-foreground/80">
+                Manage subscription plans
+              </p>
+            </div>
+            <Button
+              onClick={() => setShowModal(true)}
+              className="bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:shadow-lg dark:hover:shadow-primary/30 transition-all"
+            >
+              <Plus className="w-5 h-5 mr-2" />
+              Add Pricing Plan
+            </Button>
+          </div>
         </div>
-        <Button
-          onClick={() => setShowModal(true)}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Add Pricing Plan
-        </Button>
       </div>
 
       {/* Plans Grid */}
       {isLoading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary/30 border-t-primary"></div>
+            <div className="absolute inset-0 rounded-full bg-primary/10 blur-xl"></div>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {plans.map((plan: any) => (
             <div
               key={plan._id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow"
+              className="group relative bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-lg dark:shadow-primary/10 border border-border/70 dark:border-[#1e1e1e] overflow-hidden hover:shadow-xl dark:hover:shadow-primary/20 hover:scale-[1.02] transition-all duration-300"
             >
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+              
+              <div className="relative bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 p-6 text-white shadow-lg dark:shadow-primary/20">
                 <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
                 <div className="flex items-baseline">
-                  <span className="text-4xl font-bold">{
+                  <span className="text-3xl font-bold">{
                     plan.currencyDisplay}{plan.finalPrice}</span>
-                  <span className="ml-2 text-blue-100">/{plan.duration}</span>
+                  <span className="ml-2 text-white/80">/{plan.duration}</span>
                 </div>
                 {plan.discountPercentage > 0 && (
-                  <p className="mt-2 text-blue-100">
+                  <p className="mt-2 text-white/90">
                     <span className="line-through">{plan.currencyDisplay}{plan.price}</span>
-                    <span className="ml-2 font-semibold">
+                    <span className="ml-2 font-semibold bg-white/20 px-2 py-0.5 rounded-full text-sm">
                       {plan.discountPercentage}% OFF
                     </span>
                   </p>
                 )}
               </div>
-              <div className="p-6">
-                <p className="text-gray-600 mb-4">{plan.description}</p>
+              <div className="relative p-6">
+                <p className="text-muted-foreground dark:text-muted-foreground/80 mb-4">{plan.description}</p>
                 <div className="space-y-2 mb-6">
                   {plan.features?.map((feature: string, idx: number) => (
                     <div key={idx} className="flex items-center text-sm">
-                      <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                      <CheckCircle className="w-4 h-4 text-primary dark:text-primary/90 mr-2 flex-shrink-0" />
+                      <span className="text-foreground dark:text-foreground/90">{feature}</span>
                     </div>
                   ))}
                 </div>
-                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                <div className="flex items-center justify-between pt-4 border-t border-border/70 dark:border-[#1e1e1e]">
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-medium ${
                       plan.isActive
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-700"
+                        ? "bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/40"
+                        : "bg-muted/50 dark:bg-muted/30 text-muted-foreground dark:text-muted-foreground/70 border border-border/50 dark:border-[#1e1e1e]"
                     }`}
                   >
                     {plan.isActive ? "Active" : "Inactive"}
@@ -201,13 +218,13 @@ export default function PricingPlansPage() {
                   <div className="flex space-x-2">
                     <button
                       onClick={() => handleEdit(plan)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      className="p-2 text-primary dark:text-primary/90 hover:bg-primary/10 dark:hover:bg-primary/15 rounded-xl transition-all hover:shadow-md dark:hover:shadow-primary/20 border border-transparent hover:border-primary/30 dark:hover:border-primary/40"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(plan._id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-red-500 dark:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-500/15 rounded-xl transition-all hover:shadow-md dark:hover:shadow-red-500/20 border border-transparent hover:border-red-500/30 dark:hover:border-red-500/40"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -219,17 +236,20 @@ export default function PricingPlansPage() {
         </div>
       )}
 
-      {/* Modal */}
+      {/* Modal - Premium Dark Mode */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full my-8">
-            <div className="p-6 max-h-[80vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="relative bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/30 border border-border/70 dark:border-[#1e1e1e] max-w-2xl w-full my-8">
+            {/* Gradient Glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent rounded-2xl pointer-events-none"></div>
+            
+            <div className="relative p-6 max-h-[80vh] overflow-y-auto">
+              <h2 className="text-2xl font-bold text-foreground dark:text-foreground mb-6">
                 {editingPlan ? "Edit Pricing Plan" : "Add New Pricing Plan"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
                     Plan Name *
                   </label>
                   <input
@@ -239,11 +259,11 @@ export default function PricingPlansPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
                     Description *
                   </label>
                   <textarea
@@ -253,12 +273,12 @@ export default function PricingPlansPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all resize-none"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
                       Price *
                     </label>
                     <input
@@ -272,11 +292,11 @@ export default function PricingPlansPage() {
                           price: parseFloat(e.target.value),
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
                       Discount (%)
                     </label>
                     <input
@@ -290,13 +310,13 @@ export default function PricingPlansPage() {
                           discountPercentage: parseFloat(e.target.value),
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
                       Duration *
                     </label>
                     <select
@@ -305,14 +325,14 @@ export default function PricingPlansPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, duration: e.target.value })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground transition-all [&>option]:bg-background [&>option]:dark:bg-[#0a0a0a] [&>option]:text-foreground [&>option]:dark:text-foreground"
                     >
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
                       Max Downloads
                     </label>
                     <input
@@ -324,12 +344,12 @@ export default function PricingPlansPage() {
                           maxDownloads: parseInt(e.target.value),
                         })
                       }
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
                     Features
                   </label>
                   <div className="space-y-3">
@@ -345,35 +365,35 @@ export default function PricingPlansPage() {
                           }
                         }}
                         placeholder="Enter a feature..."
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                        className="flex-1 px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
                       />
                       <Button
                         type="button"
                         onClick={handleAddFeature}
                         disabled={!currentFeature.trim()}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 bg-primary/90 dark:bg-primary/80 hover:bg-primary dark:hover:bg-primary/90 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg dark:shadow-primary/20 transition-all"
                       >
                         Add Feature
                       </Button>
                     </div>
                     {formData.features.length > 0 && (
                       <div className="space-y-2">
-                        <p className="text-sm text-gray-600 font-medium">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground/80 font-medium">
                           Added Features:
                         </p>
-                        <div className="max-h-32 overflow-y-auto space-y-2">
+                        <div className="max-h-32 overflow-y-auto space-y-2 pr-2">
                           {formData.features.map((feature, index) => (
                             <div
                               key={index}
-                              className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg"
+                              className="flex items-center justify-between bg-muted/50 dark:bg-muted/30 backdrop-blur-sm px-3 py-2 rounded-xl border border-border/50 dark:border-[#1e1e1e] hover:bg-muted/70 dark:hover:bg-muted/40 transition-all"
                             >
-                              <span className="text-sm text-gray-700">
+                              <span className="text-sm text-foreground dark:text-foreground/90">
                                 {feature}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => handleRemoveFeature(index)}
-                                className="text-red-600 hover:text-red-800 ml-2"
+                                className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 ml-2 p-1 rounded-lg hover:bg-red-500/10 dark:hover:bg-red-500/15 transition-all"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -384,7 +404,7 @@ export default function PricingPlansPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center p-3 rounded-xl bg-muted/30 dark:bg-muted/20 border border-border/50 dark:border-[#1e1e1e]">
                   <input
                     type="checkbox"
                     id="isActive"
@@ -392,11 +412,11 @@ export default function PricingPlansPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, isActive: e.target.checked })
                     }
-                    className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-600"
+                    className="w-4 h-4 text-primary border-border/70 dark:border-[#1e1e1e] rounded focus:ring-2 focus:ring-primary dark:focus:ring-primary/60"
                   />
                   <label
                     htmlFor="isActive"
-                    className="ml-2 text-sm font-medium text-gray-700"
+                    className="ml-2 text-sm font-medium text-foreground dark:text-foreground/90 cursor-pointer"
                   >
                     Active
                   </label>
@@ -406,13 +426,13 @@ export default function PricingPlansPage() {
                     type="button"
                     onClick={handleCloseModal}
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 border-border/70 dark:border-[#1e1e1e] hover:bg-muted/50 dark:hover:bg-muted/30"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    className="flex-1 bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:shadow-lg dark:hover:shadow-primary/30 transition-all"
                   >
                     {editingPlan ? "Update" : "Create"}
                   </Button>
@@ -425,3 +445,5 @@ export default function PricingPlansPage() {
     </div>
   );
 }
+
+

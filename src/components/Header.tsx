@@ -6,6 +6,7 @@ import { useAppSelector } from "../store/hooks";
 import { UserProfile } from "./UserProfile";
 import { AuthButtons } from "./AuthButtons";
 import { CategoryDropdown } from "./CategoryDropdown";
+import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
@@ -22,12 +23,12 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
+    <header className="sticky top-0 z-50 w-full bg-background/95 dark:bg-[#0a0a0a]/98 backdrop-blur-3xl border-b border-border shadow-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <span className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+          <Link href="/" className="flex items-center group">
+            <span className="text-3xl font-black gradient-text hover:scale-105 transition-transform duration-300">
               DesignHub
             </span>
           </Link>
@@ -36,10 +37,10 @@ export const Header: React.FC = () => {
           <nav className="hidden lg:flex items-center space-x-1">
             <Link
               href="/"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-5 py-2.5 text-sm font-black rounded-xl transition-all duration-200 ${
                 isActiveLink("/")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
             >
               Home
@@ -49,10 +50,10 @@ export const Header: React.FC = () => {
 
             <Link
               href="/designs"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-5 py-2.5 text-sm font-black rounded-xl transition-all duration-200 ${
                 isActiveLink("/designs")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
             >
               Designs
@@ -60,10 +61,10 @@ export const Header: React.FC = () => {
 
             <Link
               href="/pricing"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-5 py-2.5 text-sm font-black rounded-xl transition-all duration-200 ${
                 isActiveLink("/pricing")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
             >
               Pricing
@@ -71,10 +72,10 @@ export const Header: React.FC = () => {
 
             <Link
               href="/about"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-5 py-2.5 text-sm font-black rounded-xl transition-all duration-200 ${
                 isActiveLink("/about")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
             >
               About
@@ -82,10 +83,10 @@ export const Header: React.FC = () => {
 
             <Link
               href="/contact"
-              className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              className={`px-5 py-2.5 text-sm font-black rounded-xl transition-all duration-200 ${
                 isActiveLink("/contact")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
             >
               Contact
@@ -93,7 +94,12 @@ export const Header: React.FC = () => {
           </nav>
 
           {/* Right Section */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            {/* Theme Toggle */}
+            <div className="hidden lg:block">
+              <ThemeToggle />
+            </div>
+
             {/* Dashboard/Admin Link */}
             {user && (
               <Link
@@ -102,10 +108,10 @@ export const Header: React.FC = () => {
                     ? "/admin"
                     : "/dashboard"
                 }
-                className="hidden lg:block px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                className="hidden lg:block px-6 py-2.5 text-sm font-black text-secondary bg-primary hover:bg-primary/90 rounded-xl transition-all duration-200 hover:scale-105 shadow-lg"
               >
                 {user.role === "admin" || user.role === "super_admin"
-                  ? "Admin Panel"
+                  ? "Admin"
                   : "Dashboard"}
               </Link>
             )}
@@ -118,7 +124,7 @@ export const Header: React.FC = () => {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md"
+              className="lg:hidden p-2.5 text-foreground hover:bg-muted rounded-xl transition-all"
             >
               {isMobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -132,14 +138,14 @@ export const Header: React.FC = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-gray-200 bg-white">
-          <div className="px-4 py-3 space-y-1">
+        <div className="lg:hidden border-t border-border bg-background/98 dark:bg-[#0a0a0a]/98 backdrop-blur-3xl animate-fade-in">
+          <div className="px-4 py-5 space-y-2">
             <Link
               href="/"
-              className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+              className={`block px-5 py-3 text-sm font-black rounded-xl transition-all ${
                 isActiveLink("/")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -148,10 +154,10 @@ export const Header: React.FC = () => {
 
             <Link
               href="/designs"
-              className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+              className={`block px-5 py-3 text-sm font-black rounded-xl transition-all ${
                 isActiveLink("/designs")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -160,10 +166,10 @@ export const Header: React.FC = () => {
 
             <Link
               href="/pricing"
-              className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+              className={`block px-5 py-3 text-sm font-black rounded-xl transition-all ${
                 isActiveLink("/pricing")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -177,21 +183,21 @@ export const Header: React.FC = () => {
                     ? "/admin"
                     : "/dashboard"
                 }
-                className="block px-3 py-2 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+                className="block px-5 py-3 text-sm font-black text-secondary bg-primary hover:bg-primary/90 rounded-xl shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:hover:bg-primary/40 dark:shadow-primary/30 dark:border-primary/40"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {user.role === "admin" || user.role === "super_admin"
-                  ? "Admin Panel"
+                  ? "Admin"
                   : "Dashboard"}
               </Link>
             )}
 
             <Link
               href="/about"
-              className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+              className={`block px-5 py-3 text-sm font-black rounded-xl transition-all ${
                 isActiveLink("/about")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -200,37 +206,49 @@ export const Header: React.FC = () => {
 
             <Link
               href="/contact"
-              className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+              className={`block px-5 py-3 text-sm font-black rounded-xl transition-all ${
                 isActiveLink("/contact")
-                  ? "text-blue-600 bg-blue-50"
-                  : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-secondary bg-primary shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:shadow-primary/30 dark:border-primary/40"
+                  : "text-foreground hover:bg-muted dark:hover:bg-muted/60"
               }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact
             </Link>
 
+            {/* Mobile Theme Toggle */}
+            <div className="pt-2">
+              <div className="flex items-center justify-between px-5 py-3 bg-muted rounded-xl ">
+                <span className="text-sm font-black text-foreground">
+                  Theme
+                </span>
+                <ThemeToggle />
+              </div>
+            </div>
+
             {/* Mobile Auth Section */}
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-3 border-t border-border">
               {user ? (
-                <div className="px-3 py-2">
-                  <p className="text-sm font-medium text-gray-900">
+                <div className="px-5 py-3 bg-muted rounded-xl">
+                  <p className="text-sm font-black text-foreground">
                     {user.name}
                   </p>
-                  <p className="text-xs text-gray-600">{user.email}</p>
+                  <p className="text-xs text-muted-foreground font-bold">
+                    {user.email}
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-2">
                   <Link
                     href="/login"
-                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md text-center"
+                    className="block px-5 py-3 text-sm font-black text-foreground hover:bg-muted rounded-xl text-center transition-all border border-border"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Login
                   </Link>
                   <Link
                     href="/register"
-                    className="block px-3 py-2 text-base font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md text-center"
+                    className="block px-5 py-3 text-sm font-black text-secondary bg-primary hover:bg-primary/90 rounded-xl text-center shadow-lg border border-primary/30 dark:bg-primary/30 dark:text-primary-foreground dark:hover:bg-primary/40 dark:shadow-primary/30 dark:border-primary/40"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign Up

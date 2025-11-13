@@ -45,17 +45,17 @@ export default function LikedDesignsPage() {
             <Heart className="w-7 h-7 text-white fill-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-gray-900">
+            <h1 className="text-3xl font-black text-foreground">
               My Liked Designs
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               Your collection of favorite designs
             </p>
           </div>
         </div>
         <div className="text-center py-20">
-          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto" />
-          <p className="mt-4 text-gray-600">Loading your liked designs...</p>
+          <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto" />
+          <p className="mt-4 text-muted-foreground">Loading your liked designs...</p>
         </div>
       </div>
     );
@@ -69,15 +69,15 @@ export default function LikedDesignsPage() {
             <Heart className="w-7 h-7 text-white fill-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-gray-900">
+            <h1 className="text-3xl font-black text-foreground">
               My Liked Designs
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               Your collection of favorite designs
             </p>
           </div>
         </div>
-        <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <div className="text-center py-20 bg-card rounded-2xl shadow-sm border border-gray-100">
           <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-red-400 to-pink-600 text-white">
             <svg
               className="w-12 h-12"
@@ -93,10 +93,10 @@ export default function LikedDesignsPage() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl font-bold text-foreground mb-3">
             Error Loading Likes
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             Failed to load your liked designs. Please try again later.
           </p>
           <Button
@@ -119,24 +119,24 @@ export default function LikedDesignsPage() {
             <Heart className="w-7 h-7 text-white fill-white" />
           </div>
           <div>
-            <h1 className="text-3xl font-black text-gray-900">
+            <h1 className="text-3xl font-black text-foreground">
               My Liked Designs
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               Your collection of favorite designs
             </p>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="inline-flex items-center gap-6 bg-white rounded-2xl px-6 py-4 border border-gray-100 shadow-sm">
+        <div className="inline-flex items-center gap-6 bg-card rounded-2xl px-6 py-4 border border-gray-100 shadow-sm">
           <div className="flex items-center gap-2">
             <Heart className="w-5 h-5 text-red-500 fill-red-500" />
             <div>
-              <span className="text-2xl font-bold text-gray-900">
+              <span className="text-2xl font-bold text-foreground">
                 {pagination?.totalItems || 0}
               </span>
-              <span className="text-gray-600 text-sm ml-2">
+              <span className="text-muted-foreground text-sm ml-2">
                 {pagination?.totalItems === 1 ? "Design" : "Designs"} Liked
               </span>
             </div>
@@ -146,14 +146,14 @@ export default function LikedDesignsPage() {
 
       {/* Content */}
       {likedDesigns.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <div className="text-center py-20 bg-card rounded-2xl shadow-sm border border-gray-100">
           <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-gray-200 to-gray-300">
-            <Heart className="w-12 h-12 text-gray-500" />
+            <Heart className="w-12 h-12 text-muted-foreground" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-3">
+          <h2 className="text-3xl font-bold text-foreground mb-3">
             No Liked Designs Yet
           </h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
             Start exploring and like your favorite designs to build your
             collection!
           </p>
@@ -176,7 +176,7 @@ export default function LikedDesignsPage() {
                   key={design._id}
                   className="group"
                 >
-                  <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:scale-[1.02]">
+                  <div className="bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:scale-[1.02]">
                     {/* Image */}
                     <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
                       {(design as any)?.previewImageUrls?.[0] ||
@@ -193,7 +193,7 @@ export default function LikedDesignsPage() {
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <svg
-                            className="w-16 h-16 text-gray-400"
+                            className="w-16 h-16 text-muted-foreground"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -217,17 +217,17 @@ export default function LikedDesignsPage() {
                             variant="icon"
                             size="md"
                             showCount={false}
-                            className="backdrop-blur-md bg-white/90 hover:bg-white shadow-lg"
+                            className="backdrop-blur-md bg-card/90 hover:bg-card shadow-lg"
                           />
-                          <button className="backdrop-blur-md bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all hover:scale-110">
-                            <ShoppingCart className="w-4 h-4 text-gray-700" />
+                          <button className="backdrop-blur-md bg-card/90 hover:bg-card p-2 rounded-full shadow-lg transition-all hover:scale-110">
+                            <ShoppingCart className="w-4 h-4 text-foreground" />
                           </button>
                         </div>
                       </div>
 
                       {/* Category Badge */}
                       <div className="absolute top-3 left-3">
-                        <span className="backdrop-blur-md bg-blue-600/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                        <span className="backdrop-blur-md bg-primary/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
                           {design.category?.name || "Uncategorized"}
                         </span>
                       </div>
@@ -246,10 +246,10 @@ export default function LikedDesignsPage() {
 
                     {/* Content */}
                     <div className="p-5">
-                      <h3 className="font-bold text-gray-900 text-lg mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                      <h3 className="font-bold text-foreground text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                         {design.title}
                       </h3>
-                      <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                      <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
                         {design.description}
                       </p>
 
@@ -263,7 +263,7 @@ export default function LikedDesignsPage() {
                           showCount={true}
                         />
                         <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-1 text-gray-600">
+                          <div className="flex items-center gap-1 text-muted-foreground">
                             <svg
                               className="w-4 h-4"
                               fill="none"
@@ -281,7 +281,7 @@ export default function LikedDesignsPage() {
                               {design.downloadCount || 0}
                             </span>
                           </div>
-                          <div className="text-blue-600 font-bold">
+                          <div className="text-primary font-bold">
                             {design.currencyDisplay ||
                               `$${
                                 design.discountedPrice ??
@@ -318,7 +318,7 @@ export default function LikedDesignsPage() {
                     className={`w-10 h-10 rounded-xl font-semibold transition-all ${
                       page === i + 1
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                        : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+                        : "bg-card text-foreground hover:bg-muted/50 border border-border"
                     }`}
                   >
                     {i + 1}

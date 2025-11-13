@@ -96,10 +96,10 @@ export default function ReviewsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-foreground">
             Review Management
           </h1>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-muted-foreground">
             Manage and monitor all customer reviews
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function ReviewsPage() {
           <select
             value={analyticsPeriod}
             onChange={(e) => setAnalyticsPeriod(e.target.value as any)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+            className="px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
           >
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>
@@ -118,10 +118,10 @@ export default function ReviewsPage() {
       </div>
 
       {/* Analytics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:p-5">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <MessageSquare className="w-6 h-6" />
             </div>
             <TrendingUp className="w-5 h-5 opacity-75" />
@@ -132,9 +132,9 @@ export default function ReviewsPage() {
           <p className="text-blue-100 text-sm">Total Reviews</p>
         </div>
 
-        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <Star className="w-6 h-6" />
             </div>
             <Award className="w-5 h-5 opacity-75" />
@@ -145,9 +145,9 @@ export default function ReviewsPage() {
           <p className="text-yellow-100 text-sm">Average Rating</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <Users className="w-6 h-6" />
             </div>
             <Eye className="w-5 h-5 opacity-75" />
@@ -158,9 +158,9 @@ export default function ReviewsPage() {
           <p className="text-green-100 text-sm">Helpful Reviews</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
           <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
+            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
               <Award className="w-6 h-6" />
             </div>
           </div>
@@ -181,10 +181,10 @@ export default function ReviewsPage() {
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+      <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search reviews by comment, title..."
@@ -193,7 +193,7 @@ export default function ReviewsPage() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
             />
           </div>
           <Button
@@ -212,9 +212,9 @@ export default function ReviewsPage() {
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-border">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Rating
               </label>
               <select
@@ -223,7 +223,7 @@ export default function ReviewsPage() {
                   setRatingFilter(e.target.value);
                   setPage(1);
                 }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="">All Ratings</option>
                 <option value="5">5 Stars</option>
@@ -234,13 +234,13 @@ export default function ReviewsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Sort By
               </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="createdAt">Date Created</option>
                 <option value="rating">Rating</option>
@@ -248,13 +248,13 @@ export default function ReviewsPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 Order
               </label>
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value as any)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-blue-600 focus:border-transparent"
               >
                 <option value="desc">Descending</option>
                 <option value="asc">Ascending</option>
@@ -267,15 +267,15 @@ export default function ReviewsPage() {
       {/* Reviews List */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : reviews.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-12 text-center">
           <MessageSquare className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No reviews found
           </h3>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             {search || ratingFilter
               ? "Try adjusting your filters"
               : "Reviews will appear here once customers start submitting them"}
@@ -286,9 +286,9 @@ export default function ReviewsPage() {
           {reviews.map((review: any) => (
             <div
               key={review._id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
             >
-              <div className="p-6">
+              <div className="p-4 sm:p-5">
                 <div className="flex items-start justify-between gap-4">
                   {/* Design Info */}
                   <div className="flex-1 min-w-0">
@@ -297,7 +297,7 @@ export default function ReviewsPage() {
                         <div className="flex items-center gap-3 mb-2">
                           <Link
                             href={`/designs/${review.design?._id}`}
-                            className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors"
+                            className="text-lg font-bold text-foreground hover:text-primary transition-colors"
                           >
                             {review.design?.title || "Unknown Design"}
                           </Link>
@@ -312,13 +312,13 @@ export default function ReviewsPage() {
                                 }`}
                               />
                             ))}
-                            <span className="ml-1 text-sm font-semibold text-gray-700">
+                            <span className="ml-1 text-sm font-semibold text-foreground">
                               {review.rating}/5
                             </span>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
                           <span>
                             By:{" "}
                             <strong>
@@ -339,7 +339,7 @@ export default function ReviewsPage() {
                           {review.isHelpful && (
                             <>
                               <span>•</span>
-                              <span className="text-green-600 font-medium">
+                              <span className="text-primary font-medium">
                                 Marked Helpful
                               </span>
                             </>
@@ -347,17 +347,17 @@ export default function ReviewsPage() {
                         </div>
 
                         {review.title && (
-                          <h4 className="font-bold text-gray-900 mb-2">
+                          <h4 className="font-bold text-foreground mb-2">
                             {review.title}
                           </h4>
                         )}
 
-                        <p className="text-gray-700 leading-relaxed mb-3">
+                        <p className="text-foreground leading-relaxed mb-3">
                           {review.comment}
                         </p>
 
                         {review.updatedAt !== review.createdAt && (
-                          <p className="text-xs text-gray-500 italic">
+                          <p className="text-xs text-muted-foreground italic">
                             Edited on{" "}
                             {new Date(review.updatedAt).toLocaleDateString()}
                           </p>
@@ -382,7 +382,7 @@ export default function ReviewsPage() {
                       onClick={() => handleDelete(review._id)}
                       variant="outline"
                       size="sm"
-                      className="text-red-600 hover:bg-red-50"
+                      className="text-red-500 hover:bg-red-500/10 dark:bg-red-500/15"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -396,9 +396,9 @@ export default function ReviewsPage() {
 
       {/* Pagination */}
       {pagination.totalPages > 1 && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-muted-foreground">
               Showing <strong>{(page - 1) * limit + 1}</strong> to{" "}
               <strong>
                 {Math.min(page * limit, pagination.totalItems || 0)}
@@ -421,10 +421,10 @@ export default function ReviewsPage() {
                     <button
                       key={pageNum}
                       onClick={() => handlePageChange(pageNum)}
-                      className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                      className={`px-3 py-1 rounded-xl text-sm font-medium transition-colors ${
                         page === pageNum
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-600 hover:bg-gray-100"
+                          ? "bg-primary text-white"
+                          : "text-muted-foreground hover:bg-muted"
                       }`}
                     >
                       {pageNum}
@@ -448,8 +448,8 @@ export default function ReviewsPage() {
       {/* Top Reviewed Designs */}
       {analytics.topReviewedDesigns &&
         analytics.topReviewedDesigns.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+            <h2 className="text-xl font-bold text-foreground mb-4">
               Top Reviewed Designs
             </h2>
             <div className="space-y-3">
@@ -458,17 +458,17 @@ export default function ReviewsPage() {
                 .map((design: any, index: number) => (
                   <div
                     key={design._id}
-                    className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    className="flex items-center justify-between p-4 bg-muted/50 rounded-xl hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm">
                         {index + 1}
                       </div>
                       <div>
-                        <h3 className="font-semibold text-gray-900">
+                        <h3 className="font-semibold text-foreground">
                           {design.designTitle}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted-foreground">
                           {design.reviewCount} reviews • {design.averageRating}{" "}
                           avg rating
                         </p>
@@ -494,3 +494,5 @@ export default function ReviewsPage() {
     </div>
   );
 }
+
+

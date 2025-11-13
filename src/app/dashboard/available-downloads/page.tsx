@@ -167,10 +167,10 @@ export default function AvailableDownloadsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-2xl font-bold text-foreground">
           Available Downloads
         </h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm text-muted-foreground">
           Access all designs you can download
         </p>
       </div>
@@ -178,7 +178,7 @@ export default function AvailableDownloadsPage() {
       {/* Subscription Status Banner */}
       <div
         className={`rounded-lg p-5 ${
-          hasActiveSubscription ? "bg-green-600" : "bg-blue-600"
+          hasActiveSubscription ? "bg-primary" : "bg-primary"
         } text-white`}
       >
         <div className="flex items-center justify-between">
@@ -234,7 +234,7 @@ export default function AvailableDownloadsPage() {
           ) : (
             <Link
               href="/pricing"
-              className="px-6 py-2.5 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              className="px-6 py-2.5 bg-card text-primary font-semibold rounded-lg hover:bg-muted/50 transition-colors text-sm"
             >
               View Plans
             </Link>
@@ -243,7 +243,7 @@ export default function AvailableDownloadsPage() {
       </div>
 
       {/* Filter Tabs and Search */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+      <div className="bg-card rounded-lg border border-border p-4 space-y-4">
         {/* Filter Tabs */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
@@ -251,8 +251,8 @@ export default function AvailableDownloadsPage() {
               onClick={() => setFilter("all")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                 filter === "all"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-primary text-white"
+                  : "bg-muted text-foreground hover:bg-gray-200"
               }`}
             >
               All Designs
@@ -261,8 +261,8 @@ export default function AvailableDownloadsPage() {
               onClick={() => setFilter("purchased")}
               className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                 filter === "purchased"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-primary text-white"
+                  : "bg-muted text-foreground hover:bg-gray-200"
               }`}
             >
               Purchased ({purchasedDesigns.length})
@@ -272,8 +272,8 @@ export default function AvailableDownloadsPage() {
                 onClick={() => setFilter("subscription")}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
                   filter === "subscription"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    ? "bg-primary text-white"
+                    : "bg-muted text-foreground hover:bg-gray-200"
                 }`}
               >
                 <Sparkles className="w-4 h-4 inline-block mr-1" />
@@ -285,7 +285,7 @@ export default function AvailableDownloadsPage() {
           {/* Refresh Button */}
           <button
             onClick={() => refetch()}
-            className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            className="p-2 text-muted-foreground hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"
             title="Refresh designs"
           >
             <RefreshCw className="w-4 h-4" />
@@ -299,18 +299,18 @@ export default function AvailableDownloadsPage() {
             placeholder="Search designs..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
           />
           <input
             type="text"
             placeholder="Filter by category..."
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
           />
           <button
             onClick={handleClearFilters}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2 text-sm font-medium"
+            className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2 text-sm font-medium"
           >
             <X className="w-4 h-4" />
             <span>Clear Filters</span>
@@ -322,8 +322,8 @@ export default function AvailableDownloadsPage() {
       {isLoading ? (
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-            <p className="text-gray-600 text-sm">Loading your designs...</p>
+            <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground text-sm">Loading your designs...</p>
           </div>
         </div>
       ) : uniqueDesigns.length > 0 ? (
@@ -352,12 +352,12 @@ export default function AvailableDownloadsPage() {
             return (
               <div
                 key={design._id}
-                className="bg-white relative rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-all group"
+                className="bg-card relative rounded-lg border border-border overflow-hidden hover:shadow-md transition-all group"
               >
                 {/* Design Image */}
                 <Link
                   href={`/designs/${design._id}`}
-                  className="block relative aspect-video overflow-hidden bg-gray-100"
+                  className="block relative aspect-video overflow-hidden bg-muted"
                 >
                   {preview ? (
                     <Image
@@ -368,18 +368,18 @@ export default function AvailableDownloadsPage() {
                     />
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <Package className="w-16 h-16 text-gray-400" />
+                      <Package className="w-16 h-16 text-muted-foreground" />
                     </div>
                   )}
 
                   {/* Access Badge */}
                   <div className="absolute top-2 left-2">
                     {isPurchased ? (
-                      <span className="px-2.5 py-1 bg-blue-600 text-white text-xs font-semibold rounded-lg">
+                      <span className="px-2.5 py-1 bg-primary text-white text-xs font-semibold rounded-lg">
                         Purchased
                       </span>
                     ) : (
-                      <span className="px-2.5 py-1 bg-green-600 text-white text-xs font-semibold rounded-lg flex items-center">
+                      <span className="px-2.5 py-1 bg-primary text-white text-xs font-semibold rounded-lg flex items-center">
                         <Sparkles className="w-3 h-3 mr-1" />
                         Subscription
                       </span>
@@ -388,7 +388,7 @@ export default function AvailableDownloadsPage() {
                 </Link>
                 {/* Price Badge */}
                 <div className="absolute top-3 right-3">
-                  <span className="bg-blue-600 text-white text-sm px-3 py-1.5 rounded-md font-semibold shadow-sm">
+                  <span className="bg-primary text-white text-sm px-3 py-1.5 rounded-md font-semibold shadow-sm">
                     {design.currencyDisplay}
                     {typeof design.discountedPrice === "number" && design.discountedPrice >= 0
                       ? design.discountedPrice
@@ -396,7 +396,7 @@ export default function AvailableDownloadsPage() {
                   </span>
                 </div>
                 <div className="absolute top-12 right-3">
-                  <span className="bg-white text-gray-500 text-sm px-2 py-1 rounded-md font-semibold shadow-sm line-through">
+                  <span className="bg-card text-muted-foreground text-sm px-2 py-1 rounded-md font-semibold shadow-sm line-through">
                     {design.currencyDisplay}
                     {typeof design.basePrice === "number" &&
                     design.basePrice > 0 &&
@@ -411,20 +411,20 @@ export default function AvailableDownloadsPage() {
                 {/* Design Info */}
                 <div className="p-4">
                   <Link href={`/designs/${design._id}`}>
-                    <h3 className="text-base font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors line-clamp-1">
+                    <h3 className="text-base font-bold text-foreground mb-2 hover:text-primary transition-colors line-clamp-1">
                       {design.title}
                     </h3>
                   </Link>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                     {design.description}
                   </p>
 
-                  <div className="flex items-center justify-between mb-3 text-sm text-gray-500">
+                  <div className="flex items-center justify-between mb-3 text-sm text-muted-foreground">
                     <span className="flex items-center">
                       <Calendar className="w-4 h-4 mr-1" />
                       {new Date(design.createdAt).toLocaleDateString()}
                     </span>
-                    <span className="px-2 py-1 bg-gray-100 rounded text-xs font-medium">
+                    <span className="px-2 py-1 bg-muted rounded text-xs font-medium">
                       {categoryName}
                     </span>
                   </div>
@@ -433,7 +433,7 @@ export default function AvailableDownloadsPage() {
                   <button
                     onClick={() => handleDownload(design._id, design.title)}
                     disabled={isDownloading || downloadLoading}
-                    className="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm"
+                    className="w-full py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm"
                   >
                     {isDownloading ? (
                       <>
@@ -453,12 +453,12 @@ export default function AvailableDownloadsPage() {
           })}
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
+        <div className="bg-card rounded-lg border border-border p-12 text-center">
           <AlertCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <h3 className="text-lg font-medium text-foreground mb-2">
             No designs available
           </h3>
-          <p className="text-gray-500 mb-6 text-sm">
+          <p className="text-muted-foreground mb-6 text-sm">
             {filter === "purchased"
               ? "You haven't purchased any designs yet."
               : "Purchase designs or subscribe to start downloading!"}
@@ -466,14 +466,14 @@ export default function AvailableDownloadsPage() {
           <div className="flex items-center justify-center space-x-4">
             <Link
               href="/designs"
-              className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm"
+              className="px-6 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-sm"
             >
               Browse Designs
             </Link>
             {!hasActiveSubscription && (
               <Link
                 href="/pricing"
-                className="px-6 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                className="px-6 py-2.5 border border-border text-foreground font-medium rounded-lg hover:bg-muted/50 transition-colors text-sm"
               >
                 View Pricing
               </Link>
@@ -490,17 +490,17 @@ export default function AvailableDownloadsPage() {
             <button
               onClick={() => setPage(page - 1)}
               disabled={page === 1}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
             >
               Previous
             </button>
-            <span className="px-4 py-2 text-gray-700 text-sm">
+            <span className="px-4 py-2 text-foreground text-sm">
               Page {page} of {allDesignsData.pagination.totalPages}
             </span>
             <button
               onClick={() => setPage(page + 1)}
               disabled={page >= allDesignsData.pagination.totalPages}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
             >
               Next
             </button>

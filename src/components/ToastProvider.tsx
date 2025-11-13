@@ -252,27 +252,27 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
                   );
                 }
               }}
-              className={`w-full border px-4 py-3 rounded shadow-sm flex items-start gap-3 focus:outline-none transform transition-all duration-200 ${
+              className={`w-full border px-4 py-3 rounded shadow-lg dark:shadow-primary/10 flex items-start gap-3 focus:outline-none transform transition-all duration-200 backdrop-blur-xl ${
                 t.type === "success"
-                  ? "bg-green-50 border-green-200"
+                  ? "bg-emerald-500/10 border-emerald-500/30 dark:bg-emerald-500/15 dark:border-emerald-500/40"
                   : t.type === "error"
-                  ? "bg-red-50 border-red-200"
+                  ? "bg-red-500/10 border-red-500/30 dark:bg-red-500/15 dark:border-red-500/40"
                   : t.type === "warning"
-                  ? "bg-yellow-50 border-yellow-200"
-                  : "bg-white border-gray-200"
+                  ? "bg-amber-500/10 border-amber-500/30 dark:bg-amber-500/15 dark:border-amber-500/40"
+                  : "bg-card/95 dark:bg-[#141414]/90 border-border/80 dark:border-[#1e1e1e]/80"
               }`}
             >
               <div className="flex-1">
                 {t.title && (
-                  <div className="font-semibold text-sm text-gray-900">
+                  <div className="font-semibold text-sm text-foreground">
                     {t.title}
                   </div>
                 )}
-                <div className="text-sm text-gray-700">{t.message}</div>
+                <div className="text-sm text-muted-foreground">{t.message}</div>
 
                 {/* progress bar for non-persistent toasts */}
                 {duration > 0 && (
-                  <div className="w-full h-1 mt-3 bg-black/5 rounded-full overflow-hidden">
+                  <div className="w-full h-1 mt-3 bg-muted/50 dark:bg-muted/40 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all ${
                         t.type === "success"

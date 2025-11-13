@@ -7,13 +7,13 @@ import { LikeButton } from "@/components/LikeButton";
 import Link from "next/link";
 import Image from "next/image";
 import { Design } from "@/lib/allTypes";
-import { Download, Eye, ArrowRight, Star } from "lucide-react";
+import { Download, Eye, ArrowRight, Star, Heart } from "lucide-react";
 
 const FeaturedDesigns: React.FC = () => {
   const {
     data: designsData,
     isLoading,
-    error,
+    error
   } = useGetDesignsQuery({ limit: 8, status: "Active" });
   const designs: Design[] = designsData?.data || [];
   const [loadedImages, setLoadedImages] = useState<{ [key: string]: boolean }>(
@@ -87,213 +87,178 @@ const FeaturedDesigns: React.FC = () => {
   return (
     <section className="mb-16">
       {/* Section Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Featured Designs
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
+            <Star className="w-4 h-4 text-primary" />
+            <span className="text-sm font-black text-primary uppercase tracking-wider">
+              Featured Collection
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-black text-foreground mb-3">
+            Trending <span className="gradient-text">Designs</span>
           </h2>
-          <p className="text-gray-600">
-            Handpicked designs from our collection
+          <p className="text-lg text-muted-foreground font-medium">
+            Handpicked premium designs from top creators
           </p>
         </div>
         <Link href="/designs">
           <Button
             variant="outline"
-            className="border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+            className="border-2 border-border hover:border-primary hover:bg-primary/5 rounded-xl font-black group"
           >
             View All
-            <ArrowRight className="w-4 h-4 ml-2" />
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </Link>
       </div>
 
       {/* Designs Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {designs.slice(0, 6).map((design) => (
-          <div
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {designs.slice(0, 6).map((design, index) => (
+          <Link
+            href={`/designs/${design._id}`}
             key={design._id}
-            className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden"
+            className="group relative block animate-fade-in"
+            style={{ animationDelay: `${index * 100}ms` }}
           >
-            <Link href={`/designs/${design._id}`}>
-              {/* Design Image */}
-              <div className="relative h-56 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-                {design.previewImageUrls && design.previewImageUrls[0] ? (
-                  <Image
-                    src={design.previewImageUrls[0]}
-                    alt={design.title}
-                    fill
-                    className={`object-cover transition-all duration-300 group-hover:scale-105 ${
-                      loadedImages[design._id!] ? "opacity-100" : "opacity-0"
-                    }`}
-                    onLoad={() =>
-                      setLoadedImages((prev) => ({
-                        ...prev,
-                        [design._id!]: true,
-                      }))
-                    }
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = "none";
-                    }}
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg
-                      className="w-12 h-12 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </div>
-                )}
+            {/* Main Card */}
+            <div className="relative bg-card rounded-3xl overflow-hidden transition-all duration-700 hover:shadow-2xl hover:shadow-primary/10">
+              {/* Animated Glowing Border */}
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-700 animate-pulse" />
 
-                {/* Badges */}
-                <div className="absolute top-3 left-3 right-3 flex justify-between items-start">
-                  <span className="bg-white text-gray-700 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
-                    {design.mainCategory?.name ||
-                      design.subCategory?.name ||
-                      "Uncategorized"}
-                  </span>
-                  <div className="flex flex-col items-end gap-1">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-sm">
-                      {design.currencyDisplay}
-                      {typeof design.discountedPrice === "number" &&
-                      design.discountedPrice >= 0
-                        ? design.discountedPrice
-                        : design.basePrice ?? 0}
-
-                    </span>
-                    <span className="bg-white text-gray-500 px-2 py-0.5 rounded-full text-xs font-medium line-through shadow-sm">
-                      {design.currencyDisplay}
-                      {typeof design.basePrice === "number" &&
-                      design.basePrice >= 0
-                        ? design.basePrice
-                        : design.basePrice ?? 0}
-                    </span>
-                  </div>
-                </div>
-
-                {design.complexityLevel && (
-                  <div className="absolute bottom-3 left-3">
-                    <span className="bg-white text-gray-700 px-3 py-1 rounded-full text-xs font-medium shadow-sm">
-                      {design.complexityLevel}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </Link>
-
-            {/* Design Info */}
-            <div className="p-5">
-              <Link href={`/designs/${design._id}`}>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-1">
-                  {design.title}
-                </h3>
-              </Link>
-
-              {design.designer.name && (
-                <p className="text-sm text-gray-600 mb-3">
-                  by {design.designer.name}
-                </p>
-              )}
-
-              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                {design.description}
-              </p>
-
-              {/* Rating */}
-
-              <div className="flex items-center gap-2 mb-3">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i <
-                        Math.round(
-                          (design as any).avgRating &&
-                            (design as any).avgRating > 0
-                            ? (design as any).avgRating
-                            : 0
-                        )
-                          ? "text-yellow-400 fill-yellow-400"
-                          : "text-gray-300"
+              {/* Content Wrapper */}
+              <div className="relative bg-card rounded-3xl overflow-hidden">
+                {/* Image Section */}
+                <div className="relative h-80 overflow-hidden">
+                  {design.previewImageUrls && design.previewImageUrls[0] ? (
+                    <Image
+                      src={design.previewImageUrls[0]}
+                      alt={design.title}
+                      fill
+                      className={`object-cover transition-all duration-700 group-hover:scale-125 group-hover:rotate-2 ${
+                        loadedImages[design._id!] ? "opacity-100" : "opacity-0"
                       }`}
+                      onLoad={() =>
+                        setLoadedImages((prev) => ({
+                          ...prev,
+                          [design._id!]: true
+                        }))
+                      }
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = "none";
+                      }}
                     />
-                  ))}
-                </div>
-                <span className="text-sm font-medium text-gray-700">
-                  {(design as any).avgRating && (design as any).avgRating > 0
-                    ? (design as any).avgRating.toFixed(1)
-                    : "0.0"}
-                </span>
-                {(design as any).totalReviews &&
-                (design as any).totalReviews > 0 ? (
-                  <span className="text-xs text-gray-500">
-                    ({(design as any).totalReviews}{" "}
-                    {(design as any).totalReviews === 1 ? "review" : "reviews"})
-                  </span>
-                ) : (
-                  <span className="text-xs text-gray-500">(0 review)</span>
-                )}
-              </div>
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-muted">
+                      <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                        <svg
+                          className="w-10 h-10 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
 
-              {/* Tags */}
-              {design.tags && design.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {design.tags.slice(0, 3).map((tag, index) => (
-                    <span
-                      key={index}
-                      className="bg-gray-100 text-gray-600 text-xs px-2.5 py-1 rounded-md"
-                    >
-                      #{tag}
+                  {/* Dark Overlay on Hover */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-700" />
+
+                  {/* Floating Price Badge */}
+                  <div className="absolute top-4 right-4 z-20">
+                    <div className="relative">
+                      <div className="absolute -inset-2 bg-primary/40 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                      <div className="relative bg-card/95 backdrop-blur-xl px-5 py-3 rounded-2xl shadow-2xl border border-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                        <span className="text-2xl font-black text-primary">
+                          {design.currencyDisplay}
+                          {typeof design.discountedPrice === "number" &&
+                          design.discountedPrice >= 0
+                            ? design.discountedPrice
+                            : design.basePrice ?? 0}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Category Badge - Slides in from Left */}
+                  <div className="absolute top-4 left-4 z-20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
+                    <span className="bg-card/95 backdrop-blur-xl text-foreground px-4 py-2 rounded-xl text-sm font-bold shadow-lg border border-border/50">
+                      {design.mainCategory?.name ||
+                        design.subCategory?.name ||
+                        "Design"}
                     </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Footer */}
-              <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                <div className="flex items-center gap-4 text-sm text-gray-500">
-                  <LikeButton
-                    designId={design._id!}
-                    initialLikesCount={design.likesCount}
-                    variant="compact"
-                    size="md"
-                    showCount={true}
-                  />
-                  <div className="flex items-center gap-1.5">
-                    <Download className="w-4 h-4" />
-                    <span>{design.downloadCount || 0}</span>
                   </div>
                 </div>
 
-                <Link href={`/designs/${design._id}`}>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    <Eye className="w-4 h-4 mr-1" />
-                    View
-                  </Button>
-                </Link>
+                {/* Info Section - Slides Up */}
+                <div className="relative p-6 transform translate-y-0 group-hover:-translate-y-2 transition-all duration-500">
+                  <h3 className="text-2xl font-black text-foreground mb-2 line-clamp-1 group-hover:text-primary transition-colors duration-300">
+                    {design.title}
+                  </h3>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {/* Rating */}
+                      <div className="flex items-center gap-1.5">
+                        <Star className="w-5 h-5 text-primary fill-primary" />
+                        <span className="text-lg font-black text-foreground">
+                          {(design as any).avgRating &&
+                          (design as any).avgRating > 0
+                            ? (design as any).avgRating.toFixed(1)
+                            : "5.0"}
+                        </span>
+                      </div>
+
+                      {/* Stats */}
+                      <div className="flex items-center gap-4 text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Heart className="w-4 h-4" />
+                          <span className="text-sm font-bold">
+                            {design.likesCount || 0}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Download className="w-4 h-4" />
+                          <span className="text-sm font-bold">
+                            {design.downloadCount || 0}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* View Button - Appears on Hover */}
+                    <div className="opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-500">
+                      <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg hover:shadow-primary/50 hover:scale-110 transition-all">
+                        <Eye className="w-5 h-5 text-secondary" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
       {/* View All Button */}
       {designs.length > 6 && (
-        <div className="text-center mt-8">
+        <div className="text-center mt-12">
           <Link href="/designs">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-secondary font-black rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all px-12 py-7 text-lg"
+            >
               View All {designs.length} Designs
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowRight className="w-5 h-5 ml-3" />
             </Button>
           </Link>
         </div>

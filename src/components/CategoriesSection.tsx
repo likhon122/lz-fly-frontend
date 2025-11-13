@@ -55,8 +55,8 @@ export const CategoriesSection: React.FC = () => {
       createdAt: sc.createdAt,
       updatedAt: sc.updatedAt,
       slug: sc.slug,
-      parentCategory: sc.parentCategory,
-    })),
+      parentCategory: sc.parentCategory
+    }))
   }));
 
   if (isLoading) {
@@ -124,38 +124,38 @@ export const CategoriesSection: React.FC = () => {
         bg: "bg-slate-50",
         border: "border-slate-200",
         text: "text-slate-700",
-        accent: "bg-slate-500",
+        accent: "bg-slate-500"
       },
       {
         bg: "bg-gray-50",
         border: "border-gray-200",
         text: "text-gray-700",
-        accent: "bg-gray-500",
+        accent: "bg-gray-500"
       },
       {
         bg: "bg-zinc-50",
         border: "border-zinc-200",
         text: "text-zinc-700",
-        accent: "bg-zinc-500",
+        accent: "bg-zinc-500"
       },
       {
         bg: "bg-neutral-50",
         border: "border-neutral-200",
         text: "text-neutral-700",
-        accent: "bg-neutral-500",
+        accent: "bg-neutral-500"
       },
       {
         bg: "bg-stone-50",
         border: "border-stone-200",
         text: "text-stone-700",
-        accent: "bg-stone-500",
+        accent: "bg-stone-500"
       },
       {
         bg: "bg-blue-50",
         border: "border-blue-200",
         text: "text-blue-700",
-        accent: "bg-blue-500",
-      },
+        accent: "bg-blue-500"
+      }
     ];
     return colors[index % colors.length];
   };
@@ -166,20 +166,26 @@ export const CategoriesSection: React.FC = () => {
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12 gap-4">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-              Categories
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
+              <ArrowRight className="w-4 h-4 text-primary" />
+              <span className="text-sm font-black text-primary uppercase tracking-wider">
+                Browse Categories
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-black text-foreground mb-3">
+              Explore by <span className="gradient-text">Category</span>
             </h2>
-            <p className="text-lg text-gray-600">
-              Explore design collections by category
+            <p className="text-lg text-muted-foreground font-medium">
+              Discover {categories.length}+ specialized design collections
             </p>
           </div>
           <Link href="/categories">
             <Button
               variant="outline"
-              className="border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+              className="border-2 border-border hover:border-primary hover:bg-primary/5 rounded-xl font-black group"
             >
               View All Categories
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
         </div>
@@ -187,21 +193,29 @@ export const CategoriesSection: React.FC = () => {
         {/* Categories Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category, index) => {
-            const colorScheme = getCategoryColor(index);
-
             return (
               <div
                 key={category.id}
-                className={`group bg-white rounded-xl border ${colorScheme.border} shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden`}
+                className="group bg-card rounded-2xl border-2 border-border hover:border-primary/50 shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
               >
                 <div className="p-6">
                   {/* Category Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                        {category.name}
-                      </h3>
-                      <p className="text-gray-600 line-clamp-2">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                          <span className="text-2xl">🎨</span>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-xl font-black text-foreground group-hover:text-foreground transition-colors">
+                            {category.name}
+                          </h3>
+                          <p className="text-xs text-muted-foreground font-bold">
+                            {category.subcategories.length} specialties
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
                         {category.description}
                       </p>
                     </div>
@@ -217,15 +231,13 @@ export const CategoriesSection: React.FC = () => {
                             <Link
                               key={subcategory.id}
                               href={`/designs?subCategory=${subcategory.id}`}
-                              className={`inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium ${colorScheme.bg} ${colorScheme.text} hover:${colorScheme.accent} hover:text-blue-600 transition-colors`}
+                              className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-primary/10 text-primary hover:bg-primary hover:text-secondary transition-all border border-primary/20 hover:border-primary hover:scale-105"
                             >
                               {subcategory.name}
                             </Link>
                           ))}
                         {category.subcategories.length > 4 && (
-                          <span
-                            className={`inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium ${colorScheme.bg} ${colorScheme.text}`}
-                          >
+                          <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-muted text-muted-foreground border border-border">
                             +{category.subcategories.length - 4} more
                           </span>
                         )}
@@ -234,20 +246,14 @@ export const CategoriesSection: React.FC = () => {
                   )}
 
                   {/* Action */}
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between pt-4 border-t border-border">
                     <Link
                       href={`/designs?mainCategory=${category.id}`}
-                      className="inline-flex items-center text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors group/link"
+                      className="inline-flex items-center text-sm font-black text-foreground hover:text-foreground transition-colors group/link"
                     >
                       Browse designs
-                      <ArrowRight className="w-4 h-4 ml-1 group-hover/link:translate-x-0.5 transition-transform" />
+                      <ArrowRight className="w-4 h-4 ml-1.5 group-hover/link:translate-x-1 transition-transform" />
                     </Link>
-
-                    {category.subcategories.length > 0 && (
-                      <span className="text-sm text-gray-500">
-                        {category.subcategories.length} subcategories
-                      </span>
-                    )}
                   </div>
                 </div>
               </div>
@@ -257,22 +263,26 @@ export const CategoriesSection: React.FC = () => {
 
         {/* Stats Section */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-8 px-8 py-6 bg-white rounded-2xl shadow-sm border border-gray-200">
+          <div className="inline-flex items-center gap-8 px-10 py-8 bg-card rounded-2xl shadow-xl border-2 border-border">
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-1">
+              <div className="text-3xl font-black text-foreground mb-2">
                 {categories.length}
               </div>
-              <div className="text-sm text-gray-600">Categories</div>
+              <div className="text-sm text-muted-foreground font-bold uppercase tracking-wider">
+                Categories
+              </div>
             </div>
-            <div className="w-px h-8 bg-gray-300"></div>
+            <div className="w-px h-12 bg-border"></div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900 mb-1">
+              <div className="text-3xl font-black text-primary mb-2">
                 {categories.reduce(
                   (total, cat) => total + cat.subcategories.length,
                   0
                 )}
               </div>
-              <div className="text-sm text-gray-600">Specialties</div>
+              <div className="text-sm text-muted-foreground font-bold uppercase tracking-wider">
+                Specialties
+              </div>
             </div>
           </div>
         </div>
