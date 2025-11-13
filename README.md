@@ -141,6 +141,15 @@ This is a full-featured frontend application for a design marketplace where user
    ```bash
    npm run dev
    ```
+6. **Login As a admin **
+   *Email*
+   ```bash
+   admin@gmail.com
+   ```
+   *Password*
+   ```bash
+   admin122evy@
+   ```
 
 The app will be available at `http://localhost:3000`
 
@@ -735,4 +744,4 @@ For issues or questions:
 
 ---
 
-**Made with ❤️ for designers and developers**
+**Made with ❤️ for fly designers and developers**
