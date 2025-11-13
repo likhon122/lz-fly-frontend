@@ -261,35 +261,38 @@ export default function CategoriesPage() {
         <div className=" mx-auto px-6 space-y-6">
           {/* Success/Error Messages */}
           {success && (
-            <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl flex items-center gap-2">
+            <div className="bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-4 py-3 rounded-xl flex items-center gap-2">
               <CheckCircle className="w-5 h-5" />
               <span>{success}</span>
             </div>
           )}
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl flex items-center gap-2">
+            <div className="bg-red-500/10 dark:bg-red-500/15 border border-red-500/30 dark:border-red-500/20 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl flex items-center gap-2">
               <AlertCircle className="w-5 h-5" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Header */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/20 p-5 sm:p-6 border border-border/70 dark:border-[#1e1e1e] relative overflow-hidden">
+            {/* Premium Glow Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent pointer-events-none" />
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl">
+                <div className="p-3 bg-gradient-to-br from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 rounded-xl shadow-lg dark:shadow-primary/30">
                   <Tags className="w-8 h-8 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                  <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 bg-clip-text text-transparent">
                     Categories Management
                   </h1>
-                  <p className="text-slate-600 mt-1">
+                  <p className="text-muted-foreground/80 dark:text-muted-foreground/60 mt-1 text-sm">
                     Organize and manage design categories
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <Button
                   onClick={() => {
                     setEditingCategory(null);
@@ -304,7 +307,7 @@ export default function CategoriesPage() {
                     setShowModal(true);
                     setIsSubcategoryMode(false);
                   }}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all"
+                  className="bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:from-primary/80 hover:via-primary/90 hover:to-primary dark:hover:from-primary/50 dark:hover:via-primary/70 dark:hover:to-primary/60 shadow-xl dark:shadow-primary/20 hover:shadow-2xl transition-all"
                 >
                   <Plus className="w-5 h-5 mr-2" />
                   Create Parent Category
@@ -325,7 +328,7 @@ export default function CategoriesPage() {
                   }}
                   // Track if modal is for subcategory creation
 
-                  className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 shadow-lg hover:shadow-xl transition-all"
+                  className="bg-gradient-to-r from-emerald-500/70 via-emerald-500 to-emerald-500/90 dark:from-emerald-500/40 dark:via-emerald-500/60 dark:to-emerald-500/50 hover:from-emerald-600 hover:via-emerald-600 hover:to-emerald-600 dark:hover:from-emerald-500 dark:hover:via-emerald-500 dark:hover:to-emerald-500 shadow-xl dark:shadow-emerald-500/20 hover:shadow-2xl transition-all"
                 >
                   <Plus className="w-5 h-5 mr-2" />
                   Create Subcategory
@@ -333,31 +336,30 @@ export default function CategoriesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
-                <div className="text-sm text-blue-600 font-medium">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
+              <div className="bg-gradient-to-br from-primary/10 to-primary/15 dark:from-primary/10 dark:to-primary/5 p-4 sm:p-5 rounded-xl border border-primary/30 dark:border-primary/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-primary/10 transition-all">
+                <div className="text-sm text-primary dark:text-primary/90 font-medium mb-1">
                   Total Categories
                 </div>
-                <div className="text-2xl font-bold text-blue-900">
+                <div className="text-3xl font-bold text-foreground dark:text-foreground">
                   {categories.length +
                     categories.flatMap((cat) => cat.subcategories || []).length}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
-                <div className="text-sm text-green-600 font-medium">Active</div>
-                <div className="text-2xl font-bold text-green-900">
+              <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/15 dark:from-emerald-500/10 dark:to-emerald-500/5 p-4 sm:p-5 rounded-xl border border-emerald-500/30 dark:border-emerald-500/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all">
+                <div className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mb-1">Active</div>
+                <div className="text-3xl font-bold text-foreground dark:text-foreground">
                   {categories.filter((c: ICategory) => c.isActive).length +
                     categories
                       .flatMap((cat) => cat.subcategories || [])
                       .filter((s: ICategory) => s.isActive).length}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl border border-orange-200">
-                <div className="text-sm text-orange-600 font-medium">
+              <div className="bg-gradient-to-br from-amber-500/10 to-amber-500/15 dark:from-amber-500/10 dark:to-amber-500/5 p-4 sm:p-5 rounded-xl border border-amber-500/30 dark:border-amber-500/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-amber-500/10 transition-all">
+                <div className="text-sm text-amber-600 dark:text-amber-400 font-medium mb-1">
                   Inactive
                 </div>
-                <div className="text-2xl font-bold text-orange-900">
-                  {categories.filter((c: ICategory) => !c.isActive).length +
+                <div className="text-3xl font-bold text-foreground dark:text-foreground">{categories.filter((c: ICategory) => !c.isActive).length +
                     categories
                       .flatMap((cat) => cat.subcategories || [])
                       .filter((s: ICategory) => !s.isActive).length}
@@ -369,25 +371,25 @@ export default function CategoriesPage() {
 
         {/* Stats */}
         {/* Tabs for Parent/Subcategories/All */}
-        <div className="mt-8 flex gap-2 px-6">
+        <div className="mt-6 flex gap-2 px-4 sm:px-6 flex-wrap">
           <Button
             variant={activeTab === "all" ? "default" : "outline"}
             onClick={() => setActiveTab("all")}
-            className={activeTab === "all" ? "font-bold" : ""}
+            className={`${activeTab === "all" ? "font-bold bg-primary/90 dark:bg-primary/80 shadow-lg dark:shadow-primary/30" : "hover:bg-muted/60 dark:hover:bg-muted/40"} transition-all rounded-xl`}
           >
             All Categories
           </Button>
           <Button
             variant={activeTab === "parent" ? "default" : "outline"}
             onClick={() => setActiveTab("parent")}
-            className={activeTab === "parent" ? "font-bold" : ""}
+            className={`${activeTab === "parent" ? "font-bold bg-primary/90 dark:bg-primary/80 shadow-lg dark:shadow-primary/30" : "hover:bg-muted/60 dark:hover:bg-muted/40"} transition-all rounded-xl`}
           >
             Parent Categories
           </Button>
           <Button
             variant={activeTab === "sub" ? "default" : "outline"}
             onClick={() => setActiveTab("sub")}
-            className={activeTab === "sub" ? "font-bold" : ""}
+            className={`${activeTab === "sub" ? "font-bold bg-primary/90 dark:bg-primary/80 shadow-lg dark:shadow-primary/30" : "hover:bg-muted/60 dark:hover:bg-muted/40"} transition-all rounded-xl`}
           >
             Subcategories
           </Button>
@@ -396,45 +398,50 @@ export default function CategoriesPage() {
         <div className="  overflow-hidden mt-8">
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-              <span className="ml-3 text-slate-600">Loading categories...</span>
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              <span className="ml-3 text-muted-foreground">Loading categories...</span>
             </div>
           ) : (
             <>
               {/* Refactored tab logic for new backend response */}
               {activeTab === "all" ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-5">
                   {/* All Parent Categories */}
                   {categories.map((category) => (
                     <div
                       key={category.id}
-                      className="bg-white border border-slate-200 rounded-xl shadow p-6 flex flex-col gap-3"
+                      className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-sm border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow-lg dark:shadow-primary/10 p-4 sm:p-5 flex flex-col gap-3 hover:shadow-xl dark:hover:shadow-primary/20 transition-all hover:scale-[1.02] relative overflow-hidden group"
                     >
-                      <div className="flex items-center gap-3">
-                        <Tags className="w-8 h-8 text-blue-600" />
+                      {/* Subtle gradient overlay on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent dark:group-hover:from-primary/10 transition-all pointer-events-none" />
+                      
+                      <div className="flex items-center gap-3 relative z-10">
+                        <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg">
+                          <Tags className="w-6 h-6 text-primary dark:text-primary/90" />
+                        </div>
                         <div>
-                          <h3 className="font-bold text-lg text-slate-900">
+                          <h3 className="font-bold text-lg text-foreground dark:text-foreground">
                             {category.name}
                           </h3>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-muted-foreground/70 dark:text-muted-foreground/60">
                             ID: {category.id?.slice(-8)} | Parent Category
                           </p>
                         </div>
                       </div>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground/80 relative z-10">
                         {category.description}
                       </p>
-                      <div className="flex gap-2 text-xs">
+                      <div className="flex gap-2 text-xs flex-wrap relative z-10">
                         <span
                           className={
                             category.isActive
-                              ? "bg-green-100 text-green-800 px-2 py-1 rounded"
-                              : "bg-red-100 text-red-800 px-2 py-1 rounded"
+                              ? "bg-emerald-500/15 dark:bg-emerald-500/20 border border-emerald-500/30 dark:border-emerald-500/40 text-emerald-700 dark:text-emerald-300 px-3 py-1.5 rounded-lg font-medium"
+                              : "bg-red-500/15 dark:bg-red-500/20 border border-red-500/30 dark:border-red-500/40 text-red-700 dark:text-red-300 px-3 py-1.5 rounded-lg font-medium"
                           }
                         >
                           {category.isActive ? "Active" : "Inactive"}
                         </span>
-                        <span className="text-slate-400">
+                        <span className="text-muted-foreground/60">
                           Created: {formatDate(category.createdAt)}
                         </span>
                       </div>
@@ -444,7 +451,7 @@ export default function CategoriesPage() {
                             <span className="text-xs text-indigo-600 font-medium">
                               Subcategories:
                             </span>
-                            <ul className="ml-2 list-disc text-xs text-slate-500">
+                            <ul className="ml-2 list-disc text-xs text-muted-foreground">
                               {category.subcategories.map((sub) => (
                                 <li key={sub.id}>{sub.name}</li>
                               ))}
@@ -475,38 +482,38 @@ export default function CategoriesPage() {
                     .map((subcat) => (
                       <div
                         key={subcat.id}
-                        className="bg-white border border-slate-200 rounded-xl shadow p-6 flex flex-col gap-3"
+                        className="bg-card border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow p-4 sm:p-5 flex flex-col gap-3"
                       >
                         <div className="flex items-center gap-3">
                           <Tags className="w-8 h-8 text-indigo-600" />
                           <div>
-                            <h3 className="font-bold text-lg text-slate-900">
+                            <h3 className="font-bold text-lg text-foreground">
                               {subcat.name}
                             </h3>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-muted-foreground">
                               ID: {subcat.id?.slice(-8)} | Subcategory
                             </p>
                           </div>
                         </div>
-                        <p className="text-sm text-slate-600">
+                        <p className="text-sm text-muted-foreground">
                           {subcat.description}
                         </p>
                         <div className="flex gap-2 text-xs">
                           <span
                             className={
                               subcat.isActive
-                                ? "bg-green-100 text-green-800 px-2 py-1 rounded"
-                                : "bg-red-100 text-red-800 px-2 py-1 rounded"
+                                ? "bg-green-100 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded"
+                                : "bg-red-100 text-red-700 dark:text-red-300 px-2 py-1 rounded"
                             }
                           >
                             {subcat.isActive ? "Active" : "Inactive"}
                           </span>
-                          <span className="text-slate-400">
+                          <span className="text-muted-foreground/60">
                             Created: {formatDate(subcat.createdAt)}
                           </span>
                         </div>
-                        <div className="text-xs text-slate-500">
-                          <span className="font-medium text-slate-700">
+                        <div className="text-xs text-muted-foreground">
+                          <span className="font-medium text-foreground">
                             Parent:
                           </span>{" "}
                           {subcat.parentCategory?.name || "Unknown"}
@@ -532,43 +539,43 @@ export default function CategoriesPage() {
                   {categories.length === 0 &&
                     categories.flatMap((cat) => cat.subcategories || [])
                       .length === 0 && (
-                      <div className="col-span-full text-center text-slate-500 py-12">
+                      <div className="col-span-full text-center text-muted-foreground py-12">
                         No categories found.
                       </div>
                     )}
                 </div>
               ) : activeTab === "parent" ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-5">
                   {categories.map((category) => (
                     <div
                       key={category.id}
-                      className="bg-white border border-slate-200 rounded-xl shadow p-6 flex flex-col gap-3"
+                      className="bg-card border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow p-4 sm:p-5 flex flex-col gap-3"
                     >
                       <div className="flex items-center gap-3">
-                        <Tags className="w-8 h-8 text-blue-600" />
+                        <Tags className="w-8 h-8 text-primary" />
                         <div>
-                          <h3 className="font-bold text-lg text-slate-900">
+                          <h3 className="font-bold text-lg text-foreground">
                             {category.name}
                           </h3>
-                          <p className="text-xs text-slate-500">
+                          <p className="text-xs text-muted-foreground">
                             ID: {category.id?.slice(-8)}
                           </p>
                         </div>
                       </div>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-muted-foreground">
                         {category.description}
                       </p>
                       <div className="flex gap-2 text-xs">
                         <span
                           className={
                             category.isActive
-                              ? "bg-green-100 text-green-800 px-2 py-1 rounded"
-                              : "bg-red-100 text-red-800 px-2 py-1 rounded"
+                              ? "bg-green-100 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded"
+                              : "bg-red-100 text-red-700 dark:text-red-300 px-2 py-1 rounded"
                           }
                         >
                           {category.isActive ? "Active" : "Inactive"}
                         </span>
-                        <span className="text-slate-400">
+                        <span className="text-muted-foreground/60">
                           Created: {formatDate(category.createdAt)}
                         </span>
                       </div>
@@ -578,7 +585,7 @@ export default function CategoriesPage() {
                             <span className="text-xs text-indigo-600 font-medium">
                               Subcategories:
                             </span>
-                            <ul className="ml-2 list-disc text-xs text-slate-500">
+                            <ul className="ml-2 list-disc text-xs text-muted-foreground">
                               {category.subcategories.map((sub) => (
                                 <li key={sub.id}>{sub.name}</li>
                               ))}
@@ -604,50 +611,50 @@ export default function CategoriesPage() {
                     </div>
                   ))}
                   {categories.length === 0 && (
-                    <div className="col-span-full text-center text-slate-500 py-12">
+                    <div className="col-span-full text-center text-muted-foreground py-12">
                       No parent categories found.
                     </div>
                   )}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 sm:p-5">
                   {categories
                     .flatMap((cat) => cat.subcategories || [])
                     .map((subcat) => (
                       <div
                         key={subcat.id}
-                        className="bg-white border border-slate-200 rounded-xl shadow p-6 flex flex-col gap-3"
+                        className="bg-card border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow p-4 sm:p-5 flex flex-col gap-3"
                       >
                         <div className="flex items-center gap-3">
                           <Tags className="w-8 h-8 text-indigo-600" />
                           <div>
-                            <h3 className="font-bold text-lg text-slate-900">
+                            <h3 className="font-bold text-lg text-foreground">
                               {subcat.name}
                             </h3>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-muted-foreground">
                               ID: {subcat.id?.slice(-8)}
                             </p>
                           </div>
                         </div>
-                        <p className="text-sm text-slate-600">
+                        <p className="text-sm text-muted-foreground">
                           {subcat.description}
                         </p>
                         <div className="flex gap-2 text-xs">
                           <span
                             className={
                               subcat.isActive
-                                ? "bg-green-100 text-green-800 px-2 py-1 rounded"
-                                : "bg-red-100 text-red-800 px-2 py-1 rounded"
+                                ? "bg-green-100 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded"
+                                : "bg-red-100 text-red-700 dark:text-red-300 px-2 py-1 rounded"
                             }
                           >
                             {subcat.isActive ? "Active" : "Inactive"}
                           </span>
-                          <span className="text-slate-400">
+                          <span className="text-muted-foreground/60">
                             Created: {formatDate(subcat.createdAt)}
                           </span>
                         </div>
-                        <div className="text-xs text-slate-500">
-                          <span className="font-medium text-slate-700">
+                        <div className="text-xs text-muted-foreground">
+                          <span className="font-medium text-foreground">
                             Parent:
                           </span>{" "}
                           {subcat.parentCategory?.name || "Unknown"}
@@ -672,7 +679,7 @@ export default function CategoriesPage() {
                     ))}
                   {categories.flatMap((cat) => cat.subcategories || [])
                     .length === 0 && (
-                    <div className="col-span-full text-center text-slate-500 py-12">
+                    <div className="col-span-full text-center text-muted-foreground py-12">
                       No subcategories found.
                     </div>
                   )}
@@ -685,7 +692,7 @@ export default function CategoriesPage() {
         {/* Create/Edit Modal */}
         {showModal && (
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/70 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
             role="dialog"
             aria-modal="true"
             aria-labelledby="category-modal-title"
@@ -695,14 +702,17 @@ export default function CategoriesPage() {
             }}
           >
             <div
-              className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
+              className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/20 max-w-lg w-full max-h-[90vh] overflow-y-auto border border-border/70 dark:border-[#1e1e1e] relative"
               tabIndex={0}
             >
-              <div className="p-6">
+              {/* Premium glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent pointer-events-none rounded-2xl" />
+              
+              <div className="p-4 sm:p-6 relative z-10">
                 <div className="flex items-center justify-between mb-6">
                   <h2
                     id="category-modal-title"
-                    className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+                    className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 bg-clip-text text-transparent"
                   >
                     {editingCategory
                       ? "Edit Category"
@@ -712,16 +722,16 @@ export default function CategoriesPage() {
                   </h2>
                   <button
                     onClick={handleCloseModal}
-                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                    className="p-2 hover:bg-muted/60 dark:hover:bg-muted/40 rounded-xl transition-all hover:scale-110"
                     aria-label="Close modal"
                   >
-                    <X className="w-5 h-5 text-slate-500" />
+                    <X className="w-5 h-5 text-muted-foreground dark:text-muted-foreground/80" />
                   </button>
                 </div>
 
                 {error && (
                   <div
-                    className="mb-4 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg flex items-center gap-2"
+                    className="mb-4 bg-red-500/10 dark:bg-red-500/15 border border-red-500/30 dark:border-red-500/40 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl flex items-center gap-2 backdrop-blur-sm"
                     role="alert"
                   >
                     <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -736,10 +746,10 @@ export default function CategoriesPage() {
                     <div className="mb-4">
                       <label
                         htmlFor="parent-category"
-                        className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2"
+                        className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2"
                       >
                         <span className="inline-flex items-center justify-center w-5 h-5 bg-blue-100 rounded-full">
-                          <Tags className="w-4 h-4 text-blue-600" />
+                          <Tags className="w-4 h-4 text-primary" />
                         </span>
                         Parent Category <span className="text-red-500">*</span>
                       </label>
@@ -752,21 +762,21 @@ export default function CategoriesPage() {
                             parentCategory: e.target.value || null,
                           })
                         }
-                        className="w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-slate-50"
+                        className="w-full px-4 py-3 border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary/50 dark:focus:ring-primary/60 focus:border-primary dark:focus:border-primary/60 outline-none transition-all bg-muted/30 dark:bg-[#141414]/80 backdrop-blur-sm hover:bg-muted/50 dark:hover:bg-[#141414]/90 text-foreground dark:text-foreground"
                       >
-                        <option value="">Select Parent Category</option>
+                        <option value="" className="bg-card dark:bg-[#141414]">Select Parent Category</option>
                         {categories
                           .filter((cat) => !cat.parentCategory)
                           .map((cat) => (
-                            <option key={cat.id} value={cat.id}>
+                            <option key={cat.id} value={cat.id} className="bg-card dark:bg-[#141414]">
                               {cat.name}
                             </option>
                           ))}
                       </select>
-                      <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
-                        <Info className="w-4 h-4 text-blue-400" />
+                      <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground/80 dark:text-muted-foreground/60">
+                        <Info className="w-4 h-4 text-primary/80 dark:text-primary/70" />
                         <span>
-                          <strong>Tip:</strong> Select a parent category for
+                          <strong className="text-foreground dark:text-foreground/90">Tip:</strong> Select a parent category for
                           your subcategory.
                         </span>
                       </div>
@@ -776,7 +786,7 @@ export default function CategoriesPage() {
                   <div>
                     <label
                       htmlFor="category-name"
-                      className="block text-sm font-semibold text-slate-700 mb-2"
+                      className="block text-sm font-semibold text-foreground mb-2"
                     >
                       {isSubcategoryMode ? "Sub Category" : "Category"} Name{" "}
                       <span className="text-red-500">*</span>
@@ -791,10 +801,10 @@ export default function CategoriesPage() {
                           setFormErrors({ ...formErrors, name: undefined });
                         }
                       }}
-                      className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all ${
+                      className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-transparent outline-none transition-all ${
                         formErrors.name
-                          ? "border-red-300 bg-red-50"
-                          : "border-slate-300"
+                          ? "border-red-300 bg-red-500/10 dark:bg-red-500/15"
+                          : "border-border dark:border-[#1e1e1e]"
                       }`}
                       placeholder="e.g., Web Design"
                       aria-invalid={!!formErrors.name}
@@ -803,13 +813,13 @@ export default function CategoriesPage() {
                     {formErrors.name && (
                       <p
                         id="category-name-error"
-                        className="mt-1 text-sm text-red-600 flex items-center gap-1"
+                        className="mt-1 text-sm text-red-500 flex items-center gap-1"
                       >
                         <AlertCircle className="w-4 h-4" />
                         {formErrors.name}
                       </p>
                     )}
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       2-50 characters, letters and spaces only
                     </p>
                   </div>
@@ -818,7 +828,7 @@ export default function CategoriesPage() {
                   <div>
                     <label
                       htmlFor="category-description"
-                      className="block text-sm font-semibold text-slate-700 mb-2"
+                      className="block text-sm font-semibold text-foreground mb-2"
                     >
                       Description <span className="text-red-500">*</span>
                     </label>
@@ -838,10 +848,10 @@ export default function CategoriesPage() {
                           });
                         }
                       }}
-                      className={`w-full px-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none ${
+                      className={`w-full px-4 py-2.5 border rounded-xl focus:ring-2 focus:ring-primary dark:ring-primary/60 focus:border-transparent outline-none transition-all resize-none ${
                         formErrors.description
-                          ? "border-red-300 bg-red-50"
-                          : "border-slate-300"
+                          ? "border-red-300 bg-red-500/10 dark:bg-red-500/15"
+                          : "border-border dark:border-[#1e1e1e]"
                       }`}
                       placeholder="Describe this category..."
                       aria-invalid={!!formErrors.description}
@@ -850,33 +860,33 @@ export default function CategoriesPage() {
                     {formErrors.description && (
                       <p
                         id="category-description-error"
-                        className="mt-1 text-sm text-red-600 flex items-center gap-1"
+                        className="mt-1 text-sm text-red-500 flex items-center gap-1"
                       >
                         <AlertCircle className="w-4 h-4" />
                         {formErrors.description}
                       </p>
                     )}
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       {formData.description.length}/200 characters (minimum 10)
                     </p>
                   </div>
 
                   {/* Active Status Toggle */}
-                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200">
+                  <div className="flex items-center justify-between p-4 bg-muted/50 dark:bg-[#141414]/50 rounded-xl border border-border/70 dark:border-[#1e1e1e]">
                     <div className="flex items-center gap-3">
                       {formData.isActive ? (
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <CheckCircle className="w-5 h-5 text-primary" />
                       ) : (
-                        <XCircle className="w-5 h-5 text-red-600" />
+                        <XCircle className="w-5 h-5 text-red-500" />
                       )}
                       <div>
                         <label
                           htmlFor="isActive"
-                          className="text-sm font-semibold text-slate-700 cursor-pointer"
+                          className="text-sm font-semibold text-foreground cursor-pointer"
                         >
                           Active Status
                         </label>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-muted-foreground">
                           {formData.isActive
                             ? "Category is visible to users"
                             : "Category is hidden from users"}
@@ -890,7 +900,7 @@ export default function CategoriesPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, isActive: e.target.checked })
                       }
-                      className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-600 cursor-pointer"
+                      className="w-5 h-5 text-primary border-border rounded focus:ring-blue-600 cursor-pointer"
                       aria-checked={formData.isActive}
                     />
                   </div>
@@ -909,7 +919,7 @@ export default function CategoriesPage() {
                     </Button>
                     <Button
                       type="submit"
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      className="flex-1 bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:from-primary/80 hover:via-primary/90 hover:to-primary dark:hover:from-primary/50 dark:hover:via-primary/70 dark:hover:to-primary/60"
                       disabled={isCreating || isUpdating}
                       aria-label={
                         editingCategory ? "Update Category" : "Create Category"
@@ -938,22 +948,22 @@ export default function CategoriesPage() {
         {/* Delete Confirmation Modal */}
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div className="bg-card rounded-2xl shadow-2xl max-w-md w-full p-4 sm:p-5">
               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-red-100 rounded-full">
-                  <AlertTriangle className="w-6 h-6 text-red-600" />
+                  <AlertTriangle className="w-6 h-6 text-red-500" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">
+                  <h3 className="text-xl font-bold text-foreground">
                     Delete Category
                   </h3>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-muted-foreground">
                     This action cannot be undone
                   </p>
                 </div>
               </div>
 
-              <p className="text-slate-700 mb-6">
+              <p className="text-foreground mb-6">
                 Are you sure you want to delete this category? All associated
                 designs will need to be recategorized.
               </p>
@@ -997,3 +1007,7 @@ export default function CategoriesPage() {
     </>
   );
 }
+
+
+
+

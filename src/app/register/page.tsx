@@ -193,10 +193,10 @@ export default function RegisterPage() {
   };
 
   const getPasswordStrengthColor = () => {
-    if (passwordStrength < 30) return "bg-red-500";
+    if (passwordStrength < 30) return "bg-destructive";
     if (passwordStrength < 60) return "bg-orange-500";
     if (passwordStrength < 80) return "bg-yellow-500";
-    return "bg-green-500";
+    return "bg-primary";
   };
 
   const getPasswordStrengthText = () => {
@@ -207,12 +207,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 relative overflow-hidden">
-      {/* Animated Background Blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Subtle Pattern Overlay */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-5">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(39,165,46,0.1)_1.5px,transparent_1.5px),linear-gradient(to_right,rgba(39,165,46,0.1)_1.5px,transparent_1.5px)] bg-size-[48px_48px]"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
       {/* Back to Home Button */}
@@ -220,7 +220,7 @@ export default function RegisterPage() {
         <Link href="/">
           <Button
             variant="outline"
-            className="backdrop-blur-sm bg-white/80 border-2 hover:bg-white shadow-lg hover:shadow-xl transition-all rounded-2xl font-bold"
+            className="backdrop-blur-sm bg-card border-2 border-border hover:border-primary shadow-xl hover:shadow-primary/20 transition-all rounded-2xl font-black"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -243,19 +243,19 @@ export default function RegisterPage() {
       <div className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-6xl">
           {/* Main Card with Split Layout */}
-          <div className="backdrop-blur-sm bg-white/90 rounded-3xl shadow-2xl border border-white/60 overflow-hidden">
+          <div className="backdrop-blur-sm bg-card rounded-3xl shadow-2xl border-2 border-border overflow-hidden">
             <div className="grid lg:grid-cols-2">
               {/* Left Side - Branding */}
-              <div className="hidden lg:flex relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-12 items-center justify-center overflow-hidden">
+              <div className="hidden lg:flex relative bg-primary p-12 items-center justify-center overflow-hidden">
                 {/* Decorative Elements */}
-                <div className="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-1/2 translate-y-1/2"></div>
+                <div className="absolute top-0 left-0 w-64 h-64 bg-secondary/10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-secondary/10 rounded-full translate-x-1/2 translate-y-1/2"></div>
 
-                <div className="relative z-10 text-white max-w-md">
+                <div className="relative z-10 text-secondary max-w-md">
                   {/* Logo/Icon */}
-                  <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-8 shadow-xl">
+                  <div className="w-20 h-20 rounded-2xl bg-secondary/20 backdrop-blur-sm flex items-center justify-center mb-8 shadow-2xl">
                     <svg
-                      className="w-12 h-12 text-white"
+                      className="w-12 h-12 text-secondary"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -272,7 +272,7 @@ export default function RegisterPage() {
                   <h1 className="text-4xl font-black mb-4 leading-tight">
                     Join Our Creative Community
                   </h1>
-                  <p className="text-lg text-white/90 mb-8 leading-relaxed">
+                  <p className="text-lg text-secondary/90 mb-8 leading-relaxed font-medium">
                     Start your journey with thousands of designers and creators.
                     Access premium templates and showcase your work.
                   </p>
@@ -280,7 +280,7 @@ export default function RegisterPage() {
                   {/* Features List */}
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -296,16 +296,16 @@ export default function RegisterPage() {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-bold mb-1">
+                        <h3 className="font-black mb-1">
                           1000+ Premium Designs
                         </h3>
-                        <p className="text-sm text-white/80">
+                        <p className="text-sm text-secondary/80 font-medium">
                           Access our entire collection of stunning templates
                         </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -321,14 +321,14 @@ export default function RegisterPage() {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-bold mb-1">Community Support</h3>
-                        <p className="text-sm text-white/80">
+                        <h3 className="font-black mb-1">Community Support</h3>
+                        <p className="text-sm text-secondary/80 font-medium">
                           Connect with designers worldwide
                         </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -344,8 +344,8 @@ export default function RegisterPage() {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-bold mb-1">Regular Updates</h3>
-                        <p className="text-sm text-white/80">
+                        <h3 className="font-black mb-1">Regular Updates</h3>
+                        <p className="text-sm text-secondary/80 font-medium">
                           New designs added daily
                         </p>
                       </div>
@@ -353,18 +353,18 @@ export default function RegisterPage() {
                   </div>
 
                   {/* Stats */}
-                  <div className="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/20">
+                  <div className="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-secondary/20">
                     <div>
                       <div className="text-3xl font-black mb-1">50+</div>
-                      <div className="text-sm text-white/80">Categories</div>
+                      <div className="text-sm text-secondary/80 font-bold">Categories</div>
                     </div>
                     <div>
                       <div className="text-3xl font-black mb-1">100+</div>
-                      <div className="text-sm text-white/80">Designers</div>
+                      <div className="text-sm text-secondary/80 font-bold">Designers</div>
                     </div>
                     <div>
                       <div className="text-3xl font-black mb-1">24/7</div>
-                      <div className="text-sm text-white/80">Support</div>
+                      <div className="text-sm text-secondary/80 font-bold">Support</div>
                     </div>
                   </div>
                 </div>
@@ -374,14 +374,14 @@ export default function RegisterPage() {
               <div className="p-8 sm:p-10 flex flex-col justify-center">
                 {/* Header */}
                 <div className="mb-6">
-                  <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2">
+                  <h2 className="text-3xl sm:text-4xl font-black text-foreground mb-2">
                     Create Account
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground font-medium">
                     Already have an account?{" "}
                     <Link
                       href="/login"
-                      className="font-bold text-blue-600 hover:text-purple-600 transition-colors"
+                      className="font-black text-primary hover:underline transition-colors"
                     >
                       Sign in
                     </Link>
@@ -394,10 +394,10 @@ export default function RegisterPage() {
                     type="button"
                     onClick={handleGoogleSignIn}
                     disabled={isGoogleLoading || isGitHubLoading || isLoading}
-                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white border-2 border-gray-200 rounded-xl hover:border-blue-400 hover:shadow-md disabled:bg-gray-50 disabled:cursor-not-allowed transition-all font-semibold text-gray-700"
+                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-card border-2 border-border rounded-2xl hover:border-primary hover:shadow-xl disabled:bg-muted disabled:cursor-not-allowed transition-all font-black text-foreground"
                   >
                     {isGoogleLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                      <Loader2 className="w-5 h-5 animate-spin text-primary" />
                     ) : (
                       <svg className="w-5 h-5" viewBox="0 0 24 24">
                         <path
@@ -425,7 +425,7 @@ export default function RegisterPage() {
                     type="button"
                     onClick={handleGitHubSignIn}
                     disabled={isGoogleLoading || isGitHubLoading || isLoading}
-                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-gray-900 border-2 border-gray-900 rounded-xl hover:bg-gray-800 hover:shadow-md disabled:bg-gray-300 disabled:border-gray-300 disabled:cursor-not-allowed transition-all font-semibold text-white"
+                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-foreground border-2 border-foreground rounded-2xl hover:bg-foreground/90 hover:shadow-xl disabled:bg-muted disabled:border-muted disabled:cursor-not-allowed transition-all font-black text-background"
                   >
                     {isGitHubLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -449,10 +449,10 @@ export default function RegisterPage() {
                 {/* Divider */}
                 <div className="relative mb-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t-2 border-gray-200"></div>
+                    <div className="w-full border-t-2 border-border"></div>
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="px-4 bg-white text-sm font-bold text-gray-500">
+                    <span className="px-4 bg-card text-sm font-black text-muted-foreground">
                       OR
                     </span>
                   </div>
@@ -462,9 +462,9 @@ export default function RegisterPage() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* General Error */}
                   {errors.general && (
-                    <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-2xl flex items-start gap-3">
+                    <div className="bg-destructive/10 border-2 border-destructive/30 text-destructive px-4 py-3 rounded-2xl flex items-start gap-3">
                       <svg
-                        className="w-5 h-5 flex-shrink-0 mt-0.5"
+                        className="w-5 h-5 shrink-0 mt-0.5"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -474,7 +474,7 @@ export default function RegisterPage() {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="font-medium">{errors.general}</span>
+                      <span className="font-black">{errors.general}</span>
                     </div>
                   )}
 
@@ -484,7 +484,7 @@ export default function RegisterPage() {
                     <div>
                       <label
                         htmlFor="name"
-                        className="block text-xs font-bold text-gray-700 mb-1.5"
+                        className="block text-xs font-black text-foreground mb-1.5"
                       >
                         Full Name
                       </label>
@@ -498,13 +498,13 @@ export default function RegisterPage() {
                         onChange={handleChange}
                         className={`w-full px-4 py-2.5 border-2 ${
                           errors.name
-                            ? "border-red-300 focus:border-red-500"
-                            : "border-gray-200 focus:border-blue-500"
-                        } rounded-xl focus:outline-none transition-colors text-gray-900 placeholder-gray-400`}
+                            ? "border-destructive focus:border-destructive"
+                            : "border-border focus:border-primary"
+                        } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
                         placeholder="John Doe"
                       />
                       {errors.name && (
-                        <p className="mt-1 text-xs text-red-600">
+                        <p className="mt-1 text-xs text-destructive font-black">
                           {errors.name}
                         </p>
                       )}
@@ -514,7 +514,7 @@ export default function RegisterPage() {
                     <div>
                       <label
                         htmlFor="email"
-                        className="block text-xs font-bold text-gray-700 mb-1.5"
+                        className="block text-xs font-black text-foreground mb-1.5"
                       >
                         Email Address
                       </label>
@@ -528,13 +528,13 @@ export default function RegisterPage() {
                         onChange={handleChange}
                         className={`w-full px-4 py-2.5 border-2 ${
                           errors.email
-                            ? "border-red-300 focus:border-red-500"
-                            : "border-gray-200 focus:border-blue-500"
-                        } rounded-xl focus:outline-none transition-colors text-gray-900 placeholder-gray-400`}
+                            ? "border-destructive focus:border-destructive"
+                            : "border-border focus:border-primary"
+                        } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
                         placeholder="john@example.com"
                       />
                       {errors.email && (
-                        <p className="mt-1 text-xs text-red-600">
+                        <p className="mt-1 text-xs text-destructive font-black">
                           {errors.email}
                         </p>
                       )}
@@ -547,7 +547,7 @@ export default function RegisterPage() {
                     <div>
                       <label
                         htmlFor="password"
-                        className="block text-xs font-bold text-gray-700 mb-1.5"
+                        className="block text-xs font-black text-foreground mb-1.5"
                       >
                         Password
                       </label>
@@ -562,15 +562,15 @@ export default function RegisterPage() {
                           onChange={handleChange}
                           className={`w-full px-4 pr-10 py-2.5 border-2 ${
                             errors.password
-                              ? "border-red-300 focus:border-red-500"
-                              : "border-gray-200 focus:border-blue-500"
-                          } rounded-xl focus:outline-none transition-colors text-gray-900 placeholder-gray-400`}
+                              ? "border-destructive focus:border-destructive"
+                              : "border-border focus:border-primary"
+                          } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
                           placeholder="Create password"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary transition-colors"
                         >
                           {showPassword ? (
                             <svg
@@ -611,7 +611,7 @@ export default function RegisterPage() {
                       </div>
                       {formData.password && (
                         <div className="mt-1.5">
-                          <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-2 bg-muted rounded-full overflow-hidden">
                             <div
                               className={`h-full transition-all duration-300 ${getPasswordStrengthColor()}`}
                               style={{ width: `${passwordStrength}%` }}
@@ -620,7 +620,7 @@ export default function RegisterPage() {
                         </div>
                       )}
                       {errors.password && (
-                        <p className="mt-1 text-xs text-red-600">
+                        <p className="mt-1 text-xs text-destructive font-black">
                           {errors.password}
                         </p>
                       )}
@@ -630,7 +630,7 @@ export default function RegisterPage() {
                     <div>
                       <label
                         htmlFor="confirmPassword"
-                        className="block text-xs font-bold text-gray-700 mb-1.5"
+                        className="block text-xs font-black text-foreground mb-1.5"
                       >
                         Confirm Password
                       </label>
@@ -645,9 +645,9 @@ export default function RegisterPage() {
                           onChange={handleChange}
                           className={`w-full px-4 pr-10 py-2.5 border-2 ${
                             errors.confirmPassword
-                              ? "border-red-300 focus:border-red-500"
-                              : "border-gray-200 focus:border-blue-500"
-                          } rounded-xl focus:outline-none transition-colors text-gray-900 placeholder-gray-400`}
+                              ? "border-destructive focus:border-destructive"
+                              : "border-border focus:border-primary"
+                          } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
                           placeholder="Confirm password"
                         />
                         <button
@@ -655,7 +655,7 @@ export default function RegisterPage() {
                           onClick={() =>
                             setShowConfirmPassword(!showConfirmPassword)
                           }
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary transition-colors"
                         >
                           {showConfirmPassword ? (
                             <svg
@@ -697,7 +697,7 @@ export default function RegisterPage() {
                       {!errors.confirmPassword &&
                         formData.confirmPassword &&
                         formData.password === formData.confirmPassword && (
-                          <p className="mt-1 text-xs text-green-600 flex items-center gap-1">
+                          <p className="mt-1 text-xs text-primary flex items-center gap-1 font-black">
                             <svg
                               className="w-3 h-3"
                               fill="currentColor"
@@ -713,7 +713,7 @@ export default function RegisterPage() {
                           </p>
                         )}
                       {errors.confirmPassword && (
-                        <p className="mt-1 text-xs text-red-600">
+                        <p className="mt-1 text-xs text-destructive font-black">
                           {errors.confirmPassword}
                         </p>
                       )}
@@ -721,23 +721,23 @@ export default function RegisterPage() {
                   </div>
 
                   {/* Terms & Conditions */}
-                  <div className="flex items-start gap-2.5 bg-blue-50 rounded-xl p-3">
+                  <div className="flex items-start gap-2.5 bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
                     <input
                       id="terms"
                       name="terms"
                       type="checkbox"
                       required
-                      className="mt-0.5 w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="mt-0.5 w-4 h-4 text-primary focus:ring-primary/20 border-border rounded"
                     />
                     <label
                       htmlFor="terms"
-                      className="text-xs text-gray-700 leading-relaxed"
+                      className="text-xs text-foreground leading-relaxed font-medium"
                     >
                       I agree to the{" "}
                       <Link
                         href="/terms"
                         target="_blank"
-                        className="font-bold text-blue-600 hover:text-purple-600 transition-colors underline"
+                        className="font-black text-primary hover:underline transition-colors"
                       >
                         Terms
                       </Link>{" "}
@@ -745,7 +745,7 @@ export default function RegisterPage() {
                       <Link
                         href="/privacy"
                         target="_blank"
-                        className="font-bold text-blue-600 hover:text-purple-600 transition-colors underline"
+                        className="font-black text-primary hover:underline transition-colors"
                       >
                         Privacy Policy
                       </Link>
@@ -756,7 +756,7 @@ export default function RegisterPage() {
                   <Button
                     type="submit"
                     disabled={isLoading || isGoogleLoading || isGitHubLoading}
-                    className="w-full h-12 text-base font-bold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all rounded-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    className="w-full h-14 text-base font-black bg-primary hover:bg-primary/90 shadow-2xl hover:shadow-primary/20 transform hover:scale-105 transition-all rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-secondary"
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center gap-2">
@@ -785,29 +785,29 @@ export default function RegisterPage() {
                 </form>
 
                 {/* Mobile View - Show Features */}
-                <div className="lg:hidden mt-6 pt-5 border-t border-gray-200">
+                <div className="lg:hidden mt-6 pt-5 border-t border-border">
                   <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3">
-                      <div className="text-xl font-black text-blue-600 mb-0.5">
+                    <div className="bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
+                      <div className="text-xl font-black text-primary mb-0.5">
                         50+
                       </div>
-                      <div className="text-xs font-semibold text-gray-700">
+                      <div className="text-xs font-black text-foreground">
                         Categories
                       </div>
                     </div>
-                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-3">
-                      <div className="text-xl font-black text-purple-600 mb-0.5">
+                    <div className="bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
+                      <div className="text-xl font-black text-primary mb-0.5">
                         100+
                       </div>
-                      <div className="text-xs font-semibold text-gray-700">
+                      <div className="text-xs font-black text-foreground">
                         Designers
                       </div>
                     </div>
-                    <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-3">
-                      <div className="text-xl font-black text-pink-600 mb-0.5">
+                    <div className="bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
+                      <div className="text-xl font-black text-primary mb-0.5">
                         24/7
                       </div>
-                      <div className="text-xs font-semibold text-gray-700">
+                      <div className="text-xs font-black text-foreground">
                         Support
                       </div>
                     </div>

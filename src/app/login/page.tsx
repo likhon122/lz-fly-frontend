@@ -99,12 +99,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 relative overflow-hidden">
-      {/* Animated Background Blobs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Subtle Pattern Overlay */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-5">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(39,165,46,0.1)_1.5px,transparent_1.5px),linear-gradient(to_right,rgba(39,165,46,0.1)_1.5px,transparent_1.5px)] bg-[size:48px_48px]"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
       {/* Back to Home Button */}
@@ -112,7 +112,7 @@ export default function LoginPage() {
         <Link href="/">
           <Button
             variant="outline"
-            className="backdrop-blur-sm bg-white/80 border-2 hover:bg-white shadow-lg hover:shadow-xl transition-all rounded-2xl font-bold"
+            className="backdrop-blur-sm bg-card border-2 border-border hover:border-primary shadow-xl hover:shadow-primary/20 transition-all rounded-2xl font-black"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -135,20 +135,20 @@ export default function LoginPage() {
       <div className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
         <div className="w-full max-w-6xl">
           {/* Main Card with Split Layout */}
-          <div className="backdrop-blur-sm bg-white/90 rounded-3xl shadow-2xl border border-white/60 overflow-hidden">
+          <div className="backdrop-blur-sm bg-card rounded-3xl shadow-2xl border-2 border-border overflow-hidden">
             <div className="grid lg:grid-cols-2 min-h-[650px]">
               {/* Left Side - Form */}
               <div className="p-8 sm:p-12 flex flex-col justify-center order-2 lg:order-1">
                 {/* Header */}
                 <div className="mb-8">
-                  <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-2">
+                  <h2 className="text-3xl sm:text-4xl font-black text-foreground mb-2">
                     Welcome Back
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground font-medium">
                     Don&apos;t have an account?{" "}
                     <Link
                       href="/register"
-                      className="font-bold text-blue-600 hover:text-purple-600 transition-colors"
+                      className="font-black text-primary hover:underline transition-colors"
                     >
                       Sign up
                     </Link>
@@ -159,9 +159,9 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit} className="space-y-5">
                   {/* General Error */}
                   {errors.general && (
-                    <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-2xl flex items-start gap-3">
+                    <div className="bg-destructive/10 border-2 border-destructive/30 text-destructive px-4 py-3 rounded-2xl flex items-start gap-3">
                       <svg
-                        className="w-5 h-5 flex-shrink-0 mt-0.5"
+                        className="w-5 h-5 shrink-0 mt-0.5"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -171,7 +171,7 @@ export default function LoginPage() {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="font-medium">{errors.general}</span>
+                      <span className="font-black">{errors.general}</span>
                     </div>
                   )}
 
@@ -179,14 +179,14 @@ export default function LoginPage() {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block text-sm font-bold text-gray-700 mb-2"
+                      className="block text-sm font-black text-foreground mb-2"
                     >
                       Email Address
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <svg
-                          className="w-5 h-5 text-gray-400"
+                          className="w-5 h-5 text-muted-foreground"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -209,14 +209,14 @@ export default function LoginPage() {
                         onChange={handleChange}
                         className={`w-full pl-12 pr-4 py-3 border-2 ${
                           errors.email
-                            ? "border-red-300 focus:border-red-500"
-                            : "border-gray-200 focus:border-blue-500"
-                        } rounded-2xl focus:outline-none transition-colors text-gray-900 placeholder-gray-400 font-medium`}
+                            ? "border-destructive focus:border-destructive"
+                            : "border-border focus:border-primary"
+                        } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
                         placeholder="john@example.com"
                       />
                     </div>
                     {errors.email && (
-                      <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                      <p className="mt-2 text-sm text-destructive flex items-center gap-1 font-black">
                         <svg
                           className="w-4 h-4"
                           fill="currentColor"
@@ -237,14 +237,14 @@ export default function LoginPage() {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block text-sm font-bold text-gray-700 mb-2"
+                      className="block text-sm font-black text-foreground mb-2"
                     >
                       Password
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <svg
-                          className="w-5 h-5 text-gray-400"
+                          className="w-5 h-5 text-muted-foreground"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -267,15 +267,15 @@ export default function LoginPage() {
                         onChange={handleChange}
                         className={`w-full pl-12 pr-12 py-3 border-2 ${
                           errors.password
-                            ? "border-red-300 focus:border-red-500"
-                            : "border-gray-200 focus:border-blue-500"
-                        } rounded-2xl focus:outline-none transition-colors text-gray-900 placeholder-gray-400 font-medium`}
+                            ? "border-destructive focus:border-destructive"
+                            : "border-border focus:border-primary"
+                        } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
                         placeholder="Enter your password"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600"
+                        className="absolute inset-y-0 right-0 pr-4 flex items-center text-muted-foreground hover:text-primary transition-colors"
                       >
                         {showPassword ? (
                           <svg
@@ -315,7 +315,7 @@ export default function LoginPage() {
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                      <p className="mt-2 text-sm text-destructive flex items-center gap-1 font-black">
                         <svg
                           className="w-4 h-4"
                           fill="currentColor"
@@ -341,11 +341,11 @@ export default function LoginPage() {
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
-                        className="w-5 h-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        className="w-5 h-5 text-primary focus:ring-primary/20 border-border rounded"
                       />
                       <label
                         htmlFor="remember-me"
-                        className="text-sm text-gray-700 font-medium"
+                        className="text-sm text-foreground font-bold"
                       >
                         Remember me
                       </label>
@@ -354,7 +354,7 @@ export default function LoginPage() {
                     <div className="text-sm">
                       <a
                         href="#"
-                        className="font-bold text-blue-600 hover:text-purple-600 transition-colors"
+                        className="font-black text-primary hover:underline transition-colors"
                       >
                         Forgot password?
                       </a>
@@ -365,7 +365,7 @@ export default function LoginPage() {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full h-14 text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                    className="w-full h-14 text-lg font-black bg-primary hover:bg-primary/90 shadow-2xl hover:shadow-primary/20 transform hover:scale-105 transition-all rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-secondary"
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center">
@@ -417,16 +417,16 @@ export default function LoginPage() {
               </div>
 
               {/* Right Side - Branding */}
-              <div className="hidden lg:flex relative bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600 p-12 items-center justify-center overflow-hidden order-1 lg:order-2">
+              <div className="hidden lg:flex relative bg-primary p-12 items-center justify-center overflow-hidden order-1 lg:order-2">
                 {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-1/2 translate-y-1/2"></div>
+                <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/10 rounded-full -translate-x-1/2 translate-y-1/2"></div>
 
-                <div className="relative z-10 text-white max-w-md">
+                <div className="relative z-10 text-secondary max-w-md">
                   {/* Logo/Icon */}
-                  <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-8 shadow-xl">
+                  <div className="w-20 h-20 rounded-2xl bg-secondary/20 backdrop-blur-sm flex items-center justify-center mb-8 shadow-2xl">
                     <svg
-                      className="w-12 h-12 text-white"
+                      className="w-12 h-12 text-secondary"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -443,7 +443,7 @@ export default function LoginPage() {
                   <h1 className="text-4xl font-black mb-4 leading-tight">
                     Continue Your Creative Journey
                   </h1>
-                  <p className="text-lg text-white/90 mb-8 leading-relaxed">
+                  <p className="text-lg text-secondary/90 mb-8 leading-relaxed font-medium">
                     Access your dashboard, manage your designs, and connect with
                     the creative community.
                   </p>
@@ -451,7 +451,7 @@ export default function LoginPage() {
                   {/* Features List */}
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -467,16 +467,16 @@ export default function LoginPage() {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-bold mb-1">
+                        <h3 className="font-black mb-1">
                           Your Personal Dashboard
                         </h3>
-                        <p className="text-sm text-white/80">
+                        <p className="text-sm text-secondary/80 font-medium">
                           Track your downloads and favorites
                         </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -492,14 +492,14 @@ export default function LoginPage() {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-bold mb-1">Saved Collections</h3>
-                        <p className="text-sm text-white/80">
+                        <h3 className="font-black mb-1">Saved Collections</h3>
+                        <p className="text-sm text-secondary/80 font-medium">
                           Organize your favorite designs
                         </p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
                         <svg
                           className="w-5 h-5"
                           fill="none"
@@ -515,8 +515,8 @@ export default function LoginPage() {
                         </svg>
                       </div>
                       <div>
-                        <h3 className="font-bold mb-1">Premium Access</h3>
-                        <p className="text-sm text-white/80">
+                        <h3 className="font-black mb-1">Premium Access</h3>
+                        <p className="text-sm text-secondary/80 font-medium">
                           Unlock exclusive content
                         </p>
                       </div>
@@ -524,12 +524,12 @@ export default function LoginPage() {
                   </div>
 
                   {/* Testimonial */}
-                  <div className="mt-12 pt-8 border-t border-white/20">
+                  <div className="mt-12 pt-8 border-t border-secondary/20">
                     <div className="flex items-center gap-2 mb-3">
                       {[...Array(5)].map((_, i) => (
                         <svg
                           key={i}
-                          className="w-5 h-5 text-yellow-400"
+                          className="w-5 h-5 text-secondary"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -537,11 +537,11 @@ export default function LoginPage() {
                         </svg>
                       ))}
                     </div>
-                    <p className="text-white/90 italic mb-3">
+                    <p className="text-secondary/90 italic mb-3 font-medium">
                       This platform has transformed how I work with design
                       templates. Absolutely love it!
                     </p>
-                    <p className="text-sm text-white/70 font-semibold">
+                    <p className="text-sm text-secondary/70 font-black">
                       - Sarah Johnson, Designer
                     </p>
                   </div>
@@ -551,28 +551,28 @@ export default function LoginPage() {
           </div>
 
           {/* Mobile View - Show Quick Stats */}
-          <div className="lg:hidden mt-6 backdrop-blur-sm bg-white/80 rounded-2xl p-6 border border-white/60 text-center">
-            <p className="text-sm text-gray-600 mb-4 font-medium">
+          <div className="lg:hidden mt-6 backdrop-blur-sm bg-card rounded-3xl p-8 border-2 border-border text-center shadow-2xl">
+            <p className="text-sm text-muted-foreground mb-6 font-black">
               Trusted by thousands of designers
             </p>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-6">
               <div>
-                <div className="text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-1">
+                <div className="text-3xl font-black text-primary mb-2">
                   1000+
                 </div>
-                <div className="text-xs text-gray-600">Designs</div>
+                <div className="text-xs text-muted-foreground font-bold">Designs</div>
               </div>
               <div>
-                <div className="text-2xl font-black bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-1">
+                <div className="text-3xl font-black text-primary mb-2">
                   50+
                 </div>
-                <div className="text-xs text-gray-600">Categories</div>
+                <div className="text-xs text-muted-foreground font-bold">Categories</div>
               </div>
               <div>
-                <div className="text-2xl font-black bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent mb-1">
+                <div className="text-3xl font-black text-primary mb-2">
                   24/7
                 </div>
-                <div className="text-xs text-gray-600">Support</div>
+                <div className="text-xs text-muted-foreground font-bold">Support</div>
               </div>
             </div>
           </div>

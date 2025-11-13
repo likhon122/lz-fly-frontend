@@ -56,10 +56,10 @@ export default function AdminLayout({
   // If user is null or not admin/super_admin, AuthWrapper will redirect - just show loading
   if (!user || (user.role !== "admin" && user.role !== "super_admin")) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br bg-background">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading Admin Panel...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground font-medium">Loading Admin Panel...</p>
         </div>
       </div>
     );
@@ -78,7 +78,7 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -87,69 +87,100 @@ export default function AdminLayout({
         />
       )}
 
-      {/* Sidebar */}
+      {/* Ultra-Modern Sidebar with Glassmorphism */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-card via-card to-card/95 dark:from-[#0f0f0f] dark:via-[#0f0f0f] dark:to-[#0a0a0a] backdrop-blur-xl shadow-2xl border-r-2 border-border/50 transform transition-all duration-500 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-pink-50">
-            <Link href="/admin" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg shadow-md"></div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                Admin Panel
-              </span>
+        <div className="flex flex-col h-full relative">
+          {/* Decorative Background Elements */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
+          
+          {/* Logo - Ultra Modern */}
+          <div className="relative flex items-center justify-between h-20 px-6 border-b-2 border-border/50 bg-gradient-to-r from-card to-card/80 dark:from-[#0a0a0a] dark:to-[#141414]">
+            <Link href="/admin" className="flex items-center space-x-3 group">
+              <div className="relative w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg group-hover:shadow-2xl group-hover:shadow-primary/50 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
+                <LayoutDashboard className="w-6 h-6 text-secondary" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-2xl"></div>
+              </div>
+              <div>
+                <span className="text-2xl font-black gradient-text">Admin</span>
+                <p className="text-xs text-muted-foreground font-bold">Control Panel</p>
+              </div>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-gray-500 hover:text-gray-700"
+              className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all"
             >
               <X className="w-6 h-6" />
             </button>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto py-4 px-3">
-            <div className="space-y-1">
-              {navigation.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`flex items-center px-3 py-3 rounded-lg transition-colors group ${
+          {/* Navigation - Ultra Modern */}
+          <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+            {navigation.map((item, index) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`group relative flex items-center px-4 py-4 rounded-2xl transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-primary to-primary/90 text-secondary shadow-lg shadow-primary/30"
+                      : "text-foreground hover:bg-muted/50 hover:scale-[1.02]"
+                  }`}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  {/* Active Indicator */}
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-secondary rounded-r-full"></div>
+                  )}
+                  
+                  {/* Icon Container */}
+                  <div
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center mr-4 transition-all duration-300 ${
                       isActive
-                        ? "bg-purple-600 text-white shadow-sm"
-                        : "text-gray-700 hover:bg-purple-50 hover:text-purple-600"
+                        ? "bg-secondary/20"
+                        : "bg-primary/10 group-hover:bg-primary/20 group-hover:scale-110"
                     }`}
                   >
                     <Icon
-                      className={`w-5 h-5 mr-3 ${
-                        isActive ? "text-white" : "group-hover:scale-110"
-                      } transition-transform`}
+                      className={`w-6 h-6 ${
+                        isActive ? "text-secondary" : "text-primary"
+                      }`}
                     />
-                    <span className="font-medium">{item.name}</span>
-                  </Link>
-                );
-              })}
-            </div>
+                  </div>
+                  
+                  {/* Label */}
+                  <span className={`font-black text-base ${isActive ? "text-secondary" : "group-hover:text-primary"} transition-colors`}>
+                    {item.name}
+                  </span>
+                  
+                  {/* Hover Effect */}
+                  {!isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300"></div>
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* User Profile Section */}
-          <div className="border-t border-gray-200 p-4 bg-gradient-to-br from-purple-50 to-pink-50">
-            <div className="flex items-center mb-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold shadow-md">
+          {/* User Profile Section - Ultra Modern */}
+          <div className="relative border-t-2 border-border/50 p-5 bg-gradient-to-br from-primary/5 to-transparent dark:from-primary/10 dark:to-[#0a0a0a]">
+            <div className="flex items-center mb-4">
+              <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-secondary font-black text-xl shadow-lg">
                 {user.name?.charAt(0).toUpperCase()}
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-card"></div>
               </div>
-              <div className="ml-3 flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">
+              <div className="ml-4 flex-1 min-w-0">
+                <p className="text-sm font-black text-foreground truncate">
                   {user.name}
                 </p>
-                <p className="text-xs text-gray-600 truncate">{user.email}</p>
-                <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium text-purple-700 bg-purple-100 rounded-full capitalize">
+                <p className="text-xs text-muted-foreground font-medium truncate">{user.email}</p>
+                <span className="inline-block mt-1.5 px-3 py-1 text-xs font-black text-primary bg-primary/10 border border-primary/20 rounded-full capitalize">
                   {user.role === "super_admin" ? "Super Admin" : "Admin"}
                 </span>
               </div>
@@ -157,10 +188,10 @@ export default function AdminLayout({
             <button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="w-full flex items-center justify-center px-3 py-2 text-red-600 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 font-medium"
+              className="group w-full flex items-center justify-center px-4 py-3 text-red-600 bg-red-50 hover:bg-red-100 rounded-2xl transition-all duration-300 disabled:opacity-50 font-black hover:scale-[1.02] shadow-sm hover:shadow-md"
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              <span className="text-sm">
+              <LogOut className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+              <span>
                 {isLoggingOut ? "Logging out..." : "Logout"}
               </span>
             </button>
@@ -168,35 +199,49 @@ export default function AdminLayout({
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="lg:pl-64">
-        {/* Top Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
-          <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+      {/* Ultra-Modern Main Content Area */}
+      <div className="lg:pl-72">
+        {/* Top Header with Glassmorphism */}
+        <header className="bg-card/80 dark:bg-[#0a0a0a]/95 backdrop-blur-xl shadow-lg border-b-2 border-border/50 sticky top-0 z-30">
+          <div className="flex items-center justify-between h-20 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-gray-500 hover:text-gray-700"
+              className="lg:hidden p-2.5 text-foreground hover:bg-muted rounded-xl transition-all hover:scale-105"
             >
               <Menu className="w-6 h-6" />
             </button>
-            <div className="flex items-center space-x-4">
+            
+            {/* Breadcrumb Navigation */}
+            <div className="flex items-center space-x-3">
               <Link
                 href="/"
-                className="text-sm font-medium text-gray-600 hover:text-purple-600 transition-colors"
+                className="group flex items-center gap-2 px-4 py-2 text-sm font-black text-muted-foreground hover:text-primary bg-muted/50 hover:bg-muted rounded-xl transition-all hover:scale-105"
               >
-                ← Back to Site
+                <span>← Back to Site</span>
               </Link>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600 hidden sm:inline">
-                Welcome, <span className="font-semibold">{user.name}</span>
-              </span>
+            
+            {/* User Welcome Badge */}
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl border-2 border-primary/20">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-secondary font-black text-sm">
+                  {user.name?.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground font-medium">Welcome back</p>
+                  <p className="text-sm font-black text-foreground">{user.name}</p>
+                </div>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="p-4 sm:p-6 lg:p-8">{children}</main>
+        {/* Page Content with Pattern Background */}
+        <main className="relative min-h-screen p-6">
+          {/* Subtle Background Pattern */}
+          <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10"></div>
+          {children}
+        </main>
       </div>
     </div>
   );

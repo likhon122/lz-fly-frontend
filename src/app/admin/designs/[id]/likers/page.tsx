@@ -48,8 +48,8 @@ export default function DesignLikersPage() {
     return (
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="text-center py-20">
-          <Loader2 className="w-12 h-12 animate-spin text-blue-600 mx-auto" />
-          <p className="mt-4 text-gray-600">Loading design likers...</p>
+          <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto" />
+          <p className="mt-4 text-muted-foreground">Loading design likers...</p>
         </div>
       </div>
     );
@@ -58,8 +58,8 @@ export default function DesignLikersPage() {
   if (error) {
     return (
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
-          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-red-400 to-pink-600 text-white">
+        <div className="text-center py-20 bg-card rounded-2xl shadow-sm border border-border">
+          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-destructive text-secondary">
             <svg
               className="w-12 h-12"
               fill="none"
@@ -74,10 +74,10 @@ export default function DesignLikersPage() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <h2 className="text-2xl font-bold text-foreground mb-3">
             Error Loading Likers
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             Failed to load design likers. You may not have permission to view
             this information.
           </p>
@@ -100,28 +100,29 @@ export default function DesignLikersPage() {
               Back to Designs
             </Button>
           </Link>
-          <div className="h-6 w-px bg-gray-300"></div>
-          <nav className="flex items-center gap-2 text-sm text-gray-600">
-            <Link href="/admin" className="hover:text-blue-600">
+          <div className="h-6 w-px bg-border"></div>
+          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link href="/admin" className="hover:text-primary">
               Admin
             </Link>
             <span>/</span>
-            <Link href="/admin/designs" className="hover:text-blue-600">
+            <Link href="/admin/designs" className="hover:text-primary">
               Designs
             </Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">Likers</span>
+            <span className="text-foreground font-medium">Likers</span>
           </nav>
         </div>
       </div>
 
       {/* Header with Design Info */}
       <div>
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="grid md:grid-cols-3 gap-6 p-6">
+        <div className="relative bg-card/95 dark:bg-[#141414]/95 rounded-3xl shadow-2xl dark:shadow-primary/20 border border-border/80 overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none opacity-40 bg-gradient-to-br from-primary/10 via-transparent to-primary/20 blur-3xl" />
+          <div className="relative grid md:grid-cols-3 gap-6 p-6">
             {/* Design Preview */}
             <div className="md:col-span-1">
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-primary/15 via-primary/5 to-transparent dark:from-[#1e1e1e] dark:via-[#141414] dark:to-[#0a0a0a]">
                 {design?.previewImageUrls &&
                 design.previewImageUrls.length > 0 ? (
                   <Image
@@ -133,7 +134,7 @@ export default function DesignLikersPage() {
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <svg
-                      className="w-16 h-16 text-gray-400"
+                      className="w-16 h-16 text-muted-foreground/60"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -155,31 +156,31 @@ export default function DesignLikersPage() {
               <div>
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h1 className="text-3xl font-black text-gray-900 mb-2">
+                    <h1 className="text-3xl font-black text-foreground mb-2">
                       {design?.title}
                     </h1>
-                    <p className="text-gray-600 line-clamp-2">
+                    <p className="text-muted-foreground line-clamp-2">
                       {design?.description}
                     </p>
                   </div>
                   <Link
                     href={`/designs/${designId}`}
-                    className="text-blue-600 hover:text-blue-700 font-semibold text-sm"
+                    className="text-primary hover:text-primary/80 font-semibold text-sm"
                   >
                     View Design →
                   </Link>
                 </div>
 
-                <div className="flex items-center gap-4 text-sm text-gray-600">
-                  <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <span className="bg-primary/10 text-primary px-3 py-1 rounded-full font-semibold border border-primary/20">
                     {design?.mainCategory?.name || "Uncategorized"}
                     {design?.subCategory && ` > ${design.subCategory.name}`}
                   </span>
                   <div className="flex flex-col">
-                    <span className="font-semibold">
-                      <span className="text-xl font-bold"> {
-                        design.currencyDisplay
-                      }</span>
+                    <span className="font-semibold text-foreground">
+                      <span className="text-xl font-bold">
+                        {design?.currencyDisplay}
+                      </span>
                       {design?.discountedPrice &&
                       design.discountedPrice < design.basePrice
                         ? design.discountedPrice
@@ -187,8 +188,8 @@ export default function DesignLikersPage() {
                     </span>
                     {design?.discountedPrice &&
                       design.discountedPrice < design.basePrice && (
-                        <span className="text-xs text-gray-500 line-through">
-                          {design.currencyDisplay} {design.basePrice}
+                        <span className="text-xs text-muted-foreground line-through">
+                          {design?.currencyDisplay} {design?.basePrice}
                         </span>
                       )}
                   </div>
@@ -197,21 +198,21 @@ export default function DesignLikersPage() {
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-4 border border-red-100">
+                <div className="bg-gradient-to-br from-rose-500/10 via-rose-500/5 to-transparent dark:from-rose-500/20 dark:via-[#141414] dark:to-[#0a0a0a] rounded-2xl p-4 border border-rose-500/30 shadow-lg dark:shadow-rose-500/10">
                   <div className="flex items-center gap-2 mb-1">
                     <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-                    <span className="text-xs font-medium text-red-700">
+                    <span className="text-xs font-medium text-red-500">
                       Total Likes
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {design?.likesCount || 0}
                   </p>
                 </div>
-                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-4 border border-blue-100">
+                <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent dark:from-primary/20 dark:via-[#141414] dark:to-[#0a0a0a] rounded-2xl p-4 border border-primary/30 shadow-lg dark:shadow-primary/10">
                   <div className="flex items-center gap-2 mb-1">
                     <svg
-                      className="w-4 h-4 text-blue-500"
+                      className="w-4 h-4 text-primary"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -223,22 +224,22 @@ export default function DesignLikersPage() {
                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
                       />
                     </svg>
-                    <span className="text-xs font-medium text-blue-700">
+                    <span className="text-xs font-medium text-primary">
                       Downloads
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {design?.downloadCount || 0}
                   </p>
                 </div>
-                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-4 border border-purple-100">
+                <div className="bg-gradient-to-br from-violet-500/10 via-violet-500/5 to-transparent dark:from-violet-500/20 dark:via-[#141414] dark:to-[#0a0a0a] rounded-2xl p-4 border border-violet-500/30 shadow-lg dark:shadow-violet-500/10">
                   <div className="flex items-center gap-2 mb-1">
                     <User className="w-4 h-4 text-purple-500" />
-                    <span className="text-xs font-medium text-purple-700">
+                    <span className="text-xs font-medium text-purple-500">
                       Unique Likers
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-2xl font-bold text-foreground">
                     {pagination?.totalItems || 0}
                   </p>
                 </div>
@@ -255,10 +256,10 @@ export default function DesignLikersPage() {
             <Heart className="w-7 h-7 text-white fill-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-black text-gray-900">
+            <h2 className="text-2xl font-black text-foreground">
               Users Who Liked This Design
             </h2>
-            <p className="text-gray-600 mt-1">
+            <p className="text-muted-foreground mt-1">
               {pagination?.totalItems || 0} total{" "}
               {pagination?.totalItems === 1 ? "user" : "users"}
             </p>
@@ -268,14 +269,14 @@ export default function DesignLikersPage() {
 
       {/* Content */}
       {likers.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-2xl shadow-sm border border-gray-100">
-          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-gray-200 to-gray-300">
-            <Heart className="w-12 h-12 text-gray-500" />
+        <div className="text-center py-20 bg-card/95 dark:bg-[#141414]/95 rounded-3xl shadow-2xl border border-border/70">
+          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-transparent dark:from-primary/20 dark:via-[#141414] dark:to-[#0a0a0a]">
+            <Heart className="w-12 h-12 text-primary" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+          <h3 className="text-2xl font-bold text-foreground mb-3">
             No Likes Yet
           </h3>
-          <p className="text-gray-600 max-w-md mx-auto">
+          <p className="text-muted-foreground max-w-md mx-auto">
             This design hasn&apos;t received any likes yet. Be the first to like
             it!
           </p>
@@ -283,30 +284,30 @@ export default function DesignLikersPage() {
       ) : (
         <>
           {/* Likers List */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="bg-card/95 dark:bg-[#141414]/95 rounded-3xl shadow-2xl border border-border/80 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-muted/80 dark:bg-[#141414]/80 border-b border-border/80">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
                       Email
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
                       Liked On
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-border">
                   {likers.map((liker: DesignLiker, index: number) => (
                     <tr
                       key={liker.user._id}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors"
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
@@ -326,18 +327,18 @@ export default function DesignLikersPage() {
                             {liker.user.name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <p className="font-semibold text-gray-900">
+                            <p className="font-semibold text-foreground">
                               {liker.user.name}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-muted-foreground">
                               ID: {liker.user._id.slice(0, 8)}...
                             </p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2 text-gray-700">
-                          <Mail className="w-4 h-4 text-gray-400" />
+                        <div className="flex items-center gap-2 text-muted-foreground">
+                          <Mail className="w-4 h-4 text-muted-foreground/60" />
                           {liker.user.email}
                         </div>
                       </td>
@@ -345,8 +346,8 @@ export default function DesignLikersPage() {
                         <span
                           className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
                             liker.user.role === "admin"
-                              ? "bg-purple-100 text-purple-700"
-                              : "bg-blue-100 text-blue-700"
+                              ? "bg-violet-500/10 text-violet-400 border border-violet-500/30"
+                              : "bg-primary/10 text-primary border border-primary/20"
                           }`}
                         >
                           {liker.user.role === "admin" && (
@@ -356,8 +357,8 @@ export default function DesignLikersPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2 text-sm text-gray-700">
-                          <Calendar className="w-4 h-4 text-gray-400" />
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="w-4 h-4 text-muted-foreground/60" />
                           {new Date(liker.createdAt).toLocaleDateString(
                             "en-US",
                             {
@@ -395,8 +396,8 @@ export default function DesignLikersPage() {
                     onClick={() => setPage(i + 1)}
                     className={`w-10 h-10 rounded-xl font-semibold transition-all ${
                       page === i + 1
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                        : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+                        ? "bg-gradient-to-r from-primary to-primary/60 text-primary-foreground shadow-lg dark:shadow-primary/20"
+                        : "bg-card/90 text-muted-foreground hover:bg-primary/10 border border-border/80"
                     }`}
                   >
                     {i + 1}

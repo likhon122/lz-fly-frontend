@@ -42,8 +42,8 @@ export const CategoryDropdown: React.FC = () => {
       name: sc.name,
       description: sc.description ?? "",
       isActive: !!sc.isActive,
-      parentCategory: sc.parentCategory ?? null,
-    })),
+      parentCategory: sc.parentCategory ?? null
+    }))
   }));
   const allDesigns = allDesignsData?.data || [];
 
@@ -78,12 +78,12 @@ export const CategoryDropdown: React.FC = () => {
       <Button
         variant="ghost"
         onClick={toggleDropdown}
-        className="flex items-center gap-2 text-gray-700 hover:text-gray-900 hover:bg-gray-100 px-3 py-2 text-sm font-medium rounded-md"
+        className="flex items-center gap-2 text-foreground hover:text-primary hover:bg-muted px-5 py-2.5 text-sm font-black rounded-xl transition-all duration-200"
       >
         <Grid3x3 className="w-4 h-4" />
         <span>Categories</span>
         <ChevronDown
-          className={`w-4 h-4 transition-transform ${
+          className={`w-4 h-4 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
         />
@@ -91,27 +91,27 @@ export const CategoryDropdown: React.FC = () => {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute left-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <div className="absolute left-0 mt-2 w-96 bg-card/98 dark:bg-card/98 backdrop-blur-3xl rounded-2xl shadow-2xl border border-border z-50">
           <div className="py-2">
             {/* Header */}
-            <div className="px-4 py-3 border-b border-gray-200">
-              <h3 className="text-sm font-semibold text-gray-900">
+            <div className="px-5 py-3 border-b border-border">
+              <h3 className="text-base font-black text-foreground">
                 Browse by Category
               </h3>
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="text-xs text-muted-foreground mt-1 font-medium">
                 {categories.length} categories available
               </p>
             </div>
 
             {categoriesLoading ? (
-              <div className="px-4 py-8 text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent mx-auto"></div>
-                <p className="mt-3 text-sm text-gray-600">
+              <div className="px-5 py-8 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent mx-auto"></div>
+                <p className="mt-3 text-sm text-muted-foreground font-medium">
                   Loading categories...
                 </p>
               </div>
             ) : categories.length > 0 ? (
-              <div className="max-h-96 overflow-y-auto">
+              <div className="max-h-[28rem] overflow-y-auto custom-scrollbar">
                 <div className="px-2 py-2 space-y-1">
                   {categories.map((category) => {
                     const designCount = getCategoryDesignCount(category.id);
@@ -120,46 +120,39 @@ export const CategoryDropdown: React.FC = () => {
                         <Link
                           href={`/designs?mainCategory=${category.id}`}
                           onClick={() => setIsOpen(false)}
-                          className="group block px-3 py-2.5 rounded-md hover:bg-gray-50 transition-colors"
+                          className="group block px-4 py-3 rounded-xl hover:bg-muted transition-all duration-200"
                         >
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                              <h4 className="text-sm font-black text-foreground group-hover:text-primary transition-colors">
                                 {category.name}
                               </h4>
-                              <p className="text-xs text-gray-600 line-clamp-1 mt-0.5">
+                              <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5 font-medium">
                                 {category.description}
                               </p>
                             </div>
                             <div className="flex items-center gap-2 flex-shrink-0">
-                              <span className="px-2 py-1 bg-gray-100 group-hover:bg-blue-50 text-gray-700 group-hover:text-blue-600 text-xs font-medium rounded transition-colors">
+                              <span className="px-2.5 py-1 bg-primary/10 text-primary text-xs font-black rounded-lg">
                                 {designCount}
                               </span>
-                              <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                             </div>
                           </div>
                         </Link>
                         {category.subcategories.length > 0 && (
-                          <div className="ml-4 mt-1">
-                            <span className="text-xs font-semibold text-gray-500">
-                              Subcategories:
-                            </span>
-                            <ul className="list-disc ml-4">
+                          <div className="ml-5 mt-1.5 space-y-1">
+                            <div className="flex flex-wrap gap-1.5 mt-1">
                               {category.subcategories.map((subcat) => (
-                                <li
+                                <Link
                                   key={subcat.id}
-                                  className="text-xs text-gray-600"
+                                  href={`/designs?subCategory=${subcat.id}`}
+                                  onClick={() => setIsOpen(false)}
+                                  className="px-2.5 py-1 bg-muted hover:bg-primary/10 text-foreground hover:text-primary text-xs font-bold rounded-lg transition-all border border-border"
                                 >
-                                  <Link
-                                    href={`/designs?subCategory=${subcat.id}`}
-                                    onClick={() => setIsOpen(false)}
-                                    className="hover:underline text-blue-600"
-                                  >
-                                    {subcat.name}
-                                  </Link>
-                                </li>
+                                  {subcat.name}
+                                </Link>
                               ))}
-                            </ul>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -168,12 +161,12 @@ export const CategoryDropdown: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="px-4 py-8 text-center">
-                <Grid3x3 className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-                <p className="text-sm font-medium text-gray-600">
+              <div className="px-5 py-8 text-center">
+                <Grid3x3 className="w-10 h-10 text-primary mx-auto mb-3" />
+                <p className="text-sm font-black text-foreground">
                   No categories available
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1 font-medium">
                   Check back soon for updates
                 </p>
               </div>
@@ -181,10 +174,10 @@ export const CategoryDropdown: React.FC = () => {
 
             {/* Footer */}
             {categories.length > 0 && (
-              <div className="border-t border-gray-200 px-4 py-3">
+              <div className="border-t border-border px-5 py-3 mt-1">
                 <Link
                   href="/categories"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                  className="inline-flex items-center gap-2 text-sm font-black text-primary hover:text-primary/80 transition-all"
                   onClick={() => setIsOpen(false)}
                 >
                   <span>View All Categories</span>

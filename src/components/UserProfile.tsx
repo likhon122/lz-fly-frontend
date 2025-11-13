@@ -67,17 +67,17 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
       <Button
         variant="ghost"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        className="flex items-center gap-2 hover:bg-gray-100"
+        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-muted transition-all"
         disabled={isLoading}
       >
-        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+        <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center text-secondary text-sm font-black shadow-lg">
           {user.name.charAt(0).toUpperCase()}
         </div>
-        <span className="hidden md:block text-sm font-medium text-gray-700">
-          {user.name}
+        <span className="hidden md:block text-sm font-bold text-foreground">
+          {user.name.split(" ")[0]}
         </span>
         <ChevronDown
-          className={`w-4 h-4 text-gray-500 transition-transform ${
+          className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${
             isDropdownOpen ? "rotate-180" : ""
           }`}
         />
@@ -85,83 +85,103 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
       {/* Dropdown Menu */}
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+        <div className="absolute right-0 mt-2 w-80 bg-card/98 dark:bg-card/98 backdrop-blur-3xl rounded-2xl shadow-2xl border border-border z-50 overflow-hidden">
           {/* User Info */}
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-lg font-medium">
+          <div className="p-5 border-b border-border bg-gradient-to-br from-primary/5 to-transparent">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/70 rounded-2xl flex items-center justify-center text-secondary text-xl font-black shadow-lg ring-4 ring-primary/10">
                 {user.name.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">
+                <p className="text-base font-black text-foreground truncate">
                   {user.name}
                 </p>
-                <p className="text-xs text-gray-600 truncate">{user.email}</p>
+                <p className="text-xs text-muted-foreground truncate font-medium">
+                  {user.email}
+                </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 mt-3">
-              <span className="px-2 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded capitalize">
+            <div className="flex items-center gap-2 mt-4">
+              <span className="px-3 py-1.5 text-xs font-black text-primary bg-primary/10 rounded-lg capitalize border border-primary/20">
                 {user.role}
               </span>
               {hasSubscription && (
-                <span className="px-2 py-1 text-xs font-medium text-green-700 bg-green-50 rounded">
-                  Premium
+                <span className="px-3 py-1.5 text-xs font-black text-white bg-gradient-to-r from-primary to-primary/80 rounded-lg shadow-lg">
+                  ⭐ Premium
                 </span>
               )}
             </div>
           </div>
 
           {/* Menu Items */}
-          <div className="py-2">
+          <div className="py-2 px-2">
             <Link
               href={
                 user.role === "admin" || user.role === "super_admin"
                   ? "/admin"
                   : "/dashboard"
               }
-              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-foreground hover:bg-muted rounded-xl transition-all group"
               onClick={() => setIsDropdownOpen(false)}
             >
-              <UserIcon className="w-4 h-4" />
-              {user.role === "admin" || user.role === "super_admin"
-                ? "Admin Panel"
-                : "Dashboard"}
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <UserIcon className="w-4 h-4 text-primary" />
+              </div>
+              <span className="flex-1">
+                {user.role === "admin" || user.role === "super_admin"
+                  ? "Admin Panel"
+                  : "Dashboard"}
+              </span>
+              <ChevronDown className="w-4 h-4 opacity-0 group-hover:opacity-100 -rotate-90 transition-all" />
             </Link>
             <Link
               href="/dashboard/purchases"
-              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-foreground hover:bg-muted rounded-xl transition-all group"
               onClick={() => setIsDropdownOpen(false)}
             >
-              <ShoppingBag className="w-4 h-4" />
-              My Purchases
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <ShoppingBag className="w-4 h-4 text-primary" />
+              </div>
+              <span className="flex-1">My Purchases</span>
+              <ChevronDown className="w-4 h-4 opacity-0 group-hover:opacity-100 -rotate-90 transition-all" />
             </Link>
             <Link
               href="/dashboard/available-downloads"
-              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-foreground hover:bg-muted rounded-xl transition-all group"
               onClick={() => setIsDropdownOpen(false)}
             >
-              <Download className="w-4 h-4" />
-              My Downloads
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <Download className="w-4 h-4 text-primary" />
+              </div>
+              <span className="flex-1">My Downloads</span>
+              <ChevronDown className="w-4 h-4 opacity-0 group-hover:opacity-100 -rotate-90 transition-all" />
             </Link>
             <Link
               href="/dashboard/reviews"
-              className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-3 px-4 py-3 text-sm font-bold text-foreground hover:bg-muted rounded-xl transition-all group"
               onClick={() => setIsDropdownOpen(false)}
             >
-              <Star className="w-4 h-4" />
-              My Reviews
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <Star className="w-4 h-4 text-primary" />
+              </div>
+              <span className="flex-1">My Reviews</span>
+              <ChevronDown className="w-4 h-4 opacity-0 group-hover:opacity-100 -rotate-90 transition-all" />
             </Link>
           </div>
 
           {/* Logout */}
-          <div className="border-t border-gray-200 p-2">
+          <div className="border-t border-border p-2">
             <button
               onClick={handleLogout}
               disabled={isLoading}
-              className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors font-medium disabled:opacity-50"
+              className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all font-bold disabled:opacity-50 group"
             >
-              <LogOut className="w-4 h-4" />
-              {isLoading ? "Signing out..." : "Sign Out"}
+              <div className="w-9 h-9 rounded-lg bg-red-50 dark:bg-red-950/30 flex items-center justify-center group-hover:bg-red-100 dark:group-hover:bg-red-950/50 transition-colors">
+                <LogOut className="w-4 h-4" />
+              </div>
+              <span className="flex-1 text-left">
+                {isLoading ? "Signing out..." : "Sign Out"}
+              </span>
             </button>
           </div>
         </div>

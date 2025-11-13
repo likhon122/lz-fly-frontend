@@ -109,27 +109,30 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-[#0a0a0a] dark:via-[#0f0f0f] dark:to-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto p-4 sm:p-5 space-y-6">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/20 p-5 sm:p-6 border border-border/70 dark:border-[#1e1e1e] relative overflow-hidden">
+          {/* Premium Glow Effect */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent pointer-events-none" />
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl">
+              <div className="p-3 bg-gradient-to-br from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 rounded-xl shadow-lg dark:shadow-primary/30">
                 <Users className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 bg-clip-text text-transparent">
                   Users Management
                 </h1>
-                <p className="text-slate-600 mt-1">
+                <p className="text-muted-foreground/80 dark:text-muted-foreground/60 mt-1 text-sm">
                   Manage all platform users, roles, and permissions
                 </p>
               </div>
             </div>
             <button
               onClick={handleExport}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-500/70 via-emerald-500 to-emerald-500/90 dark:from-emerald-500/40 dark:via-emerald-500/60 dark:to-emerald-500/50 text-white rounded-xl hover:from-emerald-600 hover:to-emerald-700 dark:hover:from-emerald-500 dark:hover:to-emerald-600 transition-all duration-200 shadow-xl dark:shadow-emerald-500/20 hover:shadow-2xl"
             >
               <Download className="w-4 h-4" />
               Export
@@ -138,37 +141,37 @@ export default function AdminUsersPage() {
 
           {/* Stats */}
           {pagination && (
-            <div className="grid grid-cols-4 gap-4">
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
-                <div className="text-sm text-blue-600 font-medium">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
+              <div className="bg-gradient-to-br from-primary/10 to-primary/15 dark:from-primary/10 dark:to-primary/5 p-4 sm:p-5 rounded-xl border border-primary/30 dark:border-primary/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-primary/10 transition-all">
+                <div className="text-sm text-primary dark:text-primary/90 font-medium mb-1">
                   Total Users
                 </div>
-                <div className="text-2xl font-bold text-blue-900">
+                <div className="text-3xl font-bold text-foreground dark:text-foreground">
                   {pagination.totalItems}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
-                <div className="text-sm text-purple-600 font-medium">
+              <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/15 dark:from-purple-500/10 dark:to-purple-500/5 p-4 sm:p-5 rounded-xl border border-purple-500/30 dark:border-purple-500/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-purple-500/10 transition-all">
+                <div className="text-sm text-purple-600 dark:text-purple-400 font-medium mb-1">
                   Current Page
                 </div>
-                <div className="text-2xl font-bold text-purple-900">
+                <div className="text-3xl font-bold text-foreground dark:text-foreground">
                   {pagination.currentPage} / {pagination.totalPages}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl border border-green-200">
-                <div className="text-sm text-green-600 font-medium">
+              <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/15 dark:from-emerald-500/10 dark:to-emerald-500/5 p-4 sm:p-5 rounded-xl border border-emerald-500/30 dark:border-emerald-500/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all">
+                <div className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mb-1">
                   Active Filters
                 </div>
-                <div className="text-2xl font-bold text-green-900">
+                <div className="text-3xl font-bold text-foreground dark:text-foreground">
                   {[search, role, isActive !== undefined].filter(Boolean)
                     .length || "None"}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl border border-orange-200">
-                <div className="text-sm text-orange-600 font-medium">
+              <div className="bg-gradient-to-br from-amber-500/10 to-amber-500/15 dark:from-amber-500/10 dark:to-amber-500/5 p-4 sm:p-5 rounded-xl border border-amber-500/30 dark:border-amber-500/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-amber-500/10 transition-all">
+                <div className="text-sm text-amber-600 dark:text-amber-400 font-medium mb-1">
                   Per Page
                 </div>
-                <div className="text-2xl font-bold text-orange-900">
+                <div className="text-3xl font-bold text-foreground dark:text-foreground">
                   {limit}
                 </div>
               </div>
@@ -177,22 +180,27 @@ export default function AdminUsersPage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 border border-slate-200">
-          <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-5 h-5 text-slate-600" />
-            <h2 className="text-lg font-semibold text-slate-800">Filters</h2>
+        <div className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/20 p-4 sm:p-5 border border-border/70 dark:border-[#1e1e1e] relative overflow-hidden">
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-transparent dark:from-primary/5 dark:via-transparent dark:to-transparent pointer-events-none" />
+          
+          <div className="flex items-center gap-2 mb-4 relative z-10">
+            <div className="p-1.5 bg-primary/10 dark:bg-primary/20 rounded-lg">
+              <Filter className="w-5 h-5 text-primary dark:text-primary/90" />
+            </div>
+            <h2 className="text-lg font-semibold text-foreground dark:text-foreground">Filters</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative z-10">
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60 dark:text-muted-foreground/50" />
               <input
                 type="text"
                 placeholder="Search by name or email..."
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2.5 border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary/50 dark:focus:ring-primary/60 focus:border-primary dark:focus:border-primary/60 outline-none transition-all bg-muted/30 dark:bg-[#141414]/80 backdrop-blur-sm hover:bg-muted/50 dark:hover:bg-[#141414]/90 text-foreground dark:text-foreground placeholder:text-muted-foreground/60"
               />
             </div>
 
@@ -200,22 +208,22 @@ export default function AdminUsersPage() {
             <select
               value={role}
               onChange={(e) => handleRoleFilter(e.target.value)}
-              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="px-4 py-2.5 border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary/50 dark:focus:ring-primary/60 focus:border-primary dark:focus:border-primary/60 outline-none transition-all bg-muted/30 dark:bg-[#141414]/80 backdrop-blur-sm hover:bg-muted/50 dark:hover:bg-[#141414]/90 text-foreground dark:text-foreground"
             >
-              <option value="">All Roles</option>
-              <option value="customer">Customer</option>
-              <option value="admin">Admin</option>
+              <option value="" className="bg-card dark:bg-[#141414]">All Roles</option>
+              <option value="customer" className="bg-card dark:bg-[#141414]">Customer</option>
+              <option value="admin" className="bg-card dark:bg-[#141414]">Admin</option>
             </select>
 
             {/* Active Status Filter */}
             <select
               value={isActive === undefined ? "" : isActive ? "true" : "false"}
               onChange={(e) => handleActiveFilter(e.target.value)}
-              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="px-4 py-2.5 border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary/50 dark:focus:ring-primary/60 focus:border-primary dark:focus:border-primary/60 outline-none transition-all bg-muted/30 dark:bg-[#141414]/80 backdrop-blur-sm hover:bg-muted/50 dark:hover:bg-[#141414]/90 text-foreground dark:text-foreground"
             >
-              <option value="">All Status</option>
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
+              <option value="" className="bg-card dark:bg-[#141414]">All Status</option>
+              <option value="true" className="bg-card dark:bg-[#141414]">Active</option>
+              <option value="false" className="bg-card dark:bg-[#141414]">Inactive</option>
             </select>
 
             {/* Items Per Page */}
@@ -225,13 +233,13 @@ export default function AdminUsersPage() {
                 setLimit(Number(e.target.value));
                 setPage(1);
               }}
-              className="px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+              className="px-4 py-2.5 border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary/50 dark:focus:ring-primary/60 focus:border-primary dark:focus:border-primary/60 outline-none transition-all bg-muted/30 dark:bg-[#141414]/80 backdrop-blur-sm hover:bg-muted/50 dark:hover:bg-[#141414]/90 text-foreground dark:text-foreground"
             >
-              <option value="5">5 per page</option>
-              <option value="10">10 per page</option>
-              <option value="20">20 per page</option>
-              <option value="50">50 per page</option>
-              <option value="100">100 per page</option>
+              <option value="5" className="bg-card dark:bg-[#141414]">5 per page</option>
+              <option value="10" className="bg-card dark:bg-[#141414]">10 per page</option>
+              <option value="20" className="bg-card dark:bg-[#141414]">20 per page</option>
+              <option value="50" className="bg-card dark:bg-[#141414]">50 per page</option>
+              <option value="100" className="bg-card dark:bg-[#141414]">100 per page</option>
             </select>
           </div>
 
@@ -244,7 +252,7 @@ export default function AdminUsersPage() {
                 setIsActive(undefined);
                 setPage(1);
               }}
-              className="mt-4 text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="mt-4 text-sm text-primary hover:text-primary font-medium transition-colors"
             >
               Clear all filters
             </button>
@@ -252,64 +260,67 @@ export default function AdminUsersPage() {
         </div>
 
         {/* Users Table */}
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        <div className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/20 border border-border/70 dark:border-[#1e1e1e] overflow-hidden relative">
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-transparent dark:from-primary/5 dark:via-transparent dark:to-transparent pointer-events-none" />
+          
           {isLoading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-              <span className="ml-3 text-slate-600">Loading users...</span>
+            <div className="flex items-center justify-center py-20 relative z-10">
+              <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              <span className="ml-3 text-muted-foreground dark:text-muted-foreground/80">Loading users...</span>
             </div>
           ) : error ? (
-            <div className="flex items-center justify-center py-20 text-red-600">
+            <div className="flex items-center justify-center py-20 text-red-500 dark:text-red-400 relative z-10">
               <AlertCircle className="w-6 h-6 mr-2" />
               Failed to load users
             </div>
           ) : users.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-slate-500">
-              <Users className="w-16 h-16 mb-4 text-slate-300" />
+            <div className="flex flex-col items-center justify-center py-20 text-muted-foreground dark:text-muted-foreground/80 relative z-10">
+              <Users className="w-16 h-16 mb-4 text-muted-foreground/30 dark:text-muted-foreground/20" />
               <p className="text-lg font-medium">No users found</p>
               <p className="text-sm">Try adjusting your filters</p>
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto relative z-10">
                 <table className="w-full">
-                  <thead className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+                  <thead className="bg-gradient-to-r from-muted/30 to-muted/20 dark:from-[#141414]/80 dark:to-[#0f0f0f]/60 border-b border-border/70 dark:border-[#1e1e1e]">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground dark:text-muted-foreground/80 uppercase tracking-wider">
                         User
                       </th>
                       <th
-                        className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-blue-600 transition-colors"
+                        className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground dark:text-muted-foreground/80 uppercase tracking-wider cursor-pointer hover:text-primary dark:hover:text-primary/90 transition-colors"
                         onClick={() => handleSort("email")}
                       >
                         Email{" "}
                         {sortBy === "email" &&
                           (sortOrder === "asc" ? "↑" : "↓")}
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground dark:text-muted-foreground/80 uppercase tracking-wider">
                         Role
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground dark:text-muted-foreground/80 uppercase tracking-wider">
                         Status
                       </th>
                       <th
-                        className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:text-blue-600 transition-colors"
+                        className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground dark:text-muted-foreground/80 uppercase tracking-wider cursor-pointer hover:text-primary dark:hover:text-primary/90 transition-colors"
                         onClick={() => handleSort("createdAt")}
                       >
                         Joined{" "}
                         {sortBy === "createdAt" &&
                           (sortOrder === "asc" ? "↑" : "↓")}
                       </th>
-                      <th className="px-6 py-4 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-200">
+                  <tbody className="divide-y divide-border/50 dark:divide-[#1e1e1e]">
                     {users.map((user: IUser) => (
                       <tr
                         key={user._id}
-                        className="hover:bg-slate-50 transition-colors"
+                        className="hover:bg-muted/40 dark:hover:bg-[#141414]/70 transition-all group"
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-3">
@@ -319,37 +330,37 @@ export default function AdminUsersPage() {
                                 alt={user.name}
                                 width={40}
                                 height={40}
-                                className="rounded-full"
+                                className="rounded-full ring-2 ring-border/50 dark:ring-[#1e1e1e] group-hover:ring-primary/50 dark:group-hover:ring-primary/40 transition-all"
                               />
                             ) : (
-                              <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center">
+                              <div className="w-10 h-10 bg-gradient-to-br from-primary/60 to-primary/90 dark:from-primary/40 dark:to-primary/70 rounded-full flex items-center justify-center ring-2 ring-border/50 dark:ring-[#1e1e1e] group-hover:ring-primary/50 dark:group-hover:ring-primary/40 transition-all">
                                 <User className="w-5 h-5 text-white" />
                               </div>
                             )}
                             <div>
-                              <div className="font-medium text-slate-900">
+                              <div className="font-medium text-foreground dark:text-foreground">
                                 {user.name}
                               </div>
-                              <div className="text-xs text-slate-500">
+                              <div className="text-xs text-muted-foreground/70 dark:text-muted-foreground/60">
                                 ID: {user._id.slice(-8)}
                               </div>
                             </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-2 text-slate-600">
-                            <Mail className="w-4 h-4 text-slate-400" />
+                          <div className="flex items-center gap-2 text-muted-foreground dark:text-muted-foreground/80">
+                            <Mail className="w-4 h-4 text-muted-foreground/60 dark:text-muted-foreground/50" />
                             <span className="text-sm">{user.email}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {user.role === "admin" ? (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 border border-purple-300">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-purple-500/15 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-500/30 dark:border-purple-500/40">
                               <ShieldCheck className="w-3.5 h-3.5" />
                               Admin
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border border-blue-300">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-primary/15 dark:bg-primary/20 text-primary dark:text-primary/90 border border-primary/30 dark:border-primary/40">
                               <Shield className="w-3.5 h-3.5" />
                               Customer
                             </span>
@@ -357,27 +368,27 @@ export default function AdminUsersPage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {user.isActive ? (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-300">
-                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 dark:border-emerald-500/40">
+                              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
                               Active
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-300">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-red-500/15 dark:bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/30 dark:border-red-500/40">
                               <ShieldOff className="w-3.5 h-3.5" />
                               Inactive
                             </span>
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center gap-2 text-sm text-slate-600">
-                            <Calendar className="w-4 h-4 text-slate-400" />
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground/80">
+                            <Calendar className="w-4 h-4 text-muted-foreground/60 dark:text-muted-foreground/50" />
                             {formatDate(user.createdAt)}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <Link
                             href={`/admin/users/${user._id}`}
-                            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary dark:text-primary/90 hover:bg-primary/10 dark:hover:bg-primary/20 rounded-xl transition-all border border-primary/20 dark:border-primary/30 hover:border-primary/40 dark:hover:border-primary/50"
                           >
                             View Details
                           </Link>
@@ -390,22 +401,22 @@ export default function AdminUsersPage() {
 
               {/* Pagination */}
               {pagination && pagination.totalPages > 1 && (
-                <div className="px-6 py-4 bg-slate-50 border-t border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-slate-600">
+                <div className="px-6 py-4 bg-muted/30 dark:bg-[#141414]/60 backdrop-blur-sm border-t border-border/70 dark:border-[#1e1e1e]">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div className="text-sm text-muted-foreground dark:text-muted-foreground/80">
                       Showing{" "}
-                      <span className="font-medium">
+                      <span className="font-medium text-foreground dark:text-foreground">
                         {(pagination.currentPage - 1) * limit + 1}
                       </span>{" "}
                       to{" "}
-                      <span className="font-medium">
+                      <span className="font-medium text-foreground dark:text-foreground">
                         {Math.min(
                           pagination.currentPage * limit,
                           pagination.totalItems
                         )}
                       </span>{" "}
                       of{" "}
-                      <span className="font-medium">
+                      <span className="font-medium text-foreground dark:text-foreground">
                         {pagination.totalItems}
                       </span>{" "}
                       users
@@ -415,9 +426,9 @@ export default function AdminUsersPage() {
                       <button
                         onClick={() => setPage(page - 1)}
                         disabled={!pagination.hasPrevPage}
-                        className="p-2 rounded-lg border border-slate-300 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="p-2 rounded-xl border border-border/70 dark:border-[#1e1e1e] hover:bg-muted/50 dark:hover:bg-[#141414]/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-md dark:hover:shadow-primary/10"
                       >
-                        <ChevronLeft className="w-5 h-5" />
+                        <ChevronLeft className="w-5 h-5 text-muted-foreground dark:text-muted-foreground/80" />
                       </button>
 
                       <div className="flex items-center gap-1">
@@ -433,10 +444,10 @@ export default function AdminUsersPage() {
                               <button
                                 key={pageNum}
                                 onClick={() => setPage(pageNum)}
-                                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                                   page === pageNum
-                                    ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                                    : "border border-slate-300 hover:bg-slate-100"
+                                    ? "bg-primary/90 dark:bg-primary/80 text-white shadow-lg dark:shadow-primary/30"
+                                    : "border border-border/70 dark:border-[#1e1e1e] hover:bg-muted/50 dark:hover:bg-[#141414]/80 text-muted-foreground dark:text-muted-foreground/80 hover:text-foreground dark:hover:text-foreground"
                                 }`}
                               >
                                 {pageNum}
@@ -449,7 +460,7 @@ export default function AdminUsersPage() {
                             return (
                               <span
                                 key={pageNum}
-                                className="px-2 text-slate-400"
+                                className="px-2 text-muted-foreground dark:text-muted-foreground/60"
                               >
                                 ...
                               </span>
@@ -462,9 +473,9 @@ export default function AdminUsersPage() {
                       <button
                         onClick={() => setPage(page + 1)}
                         disabled={!pagination.hasNextPage}
-                        className="p-2 rounded-lg border border-slate-300 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                        className="p-2 rounded-xl border border-border/70 dark:border-[#1e1e1e] hover:bg-muted/50 dark:hover:bg-[#141414]/80 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-md dark:hover:shadow-primary/10"
                       >
-                        <ChevronRight className="w-5 h-5" />
+                        <ChevronRight className="w-5 h-5 text-muted-foreground dark:text-muted-foreground/80" />
                       </button>
                     </div>
                   </div>
@@ -477,3 +488,5 @@ export default function AdminUsersPage() {
     </div>
   );
 }
+
+

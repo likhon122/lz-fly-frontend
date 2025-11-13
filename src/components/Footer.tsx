@@ -1,26 +1,34 @@
 import Link from "next/link";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Heart } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+    <footer className="relative bg-secondary dark:bg-card text-secondary-foreground py-20 mt-32 border-t-4 border-primary/30">
+      {/* Decorative Pattern with Lime Accent */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--primary)/0.05)_2px,transparent_2px),linear-gradient(to_bottom,rgb(var(--primary)/0.05)_2px,transparent_2px)] bg-[size:4rem_4rem] pointer-events-none" />
+
+      {/* Glowing lime orb */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary rounded-full mix-blend-screen filter blur-[120px] opacity-10 pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
-            <h3 className="text-xl font-bold mb-3 text-white">DesignHub</h3>
-            <p className="text-gray-400 text-sm mb-4">
+            <h3 className="text-3xl font-black mb-4 gradient-text">
+              DesignHub
+            </h3>
+            <p className="text-secondary-foreground/70 text-sm mb-6 leading-relaxed font-medium">
               Your destination for premium design templates and creative
-              resources.
+              resources. Transform your projects today.
             </p>
             <div className="flex gap-3">
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors"
+                className="w-12 h-12 rounded-xl bg-primary/10 hover:bg-primary backdrop-blur-sm border-2 border-primary/20 hover:border-primary flex items-center justify-center transition-all hover:scale-110 hover:rotate-6 group"
                 aria-label="Facebook"
               >
                 <svg
-                  className="w-4 h-4"
+                  className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -29,11 +37,11 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors"
+                className="w-12 h-12 rounded-xl bg-primary/10 hover:bg-primary backdrop-blur-sm border-2 border-primary/20 hover:border-primary flex items-center justify-center transition-all hover:scale-110 hover:rotate-6 group"
                 aria-label="Twitter"
               >
                 <svg
-                  className="w-4 h-4"
+                  className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -42,11 +50,11 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors"
+                className="w-12 h-12 rounded-xl bg-primary/10 hover:bg-primary backdrop-blur-sm border-2 border-primary/20 hover:border-primary flex items-center justify-center transition-all hover:scale-110 hover:rotate-6 group"
                 aria-label="Instagram"
               >
                 <svg
-                  className="w-4 h-4"
+                  className="w-5 h-5 text-primary group-hover:text-primary-foreground transition-colors"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -58,38 +66,40 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-4 text-white">Quick Links</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="font-black mb-6 text-secondary-foreground text-xl">
+              Quick Links
+            </h4>
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link
                   href="/designs"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  Browse Designs
+                  <span className="text-primary">→</span> Browse Designs
                 </Link>
               </li>
               <li>
                 <Link
                   href="/categories"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  Categories
+                  <span className="text-primary">→</span> Categories
                 </Link>
               </li>
               <li>
                 <Link
                   href="/pricing"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  Pricing
+                  <span className="text-primary">→</span> Pricing
                 </Link>
               </li>
               <li>
                 <Link
                   href="/about"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  About Us
+                  <span className="text-primary">→</span> About Us
                 </Link>
               </li>
             </ul>
@@ -97,38 +107,40 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h4 className="font-semibold mb-4 text-white">Support</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="font-black mb-6 text-secondary-foreground text-xl">
+              Support
+            </h4>
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link
                   href="/help"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  Help Center
+                  <span className="text-primary">→</span> Help Center
                 </Link>
               </li>
               <li>
                 <Link
                   href="/terms"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  Terms of Service
+                  <span className="text-primary">→</span> Terms of Service
                 </Link>
               </li>
               <li>
                 <Link
                   href="/privacy"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  Privacy Policy
+                  <span className="text-primary">→</span> Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link
                   href="/contact"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-secondary-foreground/70 hover:text-primary hover:translate-x-1 inline-flex items-center gap-2 transition-all font-bold"
                 >
-                  Contact
+                  <span className="text-primary">→</span> Contact
                 </Link>
               </li>
             </ul>
@@ -136,29 +148,40 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="font-semibold mb-4 text-white">Contact</h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2 text-gray-400">
-                <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>support@designhub.com</span>
+            <h4 className="font-black mb-6 text-secondary-foreground text-xl">
+              Contact
+            </h4>
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start gap-3 text-secondary-foreground/70 hover:text-primary transition-colors group cursor-pointer">
+                <Mail className="w-5 h-5 mt-0.5 shrink-0 text-primary group-hover:scale-110 transition-transform" />
+                <span className="font-bold">support@designhub.com</span>
               </li>
-              <li className="flex items-start gap-2 text-gray-400">
-                <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>+1 (555) 123-4567</span>
+              <li className="flex items-start gap-3 text-secondary-foreground/70 hover:text-primary transition-colors group cursor-pointer">
+                <Phone className="w-5 h-5 mt-0.5 shrink-0 text-primary group-hover:scale-110 transition-transform" />
+                <span className="font-bold">+1 (555) 123-4567</span>
               </li>
-              <li className="flex items-start gap-2 text-gray-400">
-                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>123 Design Street, Creative City, DC 12345</span>
+              <li className="flex items-start gap-3 text-secondary-foreground/70 hover:text-primary transition-colors group cursor-pointer">
+                <MapPin className="w-5 h-5 mt-0.5 shrink-0 text-primary group-hover:scale-110 transition-transform" />
+                <span className="font-bold">
+                  123 Design Street, Creative City, DC 12345
+                </span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-gray-800">
-          <p className="text-center text-sm text-gray-400">
-            &copy; 2025 DesignHub. All rights reserved.
-          </p>
+        <div className="pt-8 border-t-2 border-primary/20">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm text-secondary-foreground/60 font-bold">
+              &copy; 2025 DesignHub. All rights reserved.
+            </p>
+            <p className="text-sm text-secondary-foreground/60 flex items-center gap-2 font-bold">
+              Made with{" "}
+              <Heart className="w-4 h-4 text-primary fill-primary animate-pulse" />{" "}
+              by DesignHub Team
+            </p>
+          </div>
         </div>
       </div>
     </footer>

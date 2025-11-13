@@ -53,10 +53,10 @@ export default function DashboardLayout({
   // If user is null, AuthWrapper will redirect - just show loading
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-muted/50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-900 font-medium">Loading Dashboard...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto mb-4"></div>
+          <p className="text-foreground font-medium">Loading Dashboard...</p>
         </div>
       </div>
     );
@@ -85,7 +85,7 @@ export default function DashboardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/50">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -96,20 +96,20 @@ export default function DashboardLayout({
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+          <div className="flex items-center justify-between h-16 px-4 border-b border-border">
             <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg"></div>
-              <span className="text-lg font-bold text-gray-900">Dashboard</span>
+              <div className="w-8 h-8 bg-primary rounded-lg"></div>
+              <span className="text-lg font-bold text-foreground">Dashboard</span>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-gray-500 hover:text-gray-900"
+              className="lg:hidden text-muted-foreground hover:text-foreground"
             >
               <X className="w-5 h-5" />
             </button>
@@ -127,8 +127,8 @@ export default function DashboardLayout({
                     href={item.href}
                     className={`flex items-center px-3 py-2.5 rounded-lg transition-colors group ${
                       isActive
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                        ? "bg-primary text-white"
+                        : "text-foreground hover:bg-blue-50 hover:text-primary"
                     }`}
                   >
                     <Icon className="w-5 h-5 mr-3" />
@@ -140,16 +140,16 @@ export default function DashboardLayout({
           </nav>
 
           {/* User Profile Section */}
-          <div className="border-t border-gray-200 p-4 bg-gray-50">
+          <div className="border-t border-border p-4 bg-muted/50">
             <div className="flex items-center mb-3">
-              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
                 {user.name?.charAt(0).toUpperCase()}
               </div>
               <div className="ml-3 flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">
+                <p className="text-sm font-semibold text-foreground truncate">
                   {user.name}
                 </p>
-                <p className="text-xs text-gray-600 truncate">{user.email}</p>
+                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                 <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium text-blue-700 bg-blue-100 rounded capitalize">
                   {user.role}
                 </span>
@@ -170,26 +170,26 @@ export default function DashboardLayout({
       {/* Main Content */}
       <div className="lg:pl-64">
         {/* Top Header */}
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+        <header className="bg-card border-b border-border sticky top-0 z-30">
           <div className="flex items-center justify-between h-14 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden text-gray-500 hover:text-gray-900"
+              className="lg:hidden text-muted-foreground hover:text-foreground"
             >
               <Menu className="w-5 h-5" />
             </button>
             <div className="flex items-center space-x-4">
               <Link
                 href="/"
-                className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 ← Back to Home
               </Link>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600 hidden sm:inline">
+              <span className="text-sm text-muted-foreground hidden sm:inline">
                 Welcome,{" "}
-                <span className="font-semibold text-gray-900">{user.name}</span>
+                <span className="font-semibold text-foreground">{user.name}</span>
               </span>
             </div>
           </div>

@@ -21,7 +21,7 @@ export const AuthButtons: React.FC = () => {
       <Button
         variant="ghost"
         onClick={handleLogin}
-        className="text-gray-700 hover:text-gray-900 hover:bg-gray-100"
+        className="text-foreground hover:bg-muted rounded-xl font-bold transition-all"
         size="sm"
       >
         <LogIn className="w-4 h-4 mr-2" />
@@ -29,7 +29,7 @@ export const AuthButtons: React.FC = () => {
       </Button>
       <Button
         onClick={handleSignup}
-        className="bg-blue-600 hover:bg-blue-700 text-white"
+        className="bg-primary hover:bg-primary/90 text-secondary rounded-xl font-black shadow-lg hover:shadow-xl hover:scale-105 transition-all"
         size="sm"
       >
         <UserPlus className="w-4 h-4 mr-2" />
