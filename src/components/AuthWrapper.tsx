@@ -5,6 +5,8 @@ import { useGetProfileQuery } from "../services/api";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setCredentials, logout } from "../store/features/authSlice";
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import LZLoader from "./LZLoader";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -15,39 +17,64 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const user = useAppSelector((state) => state.auth.user);
+  const token = useAppSelector((state) => state.auth.token);
   const [authChecked, setAuthChecked] = useState(false);
 
-  const { data, error, isLoading, isSuccess, isError } =
-    useGetProfileQuery(undefined);
+  // Read NextAuth session status
+  const { data: session, status: sessionStatus } = useSession();
+
+  // Sync NextAuth OAuth credentials immediately when available
+  useEffect(() => {
+    if (sessionStatus === "authenticated" && session?.backendToken) {
+      if (!user || !token || token !== session.backendToken) {
+        dispatch(
+          setCredentials({
+            user: session.user,
+            token: session.backendToken,
+          })
+        );
+      }
+      setAuthChecked(true);
+    }
+  }, [sessionStatus, session, user, token, dispatch]);
+
+  // Fetch profile from backend; skip while NextAuth is loading to prevent false 401
+  const { data, error, isLoading, isSuccess, isError } = useGetProfileQuery(
+    undefined,
+    {
+      skip: sessionStatus === "loading",
+    }
+  );
 
   useEffect(() => {
     if (data && data.data) {
       dispatch(
         setCredentials({
-          user: data.data
+          user: data.data,
         })
       );
       setAuthChecked(true);
     } else if (error) {
-      // Only logout if the error is authentication related
       const errorData = error as { status?: number };
       if (errorData?.status === 401 || errorData?.status === 403) {
-        dispatch(logout());
+        // Only clear credentials if not actively authenticated via OAuth
+        if (sessionStatus === "unauthenticated") {
+          dispatch(logout());
+        }
       }
       setAuthChecked(true);
     }
-  }, [data, error, dispatch]);
+  }, [data, error, dispatch, sessionStatus]);
 
-  // Mark auth as checked when query completes (success or error)
   useEffect(() => {
     if (isSuccess || isError) {
       setAuthChecked(true);
     }
   }, [isSuccess, isError]);
 
-  // Redirect logic ONLY in AuthWrapper
+  // Redirect handling
   useEffect(() => {
-    // Skip auth check on public pages
+    // Skip public routes
     if (
       pathname === "/login" ||
       pathname === "/register" ||
@@ -55,51 +82,50 @@ export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
       pathname.startsWith("/designs") ||
       pathname === "/pricing" ||
       pathname === "/about" ||
-      pathname === "/contact"
+      pathname === "/contact" ||
+      pathname.startsWith("/categories")
     ) {
       setAuthChecked(true);
       return;
     }
 
-    // Wait for auth check to complete
-    if (!authChecked) {
+    // Wait until both NextAuth and backend profile check have resolved
+    if (sessionStatus === "loading" || (!authChecked && isLoading)) {
       return;
     }
 
-    // Protected routes: /dashboard and /admin
     const isProtectedRoute =
       pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
 
-    if (isProtectedRoute && !user) {
-      // No user on protected route -> redirect to login
+    const effectiveUser = user || (sessionStatus === "authenticated" ? session?.user : null);
+
+    if (isProtectedRoute && !effectiveUser) {
       router.push("/login");
     } else if (
       pathname.startsWith("/admin") &&
-      user &&
-      user.role !== "admin" &&
-      user.role !== "super_admin"
+      effectiveUser &&
+      effectiveUser.role !== "admin" &&
+      effectiveUser.role !== "super_admin"
     ) {
-      // Non-admin trying to access admin panel -> redirect to home
       router.push("/");
     }
-  }, [pathname, user, authChecked, router]);
+  }, [pathname, user, session, sessionStatus, authChecked, isLoading, router]);
 
-  if (user && (pathname === "/login" || pathname === "/register")) {
-    // Logged in user trying to access login/register -> redirect to home
+  // Logged-in users should not view login or register
+  const effectiveUser = user || (sessionStatus === "authenticated" ? session?.user : null);
+  if (effectiveUser && (pathname === "/login" || pathname === "/register")) {
     router.push("/");
-    return;
+    return null;
   }
 
-  // Show loading state while fetching profile (but not on login/register pages)
-  if (isLoading && pathname !== "/login" && pathname !== "/register") {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading...</p>
-        </div>
-      </div>
-    );
+  // Clean, lightweight loading indicator for protected routes
+  if (
+    (sessionStatus === "loading" || (isLoading && !effectiveUser)) &&
+    pathname !== "/login" &&
+    pathname !== "/register" &&
+    (pathname.startsWith("/dashboard") || pathname.startsWith("/admin"))
+  ) {
+    return <LZLoader label="Authenticating" />;
   }
 
   return <>{children}</>;

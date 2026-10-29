@@ -181,62 +181,62 @@ export default function AdminDownloadsPage() {
 
       {/* Analytics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:p-5">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
-              <Download className="w-6 h-6" />
+        <div className="bg-card rounded-xl p-4 sm:p-5 border border-border text-foreground">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 bg-muted/40 rounded-lg border border-border text-primary">
+              <Download className="w-5 h-5" />
             </div>
-            <TrendingUp className="w-5 h-5 opacity-75" />
+            <TrendingUp className="w-4 h-4 text-muted-foreground" />
           </div>
-          <h3 className="text-2xl font-bold mb-1">
+          <h3 className="text-2xl font-bold mb-1 text-foreground">
             {overviewStats.totalDownloads?.toLocaleString() || "0"}
           </h3>
-          <p className="text-blue-100 text-sm">Total Downloads</p>
+          <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">Total Downloads</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
-              <Users className="w-6 h-6" />
+        <div className="bg-card rounded-xl p-4 sm:p-5 border border-border text-foreground">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 bg-muted/40 rounded-lg border border-border text-primary">
+              <Users className="w-5 h-5" />
             </div>
-            <UserCircle className="w-5 h-5 opacity-75" />
+            <UserCircle className="w-4 h-4 text-muted-foreground" />
           </div>
-          <h3 className="text-2xl font-bold mb-1">
+          <h3 className="text-2xl font-bold mb-1 text-foreground">
             {overviewStats.uniqueUsers?.toLocaleString() || "0"}
           </h3>
-          <p className="text-green-100 text-sm">Unique Users</p>
+          <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">Unique Users</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
-              <FileDown className="w-6 h-6" />
+        <div className="bg-card rounded-xl p-4 sm:p-5 border border-border text-foreground">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 bg-muted/40 rounded-lg border border-border text-primary">
+              <FileDown className="w-5 h-5" />
             </div>
-            <Package className="w-5 h-5 opacity-75" />
+            <Package className="w-4 h-4 text-muted-foreground" />
           </div>
-          <h3 className="text-2xl font-bold mb-1">
+          <h3 className="text-2xl font-bold mb-1 text-foreground">
             {overviewStats.individualDownloads?.toLocaleString() || "0"}
           </h3>
-          <p className="text-purple-100 text-sm">Individual Purchases</p>
+          <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">Individual Purchases</p>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
-          <div className="flex items-center justify-between mb-4">
-            <div className="p-3 bg-card/20 rounded-xl backdrop-blur-sm">
-              <Package className="w-6 h-6" />
+        <div className="bg-card rounded-xl p-4 sm:p-5 border border-border text-foreground">
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 bg-muted/40 rounded-lg border border-border text-primary">
+              <Package className="w-5 h-5" />
             </div>
-            <TrendingUp className="w-5 h-5 opacity-75" />
+            <TrendingUp className="w-4 h-4 text-muted-foreground" />
           </div>
-          <h3 className="text-2xl font-bold mb-1">
+          <h3 className="text-2xl font-bold mb-1 text-foreground">
             {overviewStats.subscriptionDownloads?.toLocaleString() || "0"}
           </h3>
-          <p className="text-orange-100 text-sm">Subscription Downloads</p>
+          <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider">Subscription Downloads</p>
         </div>
       </div>
 
       {/* Download Trends Chart */}
       {downloadTrends.length > 0 && (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-primary" />
@@ -259,9 +259,9 @@ export default function AdminDownloadsPage() {
                       {trend.count} downloads
                     </span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                  <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500"
+                      className="bg-primary h-2 rounded-full transition-all duration-300"
                       style={{ width: `${percentage}%` }}
                     ></div>
                   </div>
@@ -273,7 +273,7 @@ export default function AdminDownloadsPage() {
       )}
 
       {/* Search and Filters */}
-      <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+      <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -405,19 +405,19 @@ export default function AdminDownloadsPage() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : downloads.length === 0 ? (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-          <Download className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">
+        <div className="bg-card rounded-xl border border-border p-12 text-center">
+          <Download className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
+          <h3 className="text-lg font-bold text-foreground mb-2">
             No downloads found
           </h3>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             {search || downloadType || dateRange.startDate
               ? "Try adjusting your filters"
               : "Downloads will appear here once users start downloading designs"}
           </p>
         </div>
       ) : (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-muted/50 border-b border-border">
@@ -442,12 +442,12 @@ export default function AdminDownloadsPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-border">
                 {downloads && downloads.map((download: AdminDownload) => (
-                  <tr key={download._id} className="hover:bg-muted/50">
+                  <tr key={download._id} className="hover:bg-muted/30 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                        <div className="w-10 h-10 rounded-full bg-muted/40 border border-border flex items-center justify-center text-foreground font-bold">
                           {download.user?.name?.charAt(0).toUpperCase() || "U"}
                         </div>
                         <div>
@@ -560,7 +560,7 @@ export default function AdminDownloadsPage() {
 
       {/* Pagination */}
       {pagination.totalPages > 1 && (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between">
             <div className="text-sm text-muted-foreground">
               Showing <strong>{(page - 1) * limit + 1}</strong> to{" "}
@@ -621,7 +621,7 @@ export default function AdminDownloadsPage() {
 
       {/* Top Downloaded Designs */}
       {topDesigns.length > 0 && (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <h2 className="text-xl font-bold text-foreground mb-4">
             Top Downloaded Designs
           </h2>
@@ -629,10 +629,10 @@ export default function AdminDownloadsPage() {
             {topDesigns.slice(0, 10).map((design: TopDesign, index: number) => (
               <div
                 key={design._id}
-                className="flex items-center justify-between p-4 bg-muted/50 rounded-xl hover:bg-muted transition-colors"
+                className="flex items-center justify-between p-4 bg-muted/30 border border-border rounded-xl hover:border-foreground/40 transition-colors"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-sm">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-muted/40 border border-border text-foreground font-bold text-xs">
                     #{index + 1}
                   </div>
                   <div className="w-16 h-16 rounded-xl bg-gray-200 flex items-center justify-center overflow-hidden relative">

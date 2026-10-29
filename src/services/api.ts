@@ -8,8 +8,14 @@ export const api = createApi({
     baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api",
     credentials: "include", // sends httpOnly cookies
     prepareHeaders: (headers, { getState }) => {
-      // Get token from Redux store (for OAuth users)
-      const token = (getState() as RootState).auth.token;
+      // Get token from Redux store, or fallback to localStorage
+      let token = (getState() as RootState).auth?.token;
+
+      if (!token && typeof window !== "undefined") {
+        token =
+          localStorage.getItem("token") ||
+          localStorage.getItem("accessToken");
+      }
 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);

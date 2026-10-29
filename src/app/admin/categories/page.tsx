@@ -274,25 +274,22 @@ export default function CategoriesPage() {
           )}
 
           {/* Header */}
-          <div className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/20 p-5 sm:p-6 border border-border/70 dark:border-[#1e1e1e] relative overflow-hidden">
-            {/* Premium Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent pointer-events-none" />
-            
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
+          <div className="bg-card rounded-xl border border-border p-5 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-gradient-to-br from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 rounded-xl shadow-lg dark:shadow-primary/30">
-                  <Tags className="w-8 h-8 text-white" />
+                <div className="p-2.5 bg-muted/40 border border-border rounded-lg text-primary">
+                  <Tags className="w-7 h-7" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 bg-clip-text text-transparent">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                     Categories Management
                   </h1>
-                  <p className="text-muted-foreground/80 dark:text-muted-foreground/60 mt-1 text-sm">
-                    Organize and manage design categories
+                  <p className="text-muted-foreground mt-1 text-sm font-medium">
+                    Organize and manage design categories and disciplines
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2 flex-wrap">
+              <div className="flex gap-2.5 flex-wrap">
                 <Button
                   onClick={() => {
                     setEditingCategory(null);
@@ -307,9 +304,9 @@ export default function CategoriesPage() {
                     setShowModal(true);
                     setIsSubcategoryMode(false);
                   }}
-                  className="bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:from-primary/80 hover:via-primary/90 hover:to-primary dark:hover:from-primary/50 dark:hover:via-primary/70 dark:hover:to-primary/60 shadow-xl dark:shadow-primary/20 hover:shadow-2xl transition-all"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors"
                 >
-                  <Plus className="w-5 h-5 mr-2" />
+                  <Plus className="w-4 h-4 mr-1.5" />
                   Create Parent Category
                 </Button>
                 <Button
@@ -326,40 +323,39 @@ export default function CategoriesPage() {
                     setShowModal(true);
                     setIsSubcategoryMode(true);
                   }}
-                  // Track if modal is for subcategory creation
-
-                  className="bg-gradient-to-r from-emerald-500/70 via-emerald-500 to-emerald-500/90 dark:from-emerald-500/40 dark:via-emerald-500/60 dark:to-emerald-500/50 hover:from-emerald-600 hover:via-emerald-600 hover:to-emerald-600 dark:hover:from-emerald-500 dark:hover:via-emerald-500 dark:hover:to-emerald-500 shadow-xl dark:shadow-emerald-500/20 hover:shadow-2xl transition-all"
+                  variant="outline"
+                  className="border-border hover:border-foreground/40 bg-card text-foreground font-bold rounded-lg transition-colors"
                 >
-                  <Plus className="w-5 h-5 mr-2" />
+                  <Plus className="w-4 h-4 mr-1.5" />
                   Create Subcategory
                 </Button>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 relative z-10">
-              <div className="bg-gradient-to-br from-primary/10 to-primary/15 dark:from-primary/10 dark:to-primary/5 p-4 sm:p-5 rounded-xl border border-primary/30 dark:border-primary/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-primary/10 transition-all">
-                <div className="text-sm text-primary dark:text-primary/90 font-medium mb-1">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-background p-4 sm:p-5 rounded-xl border border-border">
+                <div className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">
                   Total Categories
                 </div>
-                <div className="text-3xl font-bold text-foreground dark:text-foreground">
+                <div className="text-2xl sm:text-3xl font-extrabold text-foreground">
                   {categories.length +
                     categories.flatMap((cat) => cat.subcategories || []).length}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/15 dark:from-emerald-500/10 dark:to-emerald-500/5 p-4 sm:p-5 rounded-xl border border-emerald-500/30 dark:border-emerald-500/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all">
-                <div className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mb-1">Active</div>
-                <div className="text-3xl font-bold text-foreground dark:text-foreground">
+              <div className="bg-background p-4 sm:p-5 rounded-xl border border-border">
+                <div className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">Active Categories</div>
+                <div className="text-2xl sm:text-3xl font-extrabold text-foreground">
                   {categories.filter((c: ICategory) => c.isActive).length +
                     categories
                       .flatMap((cat) => cat.subcategories || [])
                       .filter((s: ICategory) => s.isActive).length}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-amber-500/10 to-amber-500/15 dark:from-amber-500/10 dark:to-amber-500/5 p-4 sm:p-5 rounded-xl border border-amber-500/30 dark:border-amber-500/20 backdrop-blur-sm hover:shadow-lg dark:hover:shadow-amber-500/10 transition-all">
-                <div className="text-sm text-amber-600 dark:text-amber-400 font-medium mb-1">
-                  Inactive
+              <div className="bg-background p-4 sm:p-5 rounded-xl border border-border">
+                <div className="text-xs text-muted-foreground font-bold uppercase tracking-wider mb-1">
+                  Inactive Categories
                 </div>
-                <div className="text-3xl font-bold text-foreground dark:text-foreground">{categories.filter((c: ICategory) => !c.isActive).length +
+                <div className="text-2xl sm:text-3xl font-extrabold text-foreground">{categories.filter((c: ICategory) => !c.isActive).length +
                     categories
                       .flatMap((cat) => cat.subcategories || [])
                       .filter((s: ICategory) => !s.isActive).length}
@@ -375,21 +371,21 @@ export default function CategoriesPage() {
           <Button
             variant={activeTab === "all" ? "default" : "outline"}
             onClick={() => setActiveTab("all")}
-            className={`${activeTab === "all" ? "font-bold bg-primary/90 dark:bg-primary/80 shadow-lg dark:shadow-primary/30" : "hover:bg-muted/60 dark:hover:bg-muted/40"} transition-all rounded-xl`}
+            className={`${activeTab === "all" ? "font-bold bg-primary text-primary-foreground" : "border-border hover:border-foreground/40 text-foreground bg-card"} rounded-lg transition-colors`}
           >
             All Categories
           </Button>
           <Button
             variant={activeTab === "parent" ? "default" : "outline"}
             onClick={() => setActiveTab("parent")}
-            className={`${activeTab === "parent" ? "font-bold bg-primary/90 dark:bg-primary/80 shadow-lg dark:shadow-primary/30" : "hover:bg-muted/60 dark:hover:bg-muted/40"} transition-all rounded-xl`}
+            className={`${activeTab === "parent" ? "font-bold bg-primary text-primary-foreground" : "border-border hover:border-foreground/40 text-foreground bg-card"} rounded-lg transition-colors`}
           >
             Parent Categories
           </Button>
           <Button
             variant={activeTab === "sub" ? "default" : "outline"}
             onClick={() => setActiveTab("sub")}
-            className={`${activeTab === "sub" ? "font-bold bg-primary/90 dark:bg-primary/80 shadow-lg dark:shadow-primary/30" : "hover:bg-muted/60 dark:hover:bg-muted/40"} transition-all rounded-xl`}
+            className={`${activeTab === "sub" ? "font-bold bg-primary text-primary-foreground" : "border-border hover:border-foreground/40 text-foreground bg-card"} rounded-lg transition-colors`}
           >
             Subcategories
           </Button>
@@ -410,10 +406,8 @@ export default function CategoriesPage() {
                   {categories.map((category) => (
                     <div
                       key={category.id}
-                      className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-sm border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow-lg dark:shadow-primary/10 p-4 sm:p-5 flex flex-col gap-3 hover:shadow-xl dark:hover:shadow-primary/20 transition-all hover:scale-[1.02] relative overflow-hidden group"
+                      className="bg-card border border-border rounded-xl p-4 sm:p-5 flex flex-col gap-3 hover:border-foreground/40 transition-colors"
                     >
-                      {/* Subtle gradient overlay on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-transparent dark:group-hover:from-primary/10 transition-all pointer-events-none" />
                       
                       <div className="flex items-center gap-3 relative z-10">
                         <div className="p-2 bg-primary/10 dark:bg-primary/20 rounded-lg">
@@ -482,7 +476,7 @@ export default function CategoriesPage() {
                     .map((subcat) => (
                       <div
                         key={subcat.id}
-                        className="bg-card border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow p-4 sm:p-5 flex flex-col gap-3"
+                        className="bg-card border border-border rounded-xl p-4 sm:p-5 flex flex-col gap-3 hover:border-foreground/40 transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <Tags className="w-8 h-8 text-indigo-600" />
@@ -549,7 +543,7 @@ export default function CategoriesPage() {
                   {categories.map((category) => (
                     <div
                       key={category.id}
-                      className="bg-card border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow p-4 sm:p-5 flex flex-col gap-3"
+                      className="bg-card border border-border rounded-xl p-4 sm:p-5 flex flex-col gap-3 hover:border-foreground/40 transition-colors"
                     >
                       <div className="flex items-center gap-3">
                         <Tags className="w-8 h-8 text-primary" />
@@ -623,7 +617,7 @@ export default function CategoriesPage() {
                     .map((subcat) => (
                       <div
                         key={subcat.id}
-                        className="bg-card border border-border/70 dark:border-[#1e1e1e] rounded-xl shadow p-4 sm:p-5 flex flex-col gap-3"
+                        className="bg-card border border-border rounded-xl p-4 sm:p-5 flex flex-col gap-3 hover:border-foreground/40 transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <Tags className="w-8 h-8 text-indigo-600" />
@@ -692,7 +686,7 @@ export default function CategoriesPage() {
         {/* Create/Edit Modal */}
         {showModal && (
           <div
-            className="fixed inset-0 bg-black/70 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
             role="dialog"
             aria-modal="true"
             aria-labelledby="category-modal-title"
@@ -702,17 +696,14 @@ export default function CategoriesPage() {
             }}
           >
             <div
-              className="bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/20 max-w-lg w-full max-h-[90vh] overflow-y-auto border border-border/70 dark:border-[#1e1e1e] relative"
+              className="bg-card rounded-xl border border-border max-w-lg w-full max-h-[90vh] overflow-y-auto relative"
               tabIndex={0}
             >
-              {/* Premium glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent pointer-events-none rounded-2xl" />
-              
-              <div className="p-4 sm:p-6 relative z-10">
+              <div className="p-5 sm:p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2
                     id="category-modal-title"
-                    className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 bg-clip-text text-transparent"
+                    className="text-2xl font-bold text-foreground"
                   >
                     {editingCategory
                       ? "Edit Category"
@@ -722,16 +713,16 @@ export default function CategoriesPage() {
                   </h2>
                   <button
                     onClick={handleCloseModal}
-                    className="p-2 hover:bg-muted/60 dark:hover:bg-muted/40 rounded-xl transition-all hover:scale-110"
+                    className="p-1.5 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground"
                     aria-label="Close modal"
                   >
-                    <X className="w-5 h-5 text-muted-foreground dark:text-muted-foreground/80" />
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
 
                 {error && (
                   <div
-                    className="mb-4 bg-red-500/10 dark:bg-red-500/15 border border-red-500/30 dark:border-red-500/40 text-red-700 dark:text-red-300 px-4 py-3 rounded-xl flex items-center gap-2 backdrop-blur-sm"
+                    className="mb-4 bg-red-500/10 border border-red-500/30 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg flex items-center gap-2"
                     role="alert"
                   >
                     <AlertCircle className="w-5 h-5 flex-shrink-0" />
@@ -762,7 +753,7 @@ export default function CategoriesPage() {
                             parentCategory: e.target.value || null,
                           })
                         }
-                        className="w-full px-4 py-3 border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary/50 dark:focus:ring-primary/60 focus:border-primary dark:focus:border-primary/60 outline-none transition-all bg-muted/30 dark:bg-[#141414]/80 backdrop-blur-sm hover:bg-muted/50 dark:hover:bg-[#141414]/90 text-foreground dark:text-foreground"
+                        className="w-full px-3.5 py-2.5 border border-border rounded-lg outline-none transition-colors bg-background text-foreground focus:border-foreground/40 text-sm font-medium"
                       >
                         <option value="" className="bg-card dark:bg-[#141414]">Select Parent Category</option>
                         {categories
@@ -919,7 +910,7 @@ export default function CategoriesPage() {
                     </Button>
                     <Button
                       type="submit"
-                      className="flex-1 bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:from-primary/80 hover:via-primary/90 hover:to-primary dark:hover:from-primary/50 dark:hover:via-primary/70 dark:hover:to-primary/60"
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors"
                       disabled={isCreating || isUpdating}
                       aria-label={
                         editingCategory ? "Update Category" : "Create Category"
@@ -947,8 +938,8 @@ export default function CategoriesPage() {
 
         {/* Delete Confirmation Modal */}
         {showDeleteConfirm && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-card rounded-2xl shadow-2xl max-w-md w-full p-4 sm:p-5">
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+            <div className="bg-card rounded-xl border border-border max-w-md w-full p-6">
               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-red-100 rounded-full">
                   <AlertTriangle className="w-6 h-6 text-red-500" />

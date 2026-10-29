@@ -4,7 +4,7 @@ import React, { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import PaymentStatusChecker from "@/components/PaymentStatusChecker";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowRight, Download, ShoppingBag } from "lucide-react";
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
@@ -12,56 +12,60 @@ function PaymentSuccessContent() {
   const paymentIntentId = searchParams.get("payment_intent");
 
   const handleSuccess = () => {
-    // Additional success handling
     setTimeout(() => {
       router.push("/dashboard/purchases");
-    }, 3000);
+    }, 4000);
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto bg-card rounded-3xl shadow-2xl border-2 border-border p-8">
+    <div className="container mx-auto px-4 py-16 min-h-[80vh] flex items-center justify-center bg-background">
+      <div className="max-w-xl w-full bg-card rounded-xl border border-border p-6 sm:p-8">
         {paymentIntentId ? (
           <>
             <PaymentStatusChecker
               paymentIntentId={paymentIntentId}
               onSuccess={handleSuccess}
             />
-            <div className="mt-8 flex gap-4 justify-center flex-wrap">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/dashboard/purchases"
-                className="bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 shadow-xl"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors text-center flex items-center justify-center gap-2"
               >
-                View Purchases
+                <span>View Purchases</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/dashboard/available-downloads"
-                className="bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 shadow-xl"
+                className="border border-border bg-card hover:bg-muted text-foreground px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors text-center flex items-center justify-center gap-2"
               >
-                Download Files
+                <Download className="w-4 h-4" />
+                <span>Download Files</span>
               </Link>
               <Link
                 href="/designs"
-                className="bg-muted hover:bg-muted/80 text-foreground px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 border-2 border-border"
+                className="border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors text-center flex items-center justify-center gap-2"
               >
-                Continue Shopping
+                <ShoppingBag className="w-4 h-4" />
+                <span>Browse More</span>
               </Link>
             </div>
           </>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-destructive text-xl font-black mb-4">
-              No payment information found
+          <div className="text-center py-8 space-y-4">
+            <p className="text-destructive text-lg font-bold">
+              No Payment Session Found
             </p>
-            <p className="text-muted-foreground mb-6 font-medium">
-              The payment intent ID is missing from the URL.
+            <p className="text-muted-foreground text-sm max-w-sm mx-auto">
+              The payment reference identifier was not provided in this URL request.
             </p>
-            <Link
-              href="/pricing"
-              className="inline-block bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-2xl font-black transition-all hover:scale-105 shadow-xl"
-            >
-              Back to Pricing
-            </Link>
+            <div className="pt-2">
+              <Link
+                href="/pricing"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors"
+              >
+                Return to Pricing
+              </Link>
+            </div>
           </div>
         )}
       </div>
@@ -73,12 +77,10 @@ export default function PaymentSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="container mx-auto px-4 py-12 min-h-screen bg-background">
-          <div className="max-w-2xl mx-auto bg-card rounded-3xl shadow-2xl border-2 border-border p-8">
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
-              <p className="text-foreground font-black">Loading...</p>
-            </div>
+        <div className="container mx-auto px-4 py-16 min-h-[80vh] flex items-center justify-center bg-background">
+          <div className="max-w-xl w-full bg-card rounded-xl border border-border p-8 flex flex-col items-center justify-center space-y-3">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <p className="text-sm font-semibold text-muted-foreground">Loading checkout status...</p>
           </div>
         </div>
       }

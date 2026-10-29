@@ -343,7 +343,7 @@ export default function DesignDetailPage() {
             The design you're looking for doesn't exist or has been removed.
           </p>
           <Link href="/designs">
-            <Button className="bg-primary hover:bg-primary/90 text-secondary font-black rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all px-8 py-6 text-lg">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg px-8 py-3 text-base transition-colors">
               Back to Designs
             </Button>
           </Link>
@@ -354,32 +354,32 @@ export default function DesignDetailPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Breadcrumb */}
-        <nav className="mb-8">
-          <div className="flex items-center space-x-3 text-sm">
+        <nav className="mb-6">
+          <div className="flex items-center space-x-2.5 text-sm font-semibold">
             <Link
               href="/"
-              className="text-muted-foreground hover:text-primary transition-colors font-bold"
+              className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Home
             </Link>
             <span className="text-muted-foreground">/</span>
             <Link
               href="/designs"
-              className="text-muted-foreground hover:text-primary transition-colors font-bold"
+              className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Designs
             </Link>
             <span className="text-muted-foreground">/</span>
             <Link
               href={categoryQueryLink}
-              className="text-muted-foreground hover:text-primary transition-colors font-bold"
+              className="text-muted-foreground hover:text-foreground transition-colors"
             >
               {mainCategory?.name || subCategory?.name || "Category"}
             </Link>
             <span className="text-muted-foreground">/</span>
-            <span className="text-foreground font-black truncate max-w-xs">
+            <span className="text-foreground font-bold truncate max-w-xs">
               {design.title}
             </span>
           </div>
@@ -390,11 +390,8 @@ export default function DesignDetailPage() {
           {/* Left Column - Image & Details */}
           <div className="lg:col-span-2 space-y-8">
             {/* Main Image */}
-            <div className="bg-card rounded-3xl border-2 border-border overflow-hidden group relative shadow-2xl">
-              {/* Glowing Effect */}
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/0 via-primary/30 to-primary/0 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500" />
-              
-              <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+            <div className="bg-card rounded-xl border border-border overflow-hidden relative">
+              <div className="relative aspect-[16/10] overflow-hidden bg-muted/40">
                 {heroImage ? (
                   <>
                     <Image
@@ -402,7 +399,7 @@ export default function DesignDetailPage() {
                       alt={`${design.title} preview ${currentImageIndex + 1}`}
                       fill
                       priority={true}
-                      className={`object-cover transition-all duration-700 group-hover:scale-105 ${
+                      className={`object-cover transition-opacity duration-300 ${
                         imageLoaded
                           ? "opacity-100"
                           : "opacity-0"
@@ -426,10 +423,10 @@ export default function DesignDetailPage() {
                                 previewImages.length
                             )
                           }
-                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-card/95 backdrop-blur-xl rounded-full p-3 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300 z-10"
+                          className="absolute left-4 top-1/2 -translate-y-1/2 bg-card text-foreground rounded-full p-2.5 border border-border hover:border-foreground/40 transition-colors z-10"
                         >
-                          <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
+                          <svg className="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                           </svg>
                         </button>
                         <button
@@ -439,10 +436,10 @@ export default function DesignDetailPage() {
                               (i) => (i + 1) % previewImages.length
                             )
                           }
-                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-card/95 backdrop-blur-xl rounded-full p-3 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300 z-10"
+                          className="absolute right-4 top-1/2 -translate-y-1/2 bg-card text-foreground rounded-full p-2.5 border border-border hover:border-foreground/40 transition-colors z-10"
                         >
-                          <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                          <svg className="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                           </svg>
                         </button>
                       </>
@@ -452,7 +449,7 @@ export default function DesignDetailPage() {
                     <button
                       aria-label="Open fullscreen"
                       onClick={() => setLightboxOpen(true)}
-                      className="absolute top-4 right-4 bg-card/95 backdrop-blur-xl rounded-xl p-3 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300 z-10"
+                      className="absolute top-4 right-4 bg-card text-foreground rounded-lg p-2.5 border border-border hover:border-foreground/40 transition-colors z-10"
                     >
                       <svg className="w-5 h-5 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
@@ -461,15 +458,15 @@ export default function DesignDetailPage() {
                     
                     {/* Image counter */}
                     {previewImages.length > 1 && (
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur-xl px-4 py-2 rounded-xl text-sm font-black text-foreground shadow-2xl border-2 border-border">
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-card px-3 py-1 rounded-md text-xs font-bold text-foreground border border-border">
                         {currentImageIndex + 1} / {previewImages.length}
                       </div>
                     )}
                   </>
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center">
-                      <Package className="w-12 h-12 text-primary" />
+                    <div className="w-20 h-20 rounded-xl bg-muted/40 border border-border flex items-center justify-center">
+                      <Package className="w-10 h-10 text-primary" />
                     </div>
                   </div>
                 )}
@@ -477,10 +474,10 @@ export default function DesignDetailPage() {
                 {/* Floating Badge */}
                 <div className="absolute top-4 left-4">
                   <span
-                    className={`px-4 py-2 rounded-xl text-sm font-black backdrop-blur-xl shadow-2xl border-2 transition-all duration-300 ${
+                    className={`px-3 py-1 rounded-md text-xs font-bold border transition-colors ${
                       design.status === "Active"
-                        ? "bg-primary/95 text-secondary border-primary"
-                        : "bg-destructive/95 text-white border-destructive"
+                        ? "bg-primary text-primary-foreground border-primary"
+                        : "bg-destructive text-destructive-foreground border-destructive"
                     }`}
                   >
                     {design.status}
@@ -495,14 +492,14 @@ export default function DesignDetailPage() {
                     variant="icon"
                     size="lg"
                     showCount={false}
-                    className="bg-card/95 backdrop-blur-xl hover:bg-primary/20 shadow-2xl border-2 border-border hover:border-primary hover:scale-110 transition-all duration-300"
+                    className="bg-card text-foreground hover:bg-muted border border-border hover:border-foreground/40 rounded-lg transition-colors"
                   />
                 </div>
               </div>
 
               {/* Image Thumbnails */}
               {previewImages.length > 1 && (
-                <div className="flex items-center gap-3 mt-6 overflow-x-auto p-2">
+                <div className="flex items-center gap-3 p-3 border-t border-border overflow-x-auto bg-muted/20">
                   {previewImages.map((src, idx) => (
                     <button
                       key={src + idx}
@@ -510,10 +507,10 @@ export default function DesignDetailPage() {
                         setCurrentImageIndex(idx);
                         setImageLoaded(false);
                       }}
-                      className={`group shrink-0 w-24 h-16 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                      className={`group shrink-0 w-24 h-16 rounded-lg overflow-hidden border transition-colors ${
                         idx === currentImageIndex
-                          ? "ring-4 ring-primary/30 border-primary shadow-2xl scale-105"
-                          : "border-border hover:border-primary/50 hover:scale-105"
+                          ? "border-primary"
+                          : "border-border hover:border-foreground/40"
                       }`}
                     >
                       <Image
@@ -539,10 +536,10 @@ export default function DesignDetailPage() {
               />
 
               {/* Stats Bar */}
-              <div className="grid grid-cols-4 gap-4 p-6 bg-card/50 backdrop-blur-sm border-t-2 border-border rounded-b-3xl">
+              <div className="grid grid-cols-4 gap-4 p-6 bg-card border-t border-border rounded-b-xl">
                 <div className="text-center group">
                   <div className="flex items-center justify-center mb-2">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-10 h-10 rounded-lg bg-muted/40 border border-border flex items-center justify-center">
                       <LikeButton
                         designId={design._id!}
                         initialLikesCount={design.likesCount}
@@ -552,54 +549,54 @@ export default function DesignDetailPage() {
                       />
                     </div>
                   </div>
-                  <p className="text-xl font-black text-foreground mb-1">{design.likesCount || 0}</p>
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Likes</span>
+                  <p className="text-lg font-bold text-foreground mb-1">{design.likesCount || 0}</p>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Likes</span>
                 </div>
                 <div className="text-center group">
-                  <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-10 h-10 mx-auto rounded-lg bg-muted/40 border border-border flex items-center justify-center mb-2">
                     <Download className="w-5 h-5 text-primary" />
                   </div>
-                  <p className="text-xl font-black text-foreground mb-1">
+                  <p className="text-lg font-bold text-foreground mb-1">
                     {design.downloadCount || 0}
                   </p>
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Downloads</span>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Downloads</span>
                 </div>
                 <div className="text-center group">
-                  <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-10 h-10 mx-auto rounded-lg bg-muted/40 border border-border flex items-center justify-center mb-2">
                     <Star className="w-5 h-5 text-primary fill-primary" />
                   </div>
-                  <p className="text-xl font-black text-foreground mb-1">
+                  <p className="text-lg font-bold text-foreground mb-1">
                     {statistics?.averageRating
                       ? statistics.averageRating.toFixed(1)
                       : "0.0"}
                   </p>
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Avg Rating</span>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Avg Rating</span>
                 </div>
                 <div className="text-center group">
-                  <div className="w-12 h-12 mx-auto rounded-xl bg-primary/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-10 h-10 mx-auto rounded-lg bg-muted/40 border border-border flex items-center justify-center mb-2">
                     <MessageSquare className="w-5 h-5 text-primary" />
                   </div>
-                  <p className="text-xl font-black text-foreground mb-1">
+                  <p className="text-lg font-bold text-foreground mb-1">
                     {statistics?.totalReviews || 0}
                   </p>
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Reviews</span>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Reviews</span>
                 </div>
               </div>
             </div>
             {/* Tools */}
             {design.usedTools && design.usedTools.length > 0 && (
-              <div className="group bg-card rounded-3xl border-2 border-border p-8 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+              <div className="bg-card rounded-xl border border-border p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Wrench className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 rounded-lg bg-muted/40 border border-border flex items-center justify-center">
+                    <Wrench className="w-5 h-5 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-black text-foreground">Tools Used</h3>
+                  <h3 className="text-xl font-bold text-foreground">Tools Used</h3>
                 </div>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2.5">
                   {design.usedTools.map((tool, index) => (
                     <span
                       key={index}
-                      className="bg-primary/10 text-primary text-sm px-4 py-2 rounded-xl font-black border-2 border-primary/20 hover:bg-primary hover:text-secondary hover:scale-105 transition-all duration-300 cursor-default"
+                      className="bg-muted/40 text-foreground text-sm px-3.5 py-1.5 rounded-lg font-semibold border border-border"
                     >
                       {tool}
                     </span>
@@ -610,18 +607,18 @@ export default function DesignDetailPage() {
 
             {/* Effects */}
             {design.effectsUsed && design.effectsUsed.length > 0 && (
-              <div className="group bg-card rounded-3xl border-2 border-border p-8 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+              <div className="bg-card rounded-xl border border-border p-6 sm:p-8">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Sparkles className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 rounded-lg bg-muted/40 border border-border flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-black text-foreground">Effects</h3>
+                  <h3 className="text-xl font-bold text-foreground">Effects</h3>
                 </div>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2.5">
                   {design.effectsUsed.map((effect, index) => (
                     <span
                       key={index}
-                      className="bg-primary/10 text-primary text-sm px-4 py-2 rounded-xl font-black border-2 border-primary/20 hover:bg-primary hover:text-secondary hover:scale-105 transition-all duration-300 cursor-default"
+                      className="bg-muted/40 text-foreground text-sm px-3.5 py-1.5 rounded-lg font-semibold border border-border"
                     >
                       {effect}
                     </span>
@@ -632,14 +629,14 @@ export default function DesignDetailPage() {
 
             {/* Process */}
             {design.processDescription && (
-              <div className="group bg-card rounded-3xl border-2 border-border p-8 md:col-span-2 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+              <div className="bg-card rounded-xl border border-border p-6 sm:p-8 md:col-span-2">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <FileText className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 rounded-lg bg-muted/40 border border-border flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-black text-foreground">Design Process</h3>
+                  <h3 className="text-xl font-bold text-foreground">Design Process</h3>
                 </div>
-                <p className="text-base text-foreground/80 leading-relaxed font-medium">
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed font-medium">
                   {design.processDescription}
                 </p>
               </div>
@@ -648,24 +645,24 @@ export default function DesignDetailPage() {
             {/* Reviews Section */}
             <div
               id="reviews"
-              className="bg-card rounded-3xl border-2 border-border p-8 shadow-2xl"
+              className="bg-card rounded-xl border border-border p-6 sm:p-8"
             >
               <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <MessageSquare className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 rounded-lg bg-muted/40 border border-border flex items-center justify-center">
+                    <MessageSquare className="w-5 h-5 text-primary" />
                   </div>
-                  <h2 className="text-3xl font-black text-foreground">
+                  <h2 className="text-2xl font-bold text-foreground">
                     Customer Reviews
                   </h2>
                 </div>
                 {statistics && statistics.totalReviews > 0 && (
-                  <div className="flex items-center gap-3 px-4 py-2 bg-primary/10 rounded-xl border-2 border-primary/20">
+                  <div className="flex items-center gap-2.5 px-3 py-1.5 bg-muted/40 rounded-lg border border-border">
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-5 h-5 transition-all duration-300 ${
+                          className={`w-4 h-4 transition-colors ${
                             i < Math.round(statistics.averageRating)
                               ? "text-primary fill-primary"
                               : "text-muted-foreground/30"
@@ -673,10 +670,10 @@ export default function DesignDetailPage() {
                         />
                       ))}
                     </div>
-                    <span className="text-xl font-black text-foreground">
+                    <span className="text-base font-bold text-foreground">
                       {statistics.averageRating.toFixed(1)}
                     </span>
-                    <span className="text-sm font-bold text-muted-foreground">
+                    <span className="text-xs font-semibold text-muted-foreground">
                       ({statistics.totalReviews}{" "}
                       {statistics.totalReviews === 1 ? "review" : "reviews"})
                     </span>
@@ -686,7 +683,7 @@ export default function DesignDetailPage() {
                   <div>
                     <button
                       onClick={openWriteModal}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-base font-black rounded-xl shadow-2xl hover:scale-105 transition-all duration-300"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold rounded-lg transition-colors"
                     >
                       {editingReview ? "Edit your review" : "Write a review"}
                     </button>
@@ -895,30 +892,30 @@ export default function DesignDetailPage() {
           </div>
           {/* Right Column - Purchase Card */}
           <div className="lg:col-span-1">
-            <div className="group bg-card rounded-3xl border-2 border-border p-8 sticky top-20 space-y-6 shadow-2xl hover:shadow-primary/20 transition-all duration-500">
+            <div className="bg-card rounded-xl border border-border p-6 sm:p-8 sticky top-20 space-y-6">
               {/* Title & Category */}
               <div>
-                <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-2 mb-3">
                   <Link href={categoryQueryLink}>
-                    <span className="bg-primary/95 hover:bg-primary text-secondary text-sm font-black px-4 py-2 rounded-xl shadow-lg hover:scale-105 transition-all duration-300">
+                    <span className="bg-muted/40 hover:bg-muted text-foreground text-xs font-bold px-3 py-1.5 rounded border border-border transition-colors">
                       {mainCategory?.name || subCategory?.name || "Category"}
                     </span>
                   </Link>
                   {design.complexityLevel && (
-                    <span className="bg-primary/10 text-primary text-sm font-black px-4 py-2 rounded-xl border-2 border-primary/20">
+                    <span className="bg-muted/40 text-muted-foreground text-xs font-bold px-3 py-1.5 rounded border border-border">
                       {design.complexityLevel}
                     </span>
                   )}
                 </div>
-                <h1 className="text-3xl font-black text-foreground leading-tight mb-3 group-hover:text-primary transition-colors duration-300">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground leading-tight mb-2">
                   {design.title}
                 </h1>
                 {designerName && (
                   <div className="flex items-center gap-2">
                     <User className="w-4 h-4 text-primary" />
-                    <p className="text-base text-foreground/80 font-medium">
+                    <p className="text-sm text-muted-foreground font-medium">
                       by{" "}
-                      <span className="font-black text-primary">
+                      <span className="font-bold text-foreground">
                         {designerName}
                       </span>
                     </p>
@@ -927,24 +924,22 @@ export default function DesignDetailPage() {
               </div>
 
               {/* discounted price */}
-              <div className="flex flex-col gap-3 py-6 border-y-2 border-border">
-                <div className="flex items-baseline gap-3">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-5xl font-black text-primary drop-shadow-lg">
-                      {design?.currencyDisplay}
-                      {design?.discountedPrice?.toFixed(2) || 0}
-                    </span>
-                    <span className="text-lg font-bold text-muted-foreground">
-                      {design.currencyCode}
-                    </span>
-                  </div>
-                </div>
+              <div className="flex flex-col gap-2 py-5 border-y border-border">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xl font-bold text-muted-foreground/50 line-through">
+                  <span className="text-4xl sm:text-5xl font-black text-foreground">
+                    {design?.currencyDisplay}
+                    {design?.discountedPrice?.toFixed(2) || 0}
+                  </span>
+                  <span className="text-sm font-bold text-muted-foreground">
+                    {design.currencyCode}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-semibold text-muted-foreground line-through">
                     {design?.currencyDisplay}
                     {design?.basePrice.toFixed(2) || 0}
                   </span>
-                  <span className="text-sm font-black text-destructive bg-destructive/10 px-3 py-1 rounded-lg">
+                  <span className="text-xs font-bold text-foreground bg-muted/40 border border-border px-2 py-0.5 rounded">
                     SAVE {Math.round(((design?.basePrice - (design?.discountedPrice || 0)) / design?.basePrice) * 100)}%
                   </span>
                 </div>
@@ -953,23 +948,23 @@ export default function DesignDetailPage() {
               {/* Purchase Actions */}
               <div className="space-y-4">
                 {accessLoading ? (
-                  <div className="w-full h-16 bg-primary/5 rounded-2xl flex items-center justify-center border-2 border-dashed border-primary/20">
-                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                  <div className="w-full h-12 bg-muted/20 rounded-lg flex items-center justify-center border border-border">
+                    <Loader2 className="w-5 h-5 animate-spin text-primary" />
                   </div>
                 ) : access.canDownload ||
                   access.status === "pending" ||
                   access.status === "completed" ? (
                   <>
-                    <div className="p-5 bg-primary/10 border-2 border-primary/30 rounded-2xl backdrop-blur-sm">
+                    <div className="p-4 bg-muted/30 border border-border rounded-xl">
                       <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
-                          <CheckCircle className="w-6 h-6 text-primary" />
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 border border-border flex items-center justify-center shrink-0">
+                          <CheckCircle className="w-5 h-5 text-primary" />
                         </div>
                         <div>
-                          <p className="font-black text-foreground text-base mb-1">
+                          <p className="font-bold text-foreground text-sm mb-0.5">
                             {access.message}
                           </p>
-                          <p className="text-sm text-foreground/70 font-medium">
+                          <p className="text-xs text-muted-foreground font-medium">
                             {access.reason === "subscription" &&
                             access.status === "completed"
                               ? "Included with subscription access"
@@ -991,7 +986,7 @@ export default function DesignDetailPage() {
                       <Button
                         onClick={handleDownload}
                         disabled={isDownloading}
-                        className="w-full bg-primary hover:bg-primary/90 text-secondary text-base font-black h-14 rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300"
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base font-bold h-12 rounded-lg transition-colors"
                       >
                         {isDownloading ? (
                           <>
@@ -1011,17 +1006,17 @@ export default function DesignDetailPage() {
                   <>
                     <Button
                       onClick={handlePurchaseClick}
-                      className="w-full bg-primary hover:bg-primary/90 text-secondary text-base font-black h-14 rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300"
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base font-bold h-12 rounded-lg transition-colors"
                     >
                       <ShoppingCart className="w-5 h-5 mr-2" />
                       Purchase for {design?.currencyDisplay}
                       {design?.discountedPrice?.toFixed(2) || 0}
                     </Button>
-                    <p className="text-center text-sm text-muted-foreground font-medium">
+                    <p className="text-center text-xs text-muted-foreground font-medium">
                       or{" "}
                       <Link
                         href="/pricing"
-                        className="text-primary font-black hover:underline"
+                        className="text-primary font-bold hover:underline"
                       >
                         subscribe
                       </Link>{" "}
@@ -1031,33 +1026,33 @@ export default function DesignDetailPage() {
                 )}
               </div>
 
-              <div className="flex flex-col gap-4 py-6 border-y-2 border-border">
+              <div className="flex flex-col gap-4 py-5 border-y border-border">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <FileText className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 rounded-lg bg-muted/40 border border-border flex items-center justify-center shrink-0">
+                    <FileText className="w-5 h-5 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-lg font-black text-foreground mb-3">
+                    <p className="text-base font-bold text-foreground mb-3">
                       Download details
                     </p>
                     {design?.downloadableFile ? (
-                      <dl className="text-sm text-foreground/80 grid grid-cols-1 gap-3">
-                        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                          <dt className="w-24 font-bold text-muted-foreground">File name</dt>
-                          <dd className="truncate font-medium">
+                      <dl className="text-sm text-foreground/80 grid grid-cols-1 gap-2.5">
+                        <div className="flex items-center gap-3 p-2.5 bg-muted/30 border border-border rounded-lg">
+                          <dt className="w-20 font-bold text-muted-foreground text-xs">File name</dt>
+                          <dd className="truncate font-semibold text-xs text-foreground">
                             {(design.downloadableFile as any).file_name || "—"}
                           </dd>
                         </div>
-                        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                          <dt className="w-24 font-bold text-muted-foreground">Format</dt>
-                          <dd className="uppercase font-black text-primary">
+                        <div className="flex items-center gap-3 p-2.5 bg-muted/30 border border-border rounded-lg">
+                          <dt className="w-20 font-bold text-muted-foreground text-xs">Format</dt>
+                          <dd className="uppercase font-bold text-xs text-primary">
                             {(design.downloadableFile as any).file_format ||
                               "—"}
                           </dd>
                         </div>
-                        <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-xl">
-                          <dt className="w-24 font-bold text-muted-foreground">Size</dt>
-                          <dd className="font-black text-foreground">
+                        <div className="flex items-center gap-3 p-2.5 bg-muted/30 border border-border rounded-lg">
+                          <dt className="w-20 font-bold text-muted-foreground text-xs">Size</dt>
+                          <dd className="font-bold text-xs text-foreground">
                             {formatBytes(
                               (design.downloadableFile as any).file_size
                             )}
@@ -1065,7 +1060,7 @@ export default function DesignDetailPage() {
                         </div>
                       </dl>
                     ) : (
-                      <p className="text-sm text-muted-foreground font-medium mt-2">
+                      <p className="text-xs text-muted-foreground font-medium mt-1">
                         No downloadable file information available
                       </p>
                     )}
@@ -1075,12 +1070,10 @@ export default function DesignDetailPage() {
 
               {/* Tags */}
               {design.tags && design.tags.length > 0 && (
-                <div className="pt-6 border-t-2 border-border">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <Tag className="w-5 h-5 text-primary" />
-                    </div>
-                    <h3 className="font-black text-foreground text-lg">
+                <div className="pt-5 border-t border-border">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Tag className="w-4 h-4 text-primary" />
+                    <h3 className="font-bold text-foreground text-sm">
                       Tags
                     </h3>
                   </div>
@@ -1088,7 +1081,7 @@ export default function DesignDetailPage() {
                     {design.tags.map((tag, index) => (
                       <span
                         key={index}
-                        className="bg-primary/10 text-primary text-sm px-4 py-2 rounded-xl font-black border-2 border-primary/20 hover:bg-primary hover:text-secondary hover:scale-105 transition-all duration-300 cursor-default"
+                        className="bg-muted/40 text-foreground text-xs px-3 py-1.5 rounded-md font-semibold border border-border"
                       >
                         #{tag}
                       </span>

@@ -13,8 +13,13 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
+  ArrowRight,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 type PurchaseStatus =
   | "pending"
@@ -34,7 +39,6 @@ export default function MyPurchasesPage() {
   >("purchaseDate");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  // Memoize query parameters to ensure proper refetching
   const queryParams = useMemo(
     () => ({
       page,
@@ -48,10 +52,9 @@ export default function MyPurchasesPage() {
   );
 
   const { data, isLoading, refetch } = useGetMyPurchasesQuery(queryParams);
-
   const purchases = data?.data || [];
+  const pagination = data?.pagination;
 
-  // Reset page to 1 when filters change
   useEffect(() => {
     if (page !== 1) {
       setPage(1);
@@ -67,395 +70,329 @@ export default function MyPurchasesPage() {
     setPage(1);
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case "completed":
-        return <CheckCircle className="w-5 h-5 text-primary" />;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold bg-green-50 text-green-700 border border-green-200 dark:bg-green-950/30 dark:border-green-800 dark:text-green-400 capitalize">
+            <CheckCircle className="w-3.5 h-3.5" />
+            Completed
+          </span>
+        );
       case "pending":
-        return <Clock className="w-5 h-5 text-yellow-600" />;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-400 capitalize">
+            <Clock className="w-3.5 h-3.5" />
+            Pending
+          </span>
+        );
       case "cancelled":
       case "refunded":
-        return <XCircle className="w-5 h-5 text-red-600" />;
-      case "expired":
-        return <AlertCircle className="w-5 h-5 text-muted-foreground" />;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold bg-red-50 text-red-700 border border-red-200 dark:bg-red-950/30 dark:border-red-800 dark:text-red-400 capitalize">
+            <XCircle className="w-3.5 h-3.5" />
+            {status}
+          </span>
+        );
       default:
-        return <Package className="w-5 h-5 text-muted-foreground" />;
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold bg-muted text-muted-foreground border border-border capitalize">
+            <AlertCircle className="w-3.5 h-3.5" />
+            {status}
+          </span>
+        );
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-green-100 text-green-700 border-green-200";
-      case "pending":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      case "cancelled":
-      case "refunded":
-        return "bg-red-100 text-red-700 border-red-200";
-      case "expired":
-        return "bg-muted text-foreground border-border";
-      default:
-        return "bg-muted text-foreground border-border";
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "—";
+    try {
+      return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch {
+      return "—";
     }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Breadcrumb Navigation */}
+      <nav>
+        <div className="flex items-center space-x-2 text-sm font-semibold">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Home
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Dashboard
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <span className="text-foreground">Purchases</span>
+        </div>
+      </nav>
+
+      {/* Header Section (Matching Categories Style) */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">My Purchases</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            View and manage all your purchases (
-            {data?.pagination?.totalItems || 0} total)
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2.5">
+            Transaction Ledger
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Purchase History
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1.5 max-w-xl leading-relaxed">
+            Review your individual design asset licenses, active subscriptions, and
+            payment receipts.
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={() => refetch()}
             disabled={isLoading}
-            className="px-4 py-2 bg-card border border-border rounded-lg hover:bg-muted/50 transition-colors flex items-center gap-2 disabled:opacity-50 text-sm font-medium"
+            className="px-4 py-2.5 bg-card border border-border rounded-lg hover:bg-muted text-sm font-semibold text-foreground transition-colors flex items-center gap-2 disabled:opacity-50"
           >
             <RefreshCw
               className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
             />
             <span>Refresh</span>
           </button>
+          <Link href="/designs">
+            <Button
+              variant="outline"
+              className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-sm px-4 py-2.5 transition-colors"
+            >
+              Browse Catalog
+              <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </Link>
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="bg-card rounded-lg border border-border p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-muted-foreground" />
-            <h3 className="font-semibold text-foreground text-sm">Filters</h3>
+      {/* Metrics Strip */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-border">
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {pagination?.totalItems || purchases.length}
           </div>
-          {(statusFilter ||
-            purchaseTypeFilter ||
-            sortBy !== "purchaseDate" ||
-            sortOrder !== "desc") && (
-            <button
-              onClick={clearFilters}
-              className="text-sm text-primary hover:text-blue-700 font-medium"
-            >
-              Clear All
-            </button>
-          )}
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Total Orders
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Status Filter */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              Status
-            </label>
-            <select
-              value={statusFilter}
-              onChange={(e) =>
-                setStatusFilter(e.target.value as PurchaseStatus | "")
-              }
-              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-            >
-              <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
-              <option value="expired">Expired</option>
-              <option value="refunded">Refunded</option>
-            </select>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-primary">
+            {purchases.filter((p: any) => p.status === "completed").length}
           </div>
-
-          {/* Purchase Type Filter */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              Purchase Type
-            </label>
-            <select
-              value={purchaseTypeFilter}
-              onChange={(e) =>
-                setPurchaseTypeFilter(
-                  e.target.value as "individual" | "subscription" | ""
-                )
-              }
-              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-            >
-              <option value="">All Types</option>
-              <option value="individual">Individual</option>
-              <option value="subscription">Subscription</option>
-            </select>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Completed Orders
           </div>
-
-          {/* Sort By */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              Sort By
-            </label>
-            <select
-              value={sortBy}
-              onChange={(e) =>
-                setSortBy(
-                  e.target.value as "purchaseDate" | "createdAt" | "updatedAt"
-                )
-              }
-              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-            >
-              <option value="purchaseDate">Purchase Date</option>
-              <option value="createdAt">Created Date</option>
-              <option value="updatedAt">Updated Date</option>
-            </select>
+        </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {purchases.filter((p: any) => p.purchaseType === "subscription").length}
           </div>
-
-          {/* Sort Order */}
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-2">
-              Order
-            </label>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-              className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-            >
-              <option value="desc">Newest First</option>
-              <option value="asc">Oldest First</option>
-            </select>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Subscriptions
+          </div>
+        </div>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {purchases.filter((p: any) => p.purchaseType === "individual").length}
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Single Licenses
           </div>
         </div>
       </div>
 
-      {/* Purchases List */}
+      {/* Filter Toolbar */}
+      <div className="p-5 rounded-xl border border-border bg-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <Filter className="w-4 h-4 text-muted-foreground" />
+          <span className="text-sm font-bold text-foreground">Filter Orders:</span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-1 md:max-w-2xl">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value as PurchaseStatus | "")}
+            className="px-3 py-2 text-sm bg-card border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+          >
+            <option value="">All Statuses</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="expired">Expired</option>
+            <option value="refunded">Refunded</option>
+          </select>
+
+          <select
+            value={purchaseTypeFilter}
+            onChange={(e) =>
+              setPurchaseTypeFilter(e.target.value as "individual" | "subscription" | "")
+            }
+            className="px-3 py-2 text-sm bg-card border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+          >
+            <option value="">All Types</option>
+            <option value="individual">Single Asset</option>
+            <option value="subscription">Subscription Plan</option>
+          </select>
+
+          <select
+            value={sortBy}
+            onChange={(e) =>
+              setSortBy(e.target.value as "purchaseDate" | "createdAt" | "updatedAt")
+            }
+            className="px-3 py-2 text-sm bg-card border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+          >
+            <option value="purchaseDate">Purchase Date</option>
+            <option value="createdAt">Created Date</option>
+          </select>
+
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+            className="px-3 py-2 text-sm bg-card border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+          >
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
+        </div>
+
+        {(statusFilter || purchaseTypeFilter || sortBy !== "purchaseDate" || sortOrder !== "desc") && (
+          <button
+            onClick={clearFilters}
+            className="text-sm text-primary font-bold hover:underline"
+          >
+            Reset
+          </button>
+        )}
+      </div>
+
+      {/* Orders List */}
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-          <p className="text-muted-foreground text-sm">Loading your purchases...</p>
+        <div className="py-24 text-center">
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wider">
+            Loading purchases...
+          </p>
         </div>
       ) : purchases.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4">
-          {purchases.map(
-            (purchase: {
-              _id: string;
-              purchaseType: string;
-              pricingPlan?: { name: string; duration?: string };
-              currencyDisplay: string;
-              design?: { title: string; _id: string };
-              status: string;
-              amount: number;
-              currency?: string;
-              createdAt: string;
-              purchaseDate?: string;
-              subscriptionEndDate?: string;
-              remainingDownloads?: number;
-              paymentMethod?: string;
-              updatedAt?: string;
-            }) => (
-              <div
-                key={purchase._id}
-                className="bg-card rounded-lg border border-border p-5 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-                      {purchase.purchaseType === "subscription" ? (
-                        <Package className="w-5 h-5 text-white" />
-                      ) : (
-                        <ShoppingBag className="w-5 h-5 text-white" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-base font-bold text-foreground">
-                          {purchase.purchaseType === "subscription"
-                            ? purchase.pricingPlan?.name || "Subscription Plan"
-                            : purchase.design?.title || "Design Purchase"}
-                        </h3>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Order ID: {purchase._id.slice(-8).toUpperCase()}
-                      </p>
-                      {purchase.purchaseType === "subscription" &&
-                        purchase.pricingPlan?.duration && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Duration: {purchase.pricingPlan.duration}
-                          </p>
-                        )}
-                    </div>
+        <div className="space-y-4">
+          {purchases.map((purchase: any) => (
+            <div
+              key={purchase._id}
+              className="p-6 rounded-xl border border-border bg-card hover:border-foreground/40 transition-colors"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+                <div className="flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-lg border border-border bg-muted/40 flex items-center justify-center text-foreground shrink-0">
+                    {purchase.purchaseType === "subscription" ? (
+                      <Package className="w-5 h-5 text-primary" />
+                    ) : (
+                      <ShoppingBag className="w-5 h-5 text-primary" />
+                    )}
                   </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <div
-                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border ${getStatusColor(
-                        purchase.status
-                      )}`}
-                    >
-                      {getStatusIcon(purchase.status)}
-                      <span className="capitalize">{purchase.status}</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground capitalize">
-                      {purchase.purchaseType}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 p-3 bg-muted/50 rounded-lg">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-                      <DollarSign className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Amount</p>
-                      <p className="font-bold text-foreground text-sm">
-                        {purchase.currency || "BDT"} {purchase.currencyDisplay}
-                        {purchase.amount?.toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Calendar className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Purchase Date</p>
-                      <p className="font-medium text-foreground text-sm">
-                        {new Date(
-                          purchase.purchaseDate || purchase.createdAt
-                        ).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <Package className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Type</p>
-                      <p className="font-medium text-foreground text-sm capitalize">
-                        {purchase.purchaseType}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Subscription Details */}
-                {purchase.purchaseType === "subscription" &&
-                  purchase.status === "completed" && (
-                    <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {purchase.subscriptionEndDate && (
-                        <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                          <p className="text-xs text-blue-700 font-medium mb-1">
-                            Subscription Expires
-                          </p>
-                          <p className="text-sm text-blue-900 font-semibold">
-                            {new Date(
-                              purchase.subscriptionEndDate
-                            ).toLocaleDateString()}
-                          </p>
-                          <p className="text-xs text-primary mt-1">
-                            {Math.ceil(
-                              (new Date(
-                                purchase.subscriptionEndDate
-                              ).getTime() -
-                                new Date().getTime()) /
-                                (1000 * 60 * 60 * 24)
-                            )}{" "}
-                            days remaining
-                          </p>
-                        </div>
-                      )}
-                      {purchase.remainingDownloads !== undefined && (
-                        <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
-                          <p className="text-xs text-purple-700 font-medium mb-1">
-                            Downloads Remaining
-                          </p>
-                          <p className="text-sm text-purple-900 font-semibold">
-                            {purchase.remainingDownloads === 999999
-                              ? "Unlimited"
-                              : purchase.remainingDownloads}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                {/* Payment Method */}
-                {purchase.paymentMethod && (
-                  <div className="mt-3 pt-3 border-t border-border">
-                    <p className="text-xs text-muted-foreground">
-                      Payment Method:{" "}
-                      <span className="font-medium text-foreground capitalize">
-                        {purchase.paymentMethod.replace(/_/g, " ")}
-                      </span>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-bold text-foreground">
+                      {purchase.purchaseType === "subscription"
+                        ? purchase.pricingPlan?.name || "Subscription Plan"
+                        : purchase.design?.title || "Design Asset"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+                      Order ID: #{purchase._id.slice(-8).toUpperCase()} • {formatDate(purchase.purchaseDate || purchase.createdAt)}
                     </p>
                   </div>
-                )}
+                </div>
 
-                {/* View Design Button for Individual Purchases */}
-                {purchase.purchaseType === "individual" &&
-                  purchase.design?._id &&
-                  purchase.status === "completed" && (
-                    <div className="mt-3">
-                      <Link
-                        href={`/designs/${purchase.design._id}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-sm"
-                      >
-                        <ShoppingBag className="w-4 h-4" />
-                        View Design
-                      </Link>
+                <div className="flex items-center gap-4 self-end sm:self-auto">
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-foreground">
+                      ${purchase.amount?.toFixed(2)}
                     </div>
-                  )}
+                    <div className="text-xs text-muted-foreground uppercase">
+                      {purchase.currency || "USD"}
+                    </div>
+                  </div>
+                  {getStatusBadge(purchase.status)}
+                </div>
               </div>
-            )
-          )}
+
+              <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-muted-foreground">
+                  <span>Type: <strong className="text-foreground capitalize">{purchase.purchaseType}</strong></span>
+                  {purchase.paymentMethod && (
+                    <span>Payment: <strong className="text-foreground capitalize">{purchase.paymentMethod.replace("_", " ")}</strong></span>
+                  )}
+                  {purchase.subscriptionEndDate && (
+                    <span>Expires: <strong className="text-foreground">{formatDate(purchase.subscriptionEndDate)}</strong></span>
+                  )}
+                </div>
+
+                {purchase.design?._id && (
+                  <Link
+                    href={`/designs/${purchase.design._id}`}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+                  >
+                    <span>View Asset</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </Link>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
-        <div className="bg-card rounded-lg border border-border p-12 text-center">
-          <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">
+        <div className="p-14 text-center rounded-xl border border-border bg-card">
+          <ShoppingBag className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-foreground">No purchases found</h3>
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
             {statusFilter || purchaseTypeFilter
-              ? "No purchases found"
-              : "No purchases yet"}
-          </h3>
-          <p className="text-muted-foreground mb-6 text-sm">
-            {statusFilter || purchaseTypeFilter
-              ? "Try adjusting your filters to see more results."
-              : "Start exploring our designs and pricing plans!"}
+              ? "No purchases match your selected filters. Try clearing your search parameters."
+              : "You haven't made any purchases yet. Explore our creative asset collection."}
           </p>
-          {!statusFilter && !purchaseTypeFilter && (
-            <div className="flex items-center justify-center gap-4">
-              <Link
-                href="/designs"
-                className="inline-block px-6 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-sm"
-              >
-                Browse Designs
-              </Link>
-              <Link
-                href="/pricing"
-                className="inline-block px-6 py-2.5 border border-border text-foreground font-medium rounded-lg hover:bg-muted/50 transition-colors text-sm"
-              >
-                View Plans
-              </Link>
-            </div>
-          )}
+          <div className="mt-5">
+            <Link href="/designs">
+              <Button className="bg-primary text-primary-foreground font-semibold rounded-lg text-sm px-5 py-2.5 hover:bg-primary/90 transition-colors">
+                Browse Assets
+              </Button>
+            </Link>
+          </div>
         </div>
       )}
 
-      {/* Pagination */}
-      {data?.pagination && data.pagination.totalPages > 1 && (
-        <div className="flex items-center justify-center space-x-2">
-          <button
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1 || isLoading}
-            className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
-          >
-            Previous
-          </button>
-          <span className="px-4 py-2 text-foreground text-sm">
-            Page {page} of {data.pagination.totalPages}
-          </span>
-          <button
-            onClick={() => setPage(page + 1)}
-            disabled={page >= data.pagination.totalPages || isLoading}
-            className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
-          >
-            Next
-          </button>
+      {/* Pagination (Clean Minimalist Style) */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between pt-5 border-t border-border">
+          <div className="text-sm text-muted-foreground">
+            Page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalItems} items)
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={!pagination.hasPrevPage || isLoading}
+              className="px-4 py-2 rounded-lg border border-border bg-card text-foreground hover:bg-muted text-sm font-semibold disabled:opacity-40 transition-colors flex items-center gap-1.5"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Previous</span>
+            </button>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={!pagination.hasNextPage || isLoading}
+              className="px-4 py-2 rounded-lg border border-border bg-card text-foreground hover:bg-muted text-sm font-semibold disabled:opacity-40 transition-colors flex items-center gap-1.5"
+            >
+              <span>Next</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </div>

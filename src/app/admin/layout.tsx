@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { useLogoutMutation } from "@/services/api";
 import { logout as logoutAction } from "@/store/features/authSlice";
+import { signOut } from "next-auth/react";
+import LZLoader from "@/components/LZLoader";
 
 export default function AdminLayout({
   children
@@ -32,15 +34,15 @@ export default function AdminLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [logoutMutation, { isLoading: isLoggingOut }] = useLogoutMutation();
 
-  // AuthWrapper now handles all redirect logic - layouts just render!
-  // No more timers, no more manual redirects, no more auth checks here
-
   const handleLogout = async () => {
     try {
       await logoutMutation().unwrap();
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
+      // Clear OAuth session if exists
+      await signOut({ redirect: false }).catch(() => {});
+
       // Clear Redux state
       dispatch(logoutAction());
 
@@ -55,14 +57,7 @@ export default function AdminLayout({
 
   // If user is null or not admin/super_admin, AuthWrapper will redirect - just show loading
   if (!user || (user.role !== "admin" && user.role !== "super_admin")) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br bg-background">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground font-medium">Loading Admin Panel...</p>
-        </div>
-      </div>
-    );
+    return <LZLoader label="Authenticating Admin" />;
   }
 
   const navigation = [
@@ -87,38 +82,33 @@ export default function AdminLayout({
         />
       )}
 
-      {/* Ultra-Modern Sidebar with Glassmorphism */}
+      {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-card via-card to-card/95 dark:from-[#0f0f0f] dark:via-[#0f0f0f] dark:to-[#0a0a0a] backdrop-blur-xl shadow-2xl border-r-2 border-border/50 transform transition-all duration-500 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-card border-r border-border transform transition-all duration-300 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full relative">
-          {/* Decorative Background Elements */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl"></div>
-          
-          {/* Logo - Ultra Modern */}
-          <div className="relative flex items-center justify-between h-20 px-6 border-b-2 border-border/50 bg-gradient-to-r from-card to-card/80 dark:from-[#0a0a0a] dark:to-[#141414]">
+          {/* Logo */}
+          <div className="relative flex items-center justify-between h-20 px-6 border-b border-border bg-card">
             <Link href="/admin" className="flex items-center space-x-3 group">
-              <div className="relative w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg group-hover:shadow-2xl group-hover:shadow-primary/50 flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
-                <LayoutDashboard className="w-6 h-6 text-secondary" />
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent rounded-2xl"></div>
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                <LayoutDashboard className="w-5 h-5 text-primary-foreground" />
               </div>
-              <div>
-                <span className="text-2xl font-black gradient-text">Admin</span>
-                <p className="text-xs text-muted-foreground font-bold">Control Panel</p>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-extrabold text-foreground tracking-tight">LZ Fly</span>
+                <span className="text-xs font-bold text-primary px-2 py-0.5 rounded border border-primary/20 bg-primary/10">Admin</span>
               </div>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all"
+              className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Navigation - Ultra Modern */}
+          {/* Navigation */}
           <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
             {navigation.map((item, index) => {
               const Icon = item.icon;
@@ -127,60 +117,42 @@ export default function AdminLayout({
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`group relative flex items-center px-4 py-4 rounded-2xl transition-all duration-300 ${
+                  className={`group relative flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 ${
                     isActive
-                      ? "bg-gradient-to-r from-primary to-primary/90 text-secondary shadow-lg shadow-primary/30"
-                      : "text-foreground hover:bg-muted/50 hover:scale-[1.02]"
+                      ? "bg-primary text-primary-foreground font-bold"
+                      : "text-foreground hover:bg-muted/70 font-semibold"
                   }`}
-                  style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  {/* Active Indicator */}
-                  {isActive && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-secondary rounded-r-full"></div>
-                  )}
-                  
-                  {/* Icon Container */}
                   <div
-                    className={`w-11 h-11 rounded-xl flex items-center justify-center mr-4 transition-all duration-300 ${
+                    className={`w-9 h-9 rounded-lg flex items-center justify-center mr-3 transition-all ${
                       isActive
-                        ? "bg-secondary/20"
-                        : "bg-primary/10 group-hover:bg-primary/20 group-hover:scale-110"
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : "bg-muted text-foreground group-hover:text-primary"
                     }`}
                   >
-                    <Icon
-                      className={`w-6 h-6 ${
-                        isActive ? "text-secondary" : "text-primary"
-                      }`}
-                    />
+                    <Icon className="w-5 h-5" />
                   </div>
-                  
-                  {/* Label */}
-                  <span className={`font-black text-base ${isActive ? "text-secondary" : "group-hover:text-primary"} transition-colors`}>
+                  <span className="text-sm">
                     {item.name}
                   </span>
-                  
-                  {/* Hover Effect */}
-                  {!isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300"></div>
-                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* User Profile Section - Ultra Modern */}
-          <div className="relative border-t-2 border-border/50 p-5 bg-gradient-to-br from-primary/5 to-transparent dark:from-primary/10 dark:to-[#0a0a0a]">
+          {/* User Profile Section */}
+          <div className="relative border-t border-border p-5 bg-card">
             <div className="flex items-center mb-4">
-              <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-secondary font-black text-xl shadow-lg">
+              <div className="relative w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-black text-lg">
                 {user.name?.charAt(0).toUpperCase()}
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-card"></div>
+                <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-card"></div>
               </div>
-              <div className="ml-4 flex-1 min-w-0">
-                <p className="text-sm font-black text-foreground truncate">
+              <div className="ml-3 flex-1 min-w-0">
+                <p className="text-sm font-bold text-foreground truncate">
                   {user.name}
                 </p>
                 <p className="text-xs text-muted-foreground font-medium truncate">{user.email}</p>
-                <span className="inline-block mt-1.5 px-3 py-1 text-xs font-black text-primary bg-primary/10 border border-primary/20 rounded-full capitalize">
+                <span className="inline-block mt-1 px-2 py-0.5 text-xs font-semibold text-primary bg-primary/10 border border-primary/20 rounded capitalize">
                   {user.role === "super_admin" ? "Super Admin" : "Admin"}
                 </span>
               </div>
@@ -188,9 +160,9 @@ export default function AdminLayout({
             <button
               onClick={handleLogout}
               disabled={isLoggingOut}
-              className="group w-full flex items-center justify-center px-4 py-3 text-red-600 bg-red-50 hover:bg-red-100 rounded-2xl transition-all duration-300 disabled:opacity-50 font-black hover:scale-[1.02] shadow-sm hover:shadow-md"
+              className="w-full flex items-center justify-center px-4 py-2 text-destructive border border-border hover:bg-muted rounded-lg transition-colors font-semibold text-sm"
             >
-              <LogOut className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+              <LogOut className="w-4 h-4 mr-2" />
               <span>
                 {isLoggingOut ? "Logging out..." : "Logout"}
               </span>
@@ -199,23 +171,23 @@ export default function AdminLayout({
         </div>
       </div>
 
-      {/* Ultra-Modern Main Content Area */}
+      {/* Main Content Area */}
       <div className="lg:pl-72">
-        {/* Top Header with Glassmorphism */}
-        <header className="bg-card/80 dark:bg-[#0a0a0a]/95 backdrop-blur-xl shadow-lg border-b-2 border-border/50 sticky top-0 z-30">
-          <div className="flex items-center justify-between h-20 px-4 sm:px-6 lg:px-8">
+        {/* Top Header */}
+        <header className="bg-card border-b border-border sticky top-0 z-30">
+          <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2.5 text-foreground hover:bg-muted rounded-xl transition-all hover:scale-105"
+              className="lg:hidden p-2 text-foreground hover:bg-muted border border-border rounded-lg transition-colors"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5" />
             </button>
             
             {/* Breadcrumb Navigation */}
             <div className="flex items-center space-x-3">
               <Link
                 href="/"
-                className="group flex items-center gap-2 px-4 py-2 text-sm font-black text-muted-foreground hover:text-primary bg-muted/50 hover:bg-muted rounded-xl transition-all hover:scale-105"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground bg-muted/40 hover:bg-muted border border-border rounded-lg transition-colors"
               >
                 <span>← Back to Site</span>
               </Link>
@@ -223,23 +195,20 @@ export default function AdminLayout({
             
             {/* User Welcome Badge */}
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-primary/10 to-primary/5 rounded-2xl border-2 border-primary/20">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-secondary font-black text-sm">
+              <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 bg-muted/40 rounded-lg border border-border">
+                <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs">
                   {user.name?.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground font-medium">Welcome back</p>
-                  <p className="text-sm font-black text-foreground">{user.name}</p>
+                  <p className="text-xs font-semibold text-foreground">{user.name}</p>
                 </div>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Page Content with Pattern Background */}
-        <main className="relative min-h-screen p-6">
-          {/* Subtle Background Pattern */}
-          <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10"></div>
+        {/* Page Content */}
+        <main className="relative min-h-[calc(100vh-4rem)] p-6">
           {children}
         </main>
       </div>

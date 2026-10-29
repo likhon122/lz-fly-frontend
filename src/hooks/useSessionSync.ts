@@ -1,19 +1,9 @@
 /**
  * Session Sync Hook
  *
- * Syncs NextAuth OAuth session with Redux store.
- * Call this hook in your root layout or app component.
- *
- * When user logs in with Google/GitHub (OAuth):
- * 1. NextAuth stores session
- * 2. This hook reads session
- * 3. Extracts YOUR backend token
- * 4. Stores in Redux (same as regular login)
- * 5. All API calls use YOUR token automatically
- *
- * When user logs in with email/password (local):
- * - Redux stores user data directly (no NextAuth session)
- * - This hook does NOT interfere with local auth
+ * Synchronizes NextAuth OAuth session state with the Redux store.
+ * Ensures backend JWT token received from Google/GitHub OAuth is stored
+ * in Redux so all RTK Query API calls include the proper Authorization header.
  */
 
 "use client";
@@ -30,25 +20,23 @@ export function useSessionSync() {
   const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
-    if (
-      status === "authenticated" &&
-      session?.backendToken &&
-      !isAuthenticated
-    ) {
-      // Sync NextAuth session to Redux (for OAuth users)
-      dispatch(
-        setCredentials({
-          user: session.user,
-          token: session.backendToken
-        })
-      );
+    if (status === "authenticated" && session?.backendToken) {
+      // Sync NextAuth session to Redux if not yet authenticated or token differs
+      if (!isAuthenticated || !user) {
+        dispatch(
+          setCredentials({
+            user: session.user,
+            token: session.backendToken,
+          })
+        );
+      }
     } else if (
       status === "unauthenticated" &&
       isAuthenticated &&
-      user?.authProvider !== "local"
+      (user?.authProvider === "google" || user?.authProvider === "github")
     ) {
-      // Only clear Redux if the user was authenticated via OAuth
-      // Don't clear for regular email/password users (authProvider === "local")
+      // Clear Redux if the OAuth session expired or user signed out of OAuth
+      // Does not interfere with local password logins
       dispatch(logout());
     }
   }, [session, status, dispatch, isAuthenticated, user]);

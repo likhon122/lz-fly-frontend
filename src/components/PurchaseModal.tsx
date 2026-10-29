@@ -7,11 +7,13 @@ import {
   AlertCircle,
   Loader2,
   ShoppingBag,
-  CircleGauge,
-  Sparkles,
   Shield,
   Lock,
   Download,
+  ArrowRight,
+  Layers,
+  Sparkles,
+  ArrowLeft,
 } from "lucide-react";
 import { useCreatePaymentIntentMutation, api } from "@/services/api";
 import StripeProvider from "./StripeProvider";
@@ -71,7 +73,7 @@ interface PurchaseModalProps {
   design?: Design;
   course?: Course;
   purchaseType: "subscription" | "individual";
-  onPaymentSuccess?: () => void; // Callback to refetch data after payment
+  onPaymentSuccess?: () => void;
 }
 
 const PurchaseModal: React.FC<PurchaseModalProps> = ({
@@ -96,7 +98,7 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  // Get item details
+  // Currency & price extraction
   const currencyDisplay =
     purchaseType === "subscription"
       ? plan?.currencyDisplay || "$"
@@ -113,17 +115,17 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
 
   const itemPrice =
     purchaseType === "subscription"
-      ? plan?.finalPrice || plan?.price || 0
+      ? plan?.finalPrice ?? plan?.price ?? 0
       : purchaseType === "individual" && design
-      ? design.price || 0
-      : course?.price || 0;
+      ? design.price ?? 0
+      : course?.price ?? 0;
 
   const itemName =
     purchaseType === "subscription"
-      ? plan?.name || ""
+      ? plan?.name || "Subscription Plan"
       : purchaseType === "individual" && design
-      ? design.title || ""
-      : course?.title || "";
+      ? design.title || "Design Asset"
+      : course?.title || "Course Access";
 
   const itemDescription =
     purchaseType === "subscription"
@@ -134,20 +136,20 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
 
   const originalPrice =
     purchaseType === "subscription"
-      ? plan?.price || 0
+      ? plan?.price ?? 0
       : purchaseType === "individual" && design
-      ? design.basePrice || design.price || 0
-      : course?.basePrice || course?.price || 0;
+      ? design.basePrice ?? design.price ?? 0
+      : course?.basePrice ?? course?.price ?? 0;
 
   const hasDiscount =
     purchaseType === "subscription"
-      ? plan?.discountPercentage && plan.discountPercentage > 0
+      ? Boolean(plan?.discountPercentage && plan.discountPercentage > 0)
       : originalPrice > itemPrice;
 
   const discountPercentage =
     purchaseType === "subscription" && plan?.discountPercentage
       ? plan.discountPercentage
-      : hasDiscount
+      : hasDiscount && originalPrice > 0
       ? Math.round(((originalPrice - itemPrice) / originalPrice) * 100)
       : 0;
 
@@ -158,6 +160,7 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
       setClientSecret(null);
       setPaymentIntentId(null);
       setErrorMessage("");
+      setIsRedirecting(false);
     }
   }, [isOpen]);
 
@@ -209,28 +212,21 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
 
   const handlePaymentSuccess = async (paymentId: string) => {
     setPaymentIntentId(paymentId);
-    // Wait 2 seconds to give webhook time to process
-    // This prevents showing "pending" status immediately
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     setStep("success");
-    // Don't refetch here - let PaymentStatusChecker handle it when status is confirmed
   };
 
-  // New handler: called when PaymentStatusChecker confirms payment is completed
   const handlePaymentConfirmed = () => {
-    // Invalidate cache tags to force refetch of purchases and downloads
     dispatch(api.util.invalidateTags(["Purchases", "Downloads", "Designs"]));
 
-    // Call the refetch callback to update design data
     if (onPaymentSuccess) {
       onPaymentSuccess();
     }
 
-    // Close modal after 3 seconds to show updated design page
     setTimeout(() => {
       setIsRedirecting(true);
       onClose();
-    }, 3000);
+    }, 2500);
   };
 
   const handlePaymentError = (error: string) => {
@@ -249,41 +245,16 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden border border-gray-200 animate-in zoom-in-95 duration-300">
-        {/* Stripe Trust Badge Header */}
-        {step === "payment" && (
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                <Lock className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-white font-bold text-sm">
-                  Secured by Stripe
-                </p>
-                <p className="text-blue-100 text-xs">
-                  End-to-end encrypted payment
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-white" />
-              <span className="text-white font-semibold text-sm">
-                256-bit SSL
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Progress Bar */}
-        <div className="h-1 bg-gray-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+      <div className="bg-card text-card-foreground rounded-xl border border-border max-w-xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Progress Line */}
+        <div className="h-1 bg-muted w-full">
           <div
-            className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 transition-all duration-500 ease-out"
+            className="h-full bg-primary transition-all duration-300"
             style={{
               width:
                 step === "details"
-                  ? "33%"
+                  ? "25%"
                   : step === "processing"
                   ? "50%"
                   : step === "payment"
@@ -293,221 +264,234 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
           />
         </div>
 
-        {/* Header */}
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 z-10">
-          <div className="flex justify-between items-center">
-            <div className="flex-1">
-              <h2 className="text-xl font-bold text-gray-900">
+        {/* Modal Header */}
+        <div className="px-6 py-4 border-b border-border flex items-center justify-between bg-card shrink-0">
+          <div className="flex items-center gap-3">
+            {step === "payment" && (
+              <button
+                type="button"
+                onClick={() => setStep("details")}
+                className="p-1.5 -ml-1 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                title="Back to order review"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+            )}
+            <div>
+              <h2 className="text-base font-bold text-foreground">
                 {step === "details" && "Review Order"}
                 {step === "processing" && "Preparing Payment..."}
-                {step === "payment" && "Complete Payment"}
-                {step === "success" && "Payment Successful!"}
-                {step === "error" && "Payment Failed"}
+                {step === "payment" && "Secure Checkout"}
+                {step === "success" && "Order Confirmed"}
+                {step === "error" && "Payment Incomplete"}
               </h2>
-              <p className="text-sm text-gray-600 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5 truncate max-w-[280px] sm:max-w-md">
                 {itemName} • {currencyDisplay}
                 {formatPrice(itemPrice)}
               </p>
             </div>
-            <button
-              onClick={resetAndClose}
-              className="text-gray-400 hover:text-gray-600 transition-all p-2 hover:bg-gray-100 rounded-lg"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
+          <button
+            onClick={resetAndClose}
+            className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-          {/* Step: Details */}
+        {/* Modal Body */}
+        <div className="p-6 overflow-y-auto space-y-5">
+          {/* STEP: DETAILS (Review Order) */}
           {step === "details" && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {/* Order Summary - Compact */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
-                <div className="flex items-center gap-2 mb-3">
-                  <ShoppingBag className="w-4 h-4 text-blue-600" />
-                  <h3 className="text-sm font-bold text-gray-900">
-                    Order Summary
-                  </h3>
-                </div>
-
-                {/* Item Details - Compact */}
-                {purchaseType === "individual" && (design || course) && (
-                  <div className="flex items-start gap-3 mb-3 p-3 bg-white rounded-lg border border-blue-100 relative">
-                    {hasDiscount && discountPercentage > 0 && (
-                      <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" />
-                        {discountPercentage}% OFF
-                      </div>
-                    )}
-                    {(design?.previewImageUrl || course?.previewImageUrl) && (
+            <div className="space-y-5">
+              {/* Item Card */}
+              <div className="rounded-lg border border-border bg-muted/30 p-4">
+                <div className="flex items-start gap-3.5">
+                  {purchaseType === "individual" && (design || course) ? (
+                    (design?.previewImageUrl || course?.previewImageUrl) ? (
                       <img
                         src={design?.previewImageUrl || course?.previewImageUrl}
                         alt={itemName}
-                        className="w-16 h-16 object-cover rounded-lg border border-gray-200"
+                        className="w-16 h-16 object-cover rounded-lg border border-border shrink-0 bg-muted"
                       />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-gray-900 font-semibold text-sm line-clamp-1">
-                        {itemName}
-                      </h4>
-                      {design?.category?.name && (
-                        <span className="inline-block px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium mt-1">
-                          {design.category.name}
+                    ) : (
+                      <div className="w-16 h-16 rounded-lg border border-border bg-muted flex items-center justify-center shrink-0 text-muted-foreground">
+                        <ShoppingBag className="w-6 h-6" />
+                      </div>
+                    )
+                  ) : (
+                    <div className="w-16 h-16 rounded-lg border border-border bg-card flex items-center justify-center shrink-0 text-primary">
+                      <Layers className="w-7 h-7" />
+                    </div>
+                  )}
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-sm font-bold text-foreground line-clamp-1">
+                          {itemName}
+                        </h3>
+                        {itemDescription && (
+                          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                            {itemDescription}
+                          </p>
+                        )}
+                      </div>
+                      {hasDiscount && discountPercentage > 0 && (
+                        <span className="shrink-0 px-2 py-0.5 rounded text-[11px] font-bold bg-green-50 text-green-700 border border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-800">
+                          {discountPercentage}% OFF
                         </span>
                       )}
                     </div>
-                  </div>
-                )}
 
-                {/* Pricing - Compact */}
-                <div className="space-y-2 bg-white rounded-lg p-3 border border-blue-100">
-                  <div className="flex justify-between items-center text-gray-700 text-sm">
-                    <span className="font-medium">Price</span>
-                    {hasDiscount ? (
-                      <div className="text-right">
-                        <span className="line-through text-gray-400 text-xs mr-1">
-                          {currencyDisplay}
-                          {formatPrice(originalPrice)}
+                    <div className="flex items-center gap-2 mt-2">
+                      {purchaseType === "subscription" ? (
+                        <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
+                          {plan?.duration || "Monthly"} Plan
                         </span>
-                        <span className="text-gray-900 font-bold">
-                          {currencyDisplay}
-                          {formatPrice(itemPrice)}
+                      ) : design?.category?.name ? (
+                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-muted text-muted-foreground border border-border">
+                          {design.category.name}
                         </span>
-                      </div>
-                    ) : (
-                      <span className="font-bold">
-                        {currencyDisplay}
-                        {formatPrice(originalPrice)}
-                      </span>
-                    )}
+                      ) : null}
+                    </div>
                   </div>
+                </div>
+
+                {/* Pricing Summary */}
+                <div className="border-t border-border mt-4 pt-3.5 space-y-2">
+                  <div className="flex justify-between items-center text-xs text-muted-foreground">
+                    <span>Base Price</span>
+                    <span className={hasDiscount ? "line-through" : "text-foreground font-medium"}>
+                      {currencyDisplay}{formatPrice(originalPrice)}
+                    </span>
+                  </div>
+
                   {hasDiscount && discountPercentage > 0 && (
-                    <div className="flex justify-between text-green-600 text-xs bg-green-50 px-2 py-1 rounded">
-                      <span className="font-medium">
-                        Discount ({discountPercentage}%)
-                      </span>
+                    <div className="flex justify-between items-center text-xs text-green-600 dark:text-green-400">
+                      <span>Discount ({discountPercentage}%)</span>
                       <span className="font-semibold">
-                        -{currencyDisplay}
-                        {formatPrice(originalPrice - itemPrice)}
+                        -{currencyDisplay}{formatPrice(originalPrice - itemPrice)}
                       </span>
                     </div>
                   )}
-                  <div className="border-t border-gray-200 pt-2 flex justify-between items-center">
-                    <span className="text-gray-900 font-bold">Total</span>
-                    <span className="text-xl font-bold text-blue-600">
-                      {currencyDisplay}
-                      {formatPrice(itemPrice)}
+
+                  <div className="flex justify-between items-center pt-2 border-t border-border text-foreground">
+                    <span className="text-sm font-bold">Total Due</span>
+                    <span className="text-xl font-extrabold text-foreground tracking-tight">
+                      {currencyDisplay}{formatPrice(itemPrice)}
                     </span>
                   </div>
                 </div>
               </div>
 
-              {/* What's Included - Compact */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <h4 className="font-semibold text-gray-900 mb-2 text-sm flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                  What's Included
-                </h4>
-                {purchaseType === "subscription" && plan?.features && (
-                  <ul className="space-y-1">
+              {/* What's Included */}
+              <div className="rounded-lg border border-border bg-card p-4 space-y-2.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Order Inclusions
+                </span>
+                {purchaseType === "subscription" && plan?.features ? (
+                  <ul className="space-y-2">
                     {plan.features.map((feature, index) => (
-                      <li
-                        key={index}
-                        className="flex items-start text-xs text-gray-700"
-                      >
-                        <CheckCircle className="w-3 h-3 text-green-600 mr-1.5 flex-shrink-0 mt-0.5" />
+                      <li key={index} className="flex items-start text-xs text-foreground">
+                        <CheckCircle className="w-3.5 h-3.5 text-primary mr-2 shrink-0 mt-0.5" />
                         <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
-                )}
-                {purchaseType === "individual" && (
-                  <ul className="space-y-1">
-                    <li className="flex items-start text-xs text-gray-700">
-                      <CheckCircle className="w-3 h-3 text-green-600 mr-1.5 flex-shrink-0 mt-0.5" />
-                      <span>Instant download access</span>
+                ) : (
+                  <ul className="space-y-2">
+                    <li className="flex items-start text-xs text-foreground">
+                      <CheckCircle className="w-3.5 h-3.5 text-primary mr-2 shrink-0 mt-0.5" />
+                      <span>Instant digital download (ZIP archive)</span>
                     </li>
-                    <li className="flex items-start text-xs text-gray-700">
-                      <CheckCircle className="w-3 h-3 text-green-600 mr-1.5 flex-shrink-0 mt-0.5" />
-                      <span>Lifetime access to files</span>
+                    <li className="flex items-start text-xs text-foreground">
+                      <CheckCircle className="w-3.5 h-3.5 text-primary mr-2 shrink-0 mt-0.5" />
+                      <span>Commercial license included</span>
                     </li>
-                    <li className="flex items-start text-xs text-gray-700">
-                      <CheckCircle className="w-3 h-3 text-green-600 mr-1.5 flex-shrink-0 mt-0.5" />
-                      <span>Commercial use license</span>
+                    <li className="flex items-start text-xs text-foreground">
+                      <CheckCircle className="w-3.5 h-3.5 text-primary mr-2 shrink-0 mt-0.5" />
+                      <span>Lifetime access from your dashboard</span>
                     </li>
                   </ul>
                 )}
               </div>
 
               {/* Trust Badges */}
-              <div className="grid grid-cols-3 gap-2 py-3 border-y border-gray-200">
-                <div className="text-center">
-                  <Shield className="w-6 h-6 text-blue-600 mx-auto mb-1" />
-                  <p className="text-[10px] font-semibold text-gray-700">
-                    Secured by
-                  </p>
-                  <p className="text-xs font-bold text-blue-600">Stripe</p>
+              <div className="grid grid-cols-3 gap-2.5 py-2">
+                <div className="p-2.5 rounded-lg border border-border bg-muted/20 text-center">
+                  <Lock className="w-4 h-4 text-foreground mx-auto mb-1" />
+                  <p className="text-[11px] font-semibold text-foreground">256-Bit SSL</p>
+                  <p className="text-[10px] text-muted-foreground">Bank-Grade</p>
                 </div>
-                <div className="text-center border-x border-gray-200">
-                  <Lock className="w-6 h-6 text-green-600 mx-auto mb-1" />
-                  <p className="text-[10px] font-semibold text-gray-700">
-                    256-bit
-                  </p>
-                  <p className="text-xs font-bold text-green-600">SSL</p>
+                <div className="p-2.5 rounded-lg border border-border bg-muted/20 text-center">
+                  <Shield className="w-4 h-4 text-foreground mx-auto mb-1" />
+                  <p className="text-[11px] font-semibold text-foreground">Stripe Secure</p>
+                  <p className="text-[10px] text-muted-foreground">Encrypted</p>
                 </div>
-                <div className="text-center">
-                  <CheckCircle className="w-6 h-6 text-indigo-600 mx-auto mb-1" />
-                  <p className="text-[10px] font-semibold text-gray-700">PCI</p>
-                  <p className="text-xs font-bold text-indigo-600">Compliant</p>
+                <div className="p-2.5 rounded-lg border border-border bg-muted/20 text-center">
+                  <Download className="w-4 h-4 text-foreground mx-auto mb-1" />
+                  <p className="text-[11px] font-semibold text-foreground">Instant Access</p>
+                  <p className="text-[10px] text-muted-foreground">Auto-activated</p>
                 </div>
               </div>
 
-              <button
-                onClick={handleInitiatePayment}
-                disabled={isCreatingIntent}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-400 text-white py-3.5 rounded-lg font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isCreatingIntent ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Preparing...</span>
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-4 h-4" />
-                    <span>Continue to Secure Payment</span>
-                  </>
-                )}
-              </button>
-
-              <p className="text-center text-xs text-gray-500">
-                Your payment information is encrypted and secure
-              </p>
+              {/* Action Button */}
+              <div className="space-y-2 pt-1">
+                <button
+                  type="button"
+                  onClick={handleInitiatePayment}
+                  disabled={isCreatingIntent}
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 py-3 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
+                >
+                  {isCreatingIntent ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Setting up checkout...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Lock className="w-4 h-4" />
+                      <span>Proceed to Payment ({currencyDisplay}{formatPrice(itemPrice)})</span>
+                    </>
+                  )}
+                </button>
+                <p className="text-center text-[11px] text-muted-foreground">
+                  By completing this purchase you agree to the terms of service.
+                </p>
+              </div>
             </div>
           )}
 
-          {/* Step: Processing */}
+          {/* STEP: PROCESSING */}
           {step === "processing" && (
-            <div className="flex flex-col items-center justify-center py-16 animate-in fade-in zoom-in duration-500">
-              <div className="relative mb-6">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center animate-pulse">
-                  <Loader2 className="w-12 h-12 animate-spin text-white" />
-                </div>
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 animate-ping opacity-20" />
+            <div className="flex flex-col items-center justify-center py-12 space-y-3 text-center">
+              <div className="w-12 h-12 rounded-lg border border-border bg-muted/40 flex items-center justify-center">
+                <Loader2 className="w-6 h-6 animate-spin text-primary" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                Preparing Your Payment
-              </h3>
-              <p className="text-gray-600 text-center max-w-sm">
-                Setting up a secure connection with our payment provider...
+              <p className="text-base font-bold text-foreground">
+                Initializing Secure Checkout
+              </p>
+              <p className="text-xs text-muted-foreground max-w-xs">
+                Establishing an encrypted session with Stripe payment gateway...
               </p>
             </div>
           )}
 
-          {/* Step: Payment Form */}
+          {/* STEP: PAYMENT FORM */}
           {step === "payment" && clientSecret && (
-            <div className="animate-in fade-in slide-in-from-right duration-500">
+            <div className="space-y-4">
+              <div className="p-3 rounded-lg border border-border bg-muted/30 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2 text-foreground font-medium">
+                  <Shield className="w-4 h-4 text-primary" />
+                  <span>Encrypted Payment Processing</span>
+                </div>
+                <div className="font-bold text-foreground">
+                  {currencyDisplay}{formatPrice(itemPrice)}
+                </div>
+              </div>
+
               <StripeProvider clientSecret={clientSecret}>
                 <PaymentForm
                   onSuccess={handlePaymentSuccess}
@@ -515,78 +499,74 @@ const PurchaseModal: React.FC<PurchaseModalProps> = ({
                   amount={itemPrice}
                   currency={currencyDisplay}
                   itemName={itemName}
-                  returnUrl={`${window.location.origin}/payment/success?payment_intent=${paymentIntentId}`}
+                  returnUrl={
+                    typeof window !== "undefined"
+                      ? `${window.location.origin}/payment/success?payment_intent=${paymentIntentId}`
+                      : ""
+                  }
                 />
               </StripeProvider>
             </div>
           )}
 
-          {/* Step: Success */}
+          {/* STEP: SUCCESS */}
           {step === "success" && paymentIntentId && (
-            <div className="animate-in fade-in zoom-in duration-500">
+            <div className="space-y-5">
               <PaymentStatusChecker
                 paymentIntentId={paymentIntentId}
                 onSuccess={handlePaymentConfirmed}
               />
 
-              {/* Auto-redirect notice */}
-              <div className="mt-6 text-center">
-                <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-lg border border-green-200 mb-4">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">
-                    {isRedirecting
-                      ? "Closing modal... You can now download!"
-                      : "You can now download this design!"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
                 <button
+                  type="button"
                   onClick={onClose}
                   disabled={isRedirecting}
-                  className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-400 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] disabled:scale-100 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 py-2.5 px-4 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2"
                 >
                   <Download className="w-4 h-4" />
-                  Download Now
+                  <span>{isRedirecting ? "Updating..." : "Access Item"}</span>
                 </button>
                 <button
-                  onClick={() => router.push("/dashboard/purchases")}
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    router.push("/dashboard/purchases");
+                  }}
+                  className="flex-1 border border-border bg-card text-foreground hover:bg-muted py-2.5 px-4 rounded-lg font-semibold text-sm transition-colors flex items-center justify-center gap-2"
                 >
-                  View Purchases
+                  <span>View Purchases</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* Step: Error */}
+          {/* STEP: ERROR */}
           {step === "error" && (
-            <div className="space-y-6 animate-in fade-in zoom-in duration-500">
-              <div className="text-center py-8">
-                <div className="relative inline-block mb-6">
-                  <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center">
-                    <AlertCircle className="w-10 h-10 text-red-600" />
-                  </div>
-                  <div className="absolute inset-0 rounded-full bg-red-500 animate-ping opacity-20" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  Payment Failed
-                </h3>
-                <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-4 max-w-md mx-auto">
-                  <p className="text-red-700 font-medium">{errorMessage}</p>
+            <div className="space-y-5 py-4 text-center">
+              <div className="w-12 h-12 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 flex items-center justify-center mx-auto text-red-600 dark:text-red-400">
+                <AlertCircle className="w-6 h-6" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-base font-bold text-foreground">Transaction Failed</p>
+                <div className="p-3 rounded-lg border border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20 text-xs text-red-700 dark:text-red-400 max-w-md mx-auto">
+                  {errorMessage}
                 </div>
               </div>
-              <div className="flex gap-4">
+
+              <div className="flex gap-2.5 pt-2 max-w-sm mx-auto">
                 <button
+                  type="button"
                   onClick={() => setStep("details")}
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                  className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 py-2.5 rounded-lg font-semibold text-sm transition-colors"
                 >
                   Try Again
                 </button>
                 <button
+                  type="button"
                   onClick={resetAndClose}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-4 rounded-xl font-bold transition-all duration-300 hover:scale-[1.02]"
+                  className="flex-1 border border-border bg-card text-foreground hover:bg-muted py-2.5 rounded-lg font-semibold text-sm transition-colors"
                 >
                   Cancel
                 </button>

@@ -13,6 +13,7 @@ import {
   Calendar,
   Shield,
   ArrowLeft,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -46,10 +47,10 @@ export default function DesignLikersPage() {
 
   if (designLoading || isLoading) {
     return (
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="text-center py-20">
-          <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto" />
-          <p className="mt-4 text-muted-foreground">Loading design likers...</p>
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-3" />
+          <p className="text-sm text-muted-foreground">Loading design likers...</p>
         </div>
       </div>
     );
@@ -57,11 +58,11 @@ export default function DesignLikersPage() {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="text-center py-20 bg-card rounded-2xl shadow-sm border border-border">
-          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-destructive text-secondary">
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <div className="text-center p-8 bg-card rounded-xl border border-border max-w-md w-full">
+          <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-destructive/10 text-destructive">
             <svg
-              className="w-12 h-12"
+              className="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -74,14 +75,18 @@ export default function DesignLikersPage() {
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-foreground mb-3">
+          <h2 className="text-lg font-bold text-foreground mb-2">
             Error Loading Likers
           </h2>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-sm text-muted-foreground mb-4">
             Failed to load design likers. You may not have permission to view
             this information.
           </p>
-          <Button onClick={() => window.history.back()} variant="outline">
+          <Button
+            onClick={() => window.history.back()}
+            variant="outline"
+            className="rounded-lg border-border"
+          >
             Go Back
           </Button>
         </div>
@@ -92,283 +97,239 @@ export default function DesignLikersPage() {
   return (
     <div className="space-y-6">
       {/* Breadcrumb and Back Button */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/admin/designs">
-            <Button variant="outline" size="sm" className="gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Designs
-            </Button>
-          </Link>
-          <div className="h-6 w-px bg-border"></div>
-          <nav className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Link href="/admin" className="hover:text-primary">
+      <div className="rounded-xl border border-border bg-card p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-1">
+            <Link href="/admin" className="hover:text-primary transition-colors">
               Admin
             </Link>
             <span>/</span>
-            <Link href="/admin/designs" className="hover:text-primary">
+            <Link
+              href="/admin/designs"
+              className="hover:text-primary transition-colors"
+            >
               Designs
             </Link>
             <span>/</span>
-            <span className="text-foreground font-medium">Likers</span>
-          </nav>
+            <span className="text-foreground font-semibold">Likers</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            Design Likers
+          </h1>
         </div>
+
+        <Link href="/admin/designs">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2 rounded-lg border-border text-sm font-semibold"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Designs
+          </Button>
+        </Link>
       </div>
 
       {/* Header with Design Info */}
-      <div>
-        <div className="relative bg-card/95 dark:bg-[#141414]/95 rounded-3xl shadow-2xl dark:shadow-primary/20 border border-border/80 overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none opacity-40 bg-gradient-to-br from-primary/10 via-transparent to-primary/20 blur-3xl" />
-          <div className="relative grid md:grid-cols-3 gap-6 p-6">
-            {/* Design Preview */}
-            <div className="md:col-span-1">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br from-primary/15 via-primary/5 to-transparent dark:from-[#1e1e1e] dark:via-[#141414] dark:to-[#0a0a0a]">
-                {design?.previewImageUrls &&
-                design.previewImageUrls.length > 0 ? (
-                  <Image
-                    src={design.previewImageUrls[0]}
-                    alt={design.title}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg
-                      className="w-16 h-16 text-muted-foreground/60"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                  </div>
-                )}
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
+        <div className="grid md:grid-cols-3 gap-6 p-5 sm:p-6">
+          {/* Design Preview */}
+          <div className="md:col-span-1">
+            <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted/40 border border-border">
+              {design?.previewImageUrls && design.previewImageUrls.length > 0 ? (
+                <Image
+                  src={design.previewImageUrls[0]}
+                  alt={design.title}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-muted-foreground/40">
+                  <User className="w-12 h-12" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Design Info */}
+          <div className="md:col-span-2 flex flex-col justify-between">
+            <div>
+              <div className="flex items-start justify-between gap-4 mb-3">
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground mb-1">
+                    {design?.title}
+                  </h2>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {design?.description}
+                  </p>
+                </div>
+                <Link
+                  href={`/designs/${designId}`}
+                  className="text-primary hover:underline text-xs font-semibold whitespace-nowrap"
+                >
+                  View Details →
+                </Link>
+              </div>
+
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="bg-primary/10 text-primary px-2.5 py-1 rounded-md font-semibold border border-primary/20">
+                  {design?.mainCategory?.name || "Uncategorized"}
+                  {design?.subCategory && ` > ${design.subCategory.name}`}
+                </span>
+                <span className="text-base font-bold text-foreground">
+                  {design?.currencyDisplay}
+                  {design?.discountedPrice &&
+                  design.discountedPrice < design.basePrice
+                    ? design.discountedPrice
+                    : design.basePrice}
+                </span>
+                {design?.discountedPrice &&
+                  design.discountedPrice < design.basePrice && (
+                    <span className="text-xs text-muted-foreground line-through">
+                      {design?.currencyDisplay} {design?.basePrice}
+                    </span>
+                  )}
               </div>
             </div>
 
-            {/* Design Info */}
-            <div className="md:col-span-2 flex flex-col justify-between">
-              <div>
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h1 className="text-3xl font-black text-foreground mb-2">
-                      {design?.title}
-                    </h1>
-                    <p className="text-muted-foreground line-clamp-2">
-                      {design?.description}
-                    </p>
-                  </div>
-                  <Link
-                    href={`/designs/${designId}`}
-                    className="text-primary hover:text-primary/80 font-semibold text-sm"
-                  >
-                    View Design →
-                  </Link>
-                </div>
-
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <span className="bg-primary/10 text-primary px-3 py-1 rounded-full font-semibold border border-primary/20">
-                    {design?.mainCategory?.name || "Uncategorized"}
-                    {design?.subCategory && ` > ${design.subCategory.name}`}
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-3 mt-4">
+              <div className="bg-muted/30 rounded-xl p-3.5 border border-border">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" />
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Total Likes
                   </span>
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-foreground">
-                      <span className="text-xl font-bold">
-                        {design?.currencyDisplay}
-                      </span>
-                      {design?.discountedPrice &&
-                      design.discountedPrice < design.basePrice
-                        ? design.discountedPrice
-                        : design.basePrice}
-                    </span>
-                    {design?.discountedPrice &&
-                      design.discountedPrice < design.basePrice && (
-                        <span className="text-xs text-muted-foreground line-through">
-                          {design?.currencyDisplay} {design?.basePrice}
-                        </span>
-                      )}
-                  </div>
                 </div>
+                <p className="text-xl font-bold text-foreground">
+                  {design?.likesCount || 0}
+                </p>
               </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="bg-gradient-to-br from-rose-500/10 via-rose-500/5 to-transparent dark:from-rose-500/20 dark:via-[#141414] dark:to-[#0a0a0a] rounded-2xl p-4 border border-rose-500/30 shadow-lg dark:shadow-rose-500/10">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-                    <span className="text-xs font-medium text-red-500">
-                      Total Likes
-                    </span>
-                  </div>
-                  <p className="text-2xl font-bold text-foreground">
-                    {design?.likesCount || 0}
-                  </p>
+              <div className="bg-muted/30 rounded-xl p-3.5 border border-border">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Download className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Downloads
+                  </span>
                 </div>
-                <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent dark:from-primary/20 dark:via-[#141414] dark:to-[#0a0a0a] rounded-2xl p-4 border border-primary/30 shadow-lg dark:shadow-primary/10">
-                  <div className="flex items-center gap-2 mb-1">
-                    <svg
-                      className="w-4 h-4 text-primary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                      />
-                    </svg>
-                    <span className="text-xs font-medium text-primary">
-                      Downloads
-                    </span>
-                  </div>
-                  <p className="text-2xl font-bold text-foreground">
-                    {design?.downloadCount || 0}
-                  </p>
+                <p className="text-xl font-bold text-foreground">
+                  {design?.downloadCount || 0}
+                </p>
+              </div>
+
+              <div className="bg-muted/30 rounded-xl p-3.5 border border-border">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <User className="w-3.5 h-3.5 text-purple-600" />
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    Unique Likers
+                  </span>
                 </div>
-                <div className="bg-gradient-to-br from-violet-500/10 via-violet-500/5 to-transparent dark:from-violet-500/20 dark:via-[#141414] dark:to-[#0a0a0a] rounded-2xl p-4 border border-violet-500/30 shadow-lg dark:shadow-violet-500/10">
-                  <div className="flex items-center gap-2 mb-1">
-                    <User className="w-4 h-4 text-purple-500" />
-                    <span className="text-xs font-medium text-purple-500">
-                      Unique Likers
-                    </span>
-                  </div>
-                  <p className="text-2xl font-bold text-foreground">
-                    {pagination?.totalItems || 0}
-                  </p>
-                </div>
+                <p className="text-xl font-bold text-foreground">
+                  {pagination?.totalItems || 0}
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Likers Section */}
-      <div>
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
-            <Heart className="w-7 h-7 text-white fill-white" />
-          </div>
-          <div>
-            <h2 className="text-2xl font-black text-foreground">
-              Users Who Liked This Design
-            </h2>
-            <p className="text-muted-foreground mt-1">
-              {pagination?.totalItems || 0} total{" "}
-              {pagination?.totalItems === 1 ? "user" : "users"}
-            </p>
-          </div>
-        </div>
+      {/* Likers List Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-bold text-foreground">
+          Users Who Liked ({pagination?.totalItems || 0})
+        </h2>
       </div>
 
       {/* Content */}
       {likers.length === 0 ? (
-        <div className="text-center py-20 bg-card/95 dark:bg-[#141414]/95 rounded-3xl shadow-2xl border border-border/70">
-          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-transparent dark:from-primary/20 dark:via-[#141414] dark:to-[#0a0a0a]">
-            <Heart className="w-12 h-12 text-primary" />
-          </div>
-          <h3 className="text-2xl font-bold text-foreground mb-3">
+        <div className="text-center py-16 bg-card rounded-xl border border-border">
+          <Heart className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+          <h3 className="text-base font-semibold text-foreground mb-1">
             No Likes Yet
           </h3>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            This design hasn&apos;t received any likes yet. Be the first to like
-            it!
+          <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+            This design hasn&apos;t received any likes yet.
           </p>
         </div>
       ) : (
         <>
-          {/* Likers List */}
-          <div className="bg-card/95 dark:bg-[#141414]/95 rounded-3xl shadow-2xl border border-border/80 overflow-hidden">
+          {/* Likers Table */}
+          <div className="bg-card rounded-xl border border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-muted/80 dark:bg-[#141414]/80 border-b border-border/80">
+                <thead className="bg-muted/50 border-b border-border">
                   <tr>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       User
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       Email
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       Role
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                       Liked On
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {likers.map((liker: DesignLiker, index: number) => (
+                  {likers.map((liker: DesignLiker) => (
                     <tr
                       key={liker.user._id}
-                      className="hover:bg-primary/5 dark:hover:bg-primary/10 transition-colors"
+                      className="hover:bg-muted/30 transition-colors"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-5 py-3.5 whitespace-nowrap">
                         <div className="flex items-center gap-3">
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
-                              index % 5 === 0
-                                ? "bg-gradient-to-br from-blue-500 to-blue-600"
-                                : index % 5 === 1
-                                ? "bg-gradient-to-br from-purple-500 to-purple-600"
-                                : index % 5 === 2
-                                ? "bg-gradient-to-br from-green-500 to-green-600"
-                                : index % 5 === 3
-                                ? "bg-gradient-to-br from-orange-500 to-orange-600"
-                                : "bg-gradient-to-br from-pink-500 to-pink-600"
-                            }`}
-                          >
+                          <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center font-bold text-primary text-xs">
                             {liker.user.name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <p className="font-semibold text-foreground">
+                            <p className="text-sm font-semibold text-foreground">
                               {liker.user.name}
                             </p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-xs text-muted-foreground font-mono">
                               ID: {liker.user._id.slice(0, 8)}...
                             </p>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2 text-muted-foreground">
-                          <Mail className="w-4 h-4 text-muted-foreground/60" />
-                          {liker.user.email}
+                      <td className="px-5 py-3.5 whitespace-nowrap">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Mail className="w-3.5 h-3.5 text-muted-foreground/60" />
+                          <span>{liker.user.email}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-5 py-3.5 whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-semibold ${
                             liker.user.role === "admin"
-                              ? "bg-violet-500/10 text-violet-400 border border-violet-500/30"
+                              ? "bg-purple-500/10 text-purple-600 border border-purple-500/20"
                               : "bg-primary/10 text-primary border border-primary/20"
                           }`}
                         >
                           {liker.user.role === "admin" && (
                             <Shield className="w-3 h-3" />
                           )}
-                          {liker.user.role}
+                          <span className="capitalize">{liker.user.role}</span>
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="w-4 h-4 text-muted-foreground/60" />
-                          {new Date(liker.createdAt).toLocaleDateString(
-                            "en-US",
-                            {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
+                      <td className="px-5 py-3.5 whitespace-nowrap">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <Calendar className="w-3.5 h-3.5 text-muted-foreground/60" />
+                          <span>
+                            {new Date(liker.createdAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
+                          </span>
                         </div>
                       </td>
                     </tr>
@@ -380,24 +341,24 @@ export default function DesignLikersPage() {
 
           {/* Pagination */}
           {pagination && pagination.totalPages > 1 && (
-            <div className="mt-8 flex justify-center items-center gap-2">
+            <div className="flex justify-center items-center gap-2 pt-2">
               <Button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
                 variant="outline"
-                className="px-4 py-2 rounded-xl"
+                className="px-3.5 py-1.5 rounded-lg border-border text-xs font-semibold"
               >
                 Previous
               </Button>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 {Array.from({ length: pagination.totalPages }, (_, i) => (
                   <button
                     key={i + 1}
                     onClick={() => setPage(i + 1)}
-                    className={`w-10 h-10 rounded-xl font-semibold transition-all ${
+                    className={`w-8 h-8 rounded-lg text-xs font-semibold transition-colors ${
                       page === i + 1
-                        ? "bg-gradient-to-r from-primary to-primary/60 text-primary-foreground shadow-lg dark:shadow-primary/20"
-                        : "bg-card/90 text-muted-foreground hover:bg-primary/10 border border-border/80"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-card text-muted-foreground hover:bg-muted border border-border"
                     }`}
                   >
                     {i + 1}
@@ -410,7 +371,7 @@ export default function DesignLikersPage() {
                 }
                 disabled={page === pagination.totalPages}
                 variant="outline"
-                className="px-4 py-2 rounded-xl"
+                className="px-3.5 py-1.5 rounded-lg border-border text-xs font-semibold"
               >
                 Next
               </Button>

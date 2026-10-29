@@ -1,63 +1,26 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useGetMyDownloadsQuery } from "@/services/api";
 import {
   Calendar,
   Package,
-  Sparkles,
-  ShoppingBag,
-  Loader2,
-  AlertCircle,
-  Filter,
-  X,
   RefreshCw,
-  TrendingUp,
+  Clock,
+  Filter,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  Download,
   FileDown,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-
-interface DownloadHistoryItem {
-  _id: string;
-  design: {
-    _id: string;
-    title: string;
-    previewImageUrl?: string;
-    price: number;
-    designerName?: string;
-  };
-  purchase: {
-    _id: string;
-    purchaseType: "individual" | "subscription";
-    currencyDisplay: string;
-    currencyCode: string;
-    amount: number;
-  };
-  downloadType: "individual_purchase" | "subscription";
-  downloadDate: string;
-  createdAt: string;
-}
-
-interface DownloadHistoryResponse {
-  success: boolean;
-  message: string;
-  data: DownloadHistoryItem[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
-}
+import { Button } from "@/components/ui/button";
 
 export default function DownloadsHistoryPage() {
   const [page, setPage] = useState(1);
-  const [limit] = useState(12);
+  const limit = 12;
   const [sortBy, setSortBy] = useState<"downloadDate" | "createdAt">(
     "downloadDate"
   );
@@ -65,9 +28,7 @@ export default function DownloadsHistoryPage() {
   const [downloadType, setDownloadType] = useState<
     "all" | "individual_purchase" | "subscription"
   >("all");
-  const [showFilters, setShowFilters] = useState(false);
 
-  // Memoize query params to prevent unnecessary refetches
   const queryParams = useMemo(
     () => ({
       page,
@@ -79,344 +40,234 @@ export default function DownloadsHistoryPage() {
     [page, limit, sortBy, sortOrder, downloadType]
   );
 
-  const {
-    data: downloadsData,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useGetMyDownloadsQuery(queryParams);
+  const { data, isLoading, refetch } = useGetMyDownloadsQuery(queryParams);
 
-  // Reset page when filters change
-  useEffect(() => {
-    if (page !== 1) {
-      setPage(1);
+  const downloads = data?.data || [];
+  const pagination = data?.pagination;
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "—";
+    try {
+      return new Date(dateString).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return "—";
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sortBy, sortOrder, downloadType]);
-
-  const downloads = (downloadsData as DownloadHistoryResponse)?.data || [];
-  const pagination = (downloadsData as DownloadHistoryResponse)?.pagination;
-
-  const handleClearFilters = () => {
-    setSortBy("downloadDate");
-    setSortOrder("desc");
-    setDownloadType("all");
-    setPage(1);
   };
-
-  const getDownloadTypeColor = (type: string) => {
-    return type === "individual_purchase"
-      ? "bg-blue-100 text-blue-700"
-      : "bg-purple-100 text-purple-700";
-  };
-
-  const getDownloadTypeIcon = (type: string) => {
-    return type === "individual_purchase" ? (
-      <ShoppingBag className="w-4 h-4" />
-    ) : (
-      <Sparkles className="w-4 h-4" />
-    );
-  };
-
-  // Calculate statistics
-  const totalDownloads = pagination?.totalItems || 0;
-  const individualDownloads = downloads.filter(
-    (d) => d.downloadType === "individual_purchase"
-  ).length;
-  const subscriptionDownloads = downloads.filter(
-    (d) => d.downloadType === "subscription"
-  ).length;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Downloads History</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          View and track all your design downloads
-        </p>
-      </div>
-
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-primary rounded-lg p-5 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm opacity-90">Total Downloads</p>
-              <p className="text-3xl font-bold mt-1">{totalDownloads}</p>
-            </div>
-            <FileDown className="w-10 h-10 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-purple-600 rounded-lg p-5 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm opacity-90">Subscription Downloads</p>
-              <p className="text-3xl font-bold mt-1">{subscriptionDownloads}</p>
-            </div>
-            <Sparkles className="w-10 h-10 opacity-80" />
-          </div>
-        </div>
-
-        <div className="bg-primary rounded-lg p-5 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm opacity-90">Individual Downloads</p>
-              <p className="text-3xl font-bold mt-1">{individualDownloads}</p>
-            </div>
-            <ShoppingBag className="w-10 h-10 opacity-80" />
-          </div>
-        </div>
-      </div>
-
-      {/* Filters and Controls */}
-      <div className="bg-card rounded-lg border border-border p-4 space-y-4">
-        {/* Top Row - Filter Toggle and Refresh */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center space-x-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+    <div className="space-y-8">
+      {/* Breadcrumb Navigation */}
+      <nav>
+        <div className="flex items-center space-x-2 text-sm font-semibold">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            <Filter className="w-4 h-4" />
-            <span>Filters</span>
-            {showFilters ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
-
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-muted-foreground">
-              {pagination?.totalItems || 0} total downloads
-            </span>
-            <button
-              onClick={() => refetch()}
-              disabled={isFetching}
-              className="p-2 text-muted-foreground hover:text-primary hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50"
-              title="Refresh downloads"
-            >
-              <RefreshCw
-                className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`}
-              />
-            </button>
-          </div>
+            Home
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Dashboard
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <span className="text-foreground">Download History</span>
         </div>
+      </nav>
 
-        {/* Filters Panel */}
-        {showFilters && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-border">
-            {/* Download Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Download Type
-              </label>
-              <select
-                value={downloadType}
-                onChange={(e) =>
-                  setDownloadType(
-                    e.target.value as
-                      | "all"
-                      | "individual_purchase"
-                      | "subscription"
-                  )
-                }
-                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">All Types</option>
-                <option value="individual_purchase">Individual Purchase</option>
-                <option value="subscription">Subscription</option>
-              </select>
-            </div>
-
-            {/* Sort By Filter */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Sort By
-              </label>
-              <select
-                value={sortBy}
-                onChange={(e) =>
-                  setSortBy(e.target.value as "downloadDate" | "createdAt")
-                }
-                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="downloadDate">Download Date</option>
-                <option value="createdAt">Created Date</option>
-              </select>
-            </div>
-
-            {/* Sort Order Filter */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Sort Order
-              </label>
-              <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="desc">Newest First</option>
-                <option value="asc">Oldest First</option>
-              </select>
-            </div>
-
-            {/* Clear Filters Button */}
-            <div className="flex items-end">
-              <button
-                onClick={handleClearFilters}
-                className="w-full px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2 text-sm font-medium"
-              >
-                <X className="w-4 h-4" />
-                <span>Clear</span>
-              </button>
-            </div>
+      {/* Header Section (Matching Categories Style) */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2.5">
+            Activity Log
           </div>
-        )}
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Download History
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1.5 max-w-xl leading-relaxed">
+            Audit trail of all asset downloads, historical timestamps, and license allocations.
+          </p>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading}
+            className="px-4 py-2.5 bg-card border border-border rounded-lg hover:bg-muted text-sm font-semibold text-foreground transition-colors flex items-center gap-2 disabled:opacity-50"
+          >
+            <RefreshCw
+              className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            <span>Refresh</span>
+          </button>
+          <Link href="/dashboard/available-downloads">
+            <Button
+              variant="outline"
+              className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-sm px-4 py-2.5 transition-colors"
+            >
+              Available Downloads
+            </Button>
+          </Link>
+        </div>
       </div>
 
-      {/* Downloads Grid */}
-      {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground text-sm">Loading your downloads...</p>
+      {/* Metrics Strip */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-border">
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {pagination?.totalItems || downloads.length}
           </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Total Downloads
+          </div>
+        </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-primary">
+            {downloads.filter((d: any) => d.downloadType === "subscription").length}
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Subscription Usage
+          </div>
+        </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {downloads.filter((d: any) => d.downloadType === "individual_purchase").length}
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Direct Purchases
+          </div>
+        </div>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            Original
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Asset Integrity
+          </div>
+        </div>
+      </div>
+
+      {/* Filters Toolbar */}
+      <div className="p-5 rounded-xl border border-border bg-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <Filter className="w-4 h-4 text-muted-foreground" />
+          <span className="text-sm font-bold text-foreground">Filter Records:</span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <select
+            value={downloadType}
+            onChange={(e) => setDownloadType(e.target.value as any)}
+            className="px-3 py-2 text-sm bg-card border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+          >
+            <option value="all">All License Types</option>
+            <option value="individual_purchase">Individual Purchase</option>
+            <option value="subscription">Subscription Quota</option>
+          </select>
+
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as any)}
+            className="px-3 py-2 text-sm bg-card border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+          >
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
+
+          {downloadType !== "all" && (
+            <button
+              onClick={() => setDownloadType("all")}
+              className="text-sm text-primary font-bold hover:underline ml-2"
+            >
+              Reset
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* History List */}
+      {isLoading ? (
+        <div className="py-24 text-center">
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wider">
+            Loading download history...
+          </p>
         </div>
       ) : downloads.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {downloads.map((download: DownloadHistoryItem) => (
-            <div
-              key={download._id}
-              className="bg-card rounded-lg border border-border overflow-hidden hover:shadow-md transition-all group"
-            >
-              
-              {/* Design Image */}
-              <Link
-                href={`/designs/${download.design._id}`}
-                className="block relative aspect-video overflow-hidden bg-muted"
+        <div className="space-y-4">
+          {downloads.map((item: any) => {
+            const previewUrl =
+              item.design?.previewImageUrls?.[0] || item.design?.previewImageUrl;
+
+            return (
+              <div
+                key={item._id}
+                className="p-5 rounded-xl border border-border bg-card hover:border-foreground/40 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
-                {(download.design as any)?.previewImageUrls?.[0] ||
-                download.design.previewImageUrl ? (
-                  <Image
-                    src={
-                      (download.design as any)?.previewImageUrls?.[0] ||
-                      download.design.previewImageUrl
-                    }
-                    alt={download.design.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Package className="w-16 h-16 text-muted-foreground" />
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  <div className="relative w-14 h-14 rounded-lg bg-muted border border-border overflow-hidden shrink-0">
+                    {previewUrl ? (
+                      <Image
+                        src={previewUrl}
+                        alt={item.design?.title || "Design"}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                        <FileDown className="w-6 h-6" />
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-base font-bold text-foreground truncate">
+                      {item.design?.title || "Design Asset"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 truncate">
+                      by {item.design?.designerName || "Designer"} • Downloaded {formatDate(item.downloadDate || item.createdAt)}
+                    </p>
+                  </div>
+                </div>
 
-                {/* Download Type Badge */}
-                <div className="absolute top-2 right-2">
-                  <span
-                    className={`px-2.5 py-1 ${getDownloadTypeColor(
-                      download.downloadType
-                    )} text-xs font-semibold rounded-lg flex items-center space-x-1`}
-                  >
-                    {getDownloadTypeIcon(download.downloadType)}
-                    <span>
-                      {download.downloadType === "individual_purchase"
-                        ? "Purchased"
-                        : "Subscription"}
-                    </span>
+                <div className="flex items-center gap-4 self-end sm:self-auto shrink-0">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold bg-muted text-foreground border border-border uppercase tracking-wider">
+                    {item.downloadType === "subscription" ? "Subscription" : "Direct Purchase"}
                   </span>
-                </div>
-              </Link>
-
-              {/* Download Info */}
-              <div className="p-4">
-                <Link href={`/designs/${download.design._id}`}>
-                  <h3 className="text-base font-bold text-foreground mb-2 hover:text-primary transition-colors line-clamp-1">
-                    {download.design.title}
-                  </h3>
-                </Link>
-
-                {((download.design as any)?.designer?.name ||
-                  download.design.designerName) && (
-                  <p className="text-sm text-muted-foreground mb-3">
-                    by{" "}
-                    {(download.design as any)?.designer?.name ||
-                      download.design.designerName}
-                  </p>
-                )}
-
-                <div className="space-y-2 mb-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      Downloaded
-                    </span>
-                    <span className="font-medium text-foreground">
-                      {new Date(download.downloadDate).toLocaleDateString()}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-muted-foreground flex items-center">
-                      <TrendingUp className="w-4 h-4 mr-1" />
-                      Amount
-                    </span>
-                    <span className="font-bold text-primary">
-                      {download?.purchase?.currencyDisplay || "$"}{download?.purchase?.amount.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex items-center space-x-2">
-                  <Link
-                    href={`/designs/${download.design._id}`}
-                    className="flex-1 py-2 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-center text-sm"
-                  >
-                    View Design
-                  </Link>
-                  <Link
-                    href={`/dashboard/purchases`}
-                    className="px-3 py-2 border border-border text-foreground rounded-lg hover:bg-muted/50 transition-colors"
-                    title="View Purchase"
-                  >
-                    <ShoppingBag className="w-4 h-4" />
-                  </Link>
+                  {item.design?._id && (
+                    <Link
+                      href={`/designs/${item.design._id}`}
+                      className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                      aria-label="View Asset"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Link>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
-        <div className="bg-card rounded-lg border border-border p-12 text-center">
-          <AlertCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">
-            No downloads yet
+        <div className="p-14 text-center rounded-xl border border-border bg-card">
+          <Clock className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-foreground">
+            No download activity recorded
           </h3>
-          <p className="text-muted-foreground mb-6 text-sm">
-            {downloadType !== "all"
-              ? `No ${
-                  downloadType === "individual_purchase"
-                    ? "individual purchase"
-                    : "subscription"
-                } downloads found.`
-              : "Start downloading designs to see your history here."}
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
+            You haven&apos;t downloaded any design assets yet. Downloaded files will be logged here.
           </p>
-          <div className="flex items-center justify-center space-x-4">
-            <Link
-              href="/dashboard/available-downloads"
-              className="px-6 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-sm"
-            >
-              Browse Available Downloads
-            </Link>
-            <Link
-              href="/pricing"
-              className="px-6 py-2.5 border border-border text-foreground font-medium rounded-lg hover:bg-muted/50 transition-colors text-sm"
-            >
-              View Pricing
+          <div className="mt-5">
+            <Link href="/dashboard/available-downloads">
+              <Button className="bg-primary text-primary-foreground font-semibold rounded-lg text-sm px-5 py-2.5 hover:bg-primary/90 transition-colors">
+                Available Downloads
+              </Button>
             </Link>
           </div>
         </div>
@@ -424,49 +275,28 @@ export default function DownloadsHistoryPage() {
 
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
-        <div className="flex items-center justify-center space-x-2">
-          <button
-            onClick={() => setPage(page - 1)}
-            disabled={!pagination.hasPrevPage || isFetching}
-            className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
-          >
-            Previous
-          </button>
-          <div className="flex items-center space-x-2">
-            {Array.from({ length: Math.min(5, pagination.totalPages) }).map(
-              (_, idx) => {
-                const pageNum = idx + 1;
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => setPage(pageNum)}
-                    className={`px-4 py-2 rounded-lg transition-colors text-sm font-medium ${
-                      page === pageNum
-                        ? "bg-primary text-white"
-                        : "border border-border hover:bg-muted/50"
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              }
-            )}
-            {pagination.totalPages > 5 && (
-              <>
-                <span className="text-muted-foreground text-sm">...</span>
-                <span className="px-4 py-2 text-foreground text-sm">
-                  of {pagination.totalPages}
-                </span>
-              </>
-            )}
+        <div className="flex items-center justify-between pt-5 border-t border-border">
+          <div className="text-sm text-muted-foreground">
+            Page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalItems} entries)
           </div>
-          <button
-            onClick={() => setPage(page + 1)}
-            disabled={!pagination.hasNextPage || isFetching}
-            className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
-          >
-            Next
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page <= 1 || isLoading}
+              className="px-4 py-2 rounded-lg border border-border bg-card text-foreground hover:bg-muted text-sm font-semibold disabled:opacity-40 transition-colors flex items-center gap-1.5"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Previous</span>
+            </button>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page >= pagination.totalPages || isLoading}
+              className="px-4 py-2 rounded-lg border border-border bg-card text-foreground hover:bg-muted text-sm font-semibold disabled:opacity-40 transition-colors flex items-center gap-1.5"
+            >
+              <span>Next</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
     </div>

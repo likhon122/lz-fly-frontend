@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Mail,
   Phone,
@@ -11,8 +11,10 @@ import {
   Globe,
   CheckCircle,
   AlertCircle,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -27,56 +29,56 @@ export default function ContactPage() {
   const contactInfo = [
     {
       icon: Mail,
-      title: "Email Us",
-      content: "support@designhub.com",
-      link: "mailto:support@designhub.com",
+      title: "Email Support",
+      content: "support@lzfly.com",
+      link: "mailto:support@lzfly.com",
     },
     {
       icon: Phone,
-      title: "Call Us",
+      title: "Direct Phone",
       content: "+1 (555) 123-4567",
       link: "tel:+15551234567",
     },
     {
       icon: MapPin,
-      title: "Visit Us",
-      content: "123 Design Street, Creative City, DC 12345",
+      title: "Headquarters",
+      content: "123 Creative Studio Way, San Francisco, CA",
       link: "https://maps.google.com",
     },
     {
       icon: Clock,
-      title: "Business Hours",
-      content: "Mon - Fri: 9AM - 6PM EST",
+      title: "Support Hours",
+      content: "Mon - Fri: 9:00 AM - 6:00 PM EST",
       link: null,
     },
   ];
 
   const faqCategories = [
     {
-      category: "General",
+      category: "Licensing & Purchases",
       icon: MessageSquare,
       questions: [
         {
-          q: "How do I purchase a design?",
-          a: "Browse our design collection, click on a design you like, and click the 'Purchase' button. You'll be guided through a secure checkout process.",
+          q: "How does the commercial license work?",
+          a: "Every design template and asset download from LZ Fly includes full commercial rights for client and personal projects. You are permitted to modify, deploy, and ship unlimited end-products.",
         },
         {
-          q: "What payment methods do you accept?",
-          a: "We accept credit cards, PayPal, Stripe, and bank transfers for your convenience.",
+          q: "What payment methods do you support?",
+          a: "We accept all major credit and debit cards, Stripe checkout, and corporate invoicing for annual enterprise tiers.",
         },
       ],
     },
     {
-      category: "Downloads",
+      category: "Vault Downloads & Formats",
       icon: Globe,
       questions: [
         {
-          q: "How do I download my purchased designs?",
-          a: "After purchase, go to your dashboard and click on 'My Downloads'. You can download your designs anytime from there.",
+          q: "Where do I retrieve purchased design files?",
+          a: "Directly from your User Dashboard under the Downloads Vault. Files remain accessible permanently with unlimited re-downloads.",
         },
         {
-          q: "Can I re-download designs?",
-          a: "Yes! Once purchased, you can download your designs as many times as needed from your account.",
+          q: "What formats are included in downloads?",
+          a: "Assets typically include Figma files, vector SVGs, component specs, code-ready CSS tokens, and raw raster previews.",
         },
       ],
     },
@@ -88,8 +90,7 @@ export default function ContactPage() {
     setStatus("idle");
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Contact form submitted:", formData);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setStatus("success");
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch {
@@ -100,7 +101,7 @@ export default function ContactPage() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setFormData({
       ...formData,
@@ -110,141 +111,209 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-24 border-b border-border">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--primary)/0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--primary)/0.2)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-          <div className="absolute top-20 left-20 w-72 h-72 bg-primary rounded-full blur-3xl animate-pulse opacity-20"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary rounded-full blur-3xl animate-pulse delay-700 opacity-20"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl md:text-7xl font-black mb-6 animate-fade-in gradient-text">
-              Get in Touch
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Breadcrumb Navigation */}
+        <nav className="mb-6">
+          <div className="flex items-center space-x-2 text-sm font-semibold">
+            <Link
+              href="/"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Home
+            </Link>
+            <span className="text-muted-foreground/40">/</span>
+            <span className="text-foreground">Contact</span>
+          </div>
+        </nav>
+
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 border-b border-border">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">
+              Support Desk
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight">
+              Contact Us
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed font-medium">
-              Have a question or need assistance? We&apos;re here to help! Reach
-              out to us and we&apos;ll get back to you as soon as possible.
+            <p className="text-base sm:text-lg text-muted-foreground mt-2 max-w-2xl leading-relaxed">
+              Have questions regarding subscriptions, custom licenses, or enterprise
+              integrations? Our support team is ready to assist.
             </p>
           </div>
-        </div>
-      </section>
-
-      {/* Contact Info Cards */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {contactInfo.map((info, index) => {
-              const Icon = info.icon;
-              return (
-                <div
-                  key={index}
-                  className="group bg-card rounded-3xl shadow-2xl p-8 hover:shadow-primary/20 transition-all duration-500 border-2 border-border hover:border-primary hover:scale-105"
-                >
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                    <Icon className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="font-black text-foreground mb-3">{info.title}</h3>
-                  {info.link ? (
-                    <a
-                      href={info.link}
-                      target={info.link.startsWith("http") ? "_blank" : undefined}
-                      rel={info.link.startsWith("http") ? "noopener noreferrer" : undefined}
-                      className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-                    >
-                      {info.content}
-                    </a>
-                  ) : (
-                    <p className="text-muted-foreground text-sm font-medium">{info.content}</p>
-                  )}
-                </div>
-              );
-            })}
+          <div className="flex items-center gap-2">
+            <Link href="/pricing">
+              <Button
+                variant="outline"
+                className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-sm px-5 py-2.5 transition-colors"
+              >
+                View Plans & Pricing
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Button>
+            </Link>
           </div>
         </div>
-      </section>
 
-      {/* Contact Form & Quick Links Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Contact Form */}
-            <div>
-              <div className="mb-8">
-                <h2 className="text-4xl font-black text-foreground mb-4">
-                  Send Us a Message
+        {/* Minimalist Metrics Strip (0 gradients, 0 box shadow, 0 blur) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8 border-b border-border">
+          <div className="border-r border-border/50 pr-4">
+            <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+              &lt; 24h
+            </div>
+            <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+              Response Time
+            </div>
+          </div>
+          <div className="border-r border-border/50 pr-4">
+            <div className="text-3xl sm:text-4xl font-extrabold text-primary">
+              100%
+            </div>
+            <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+              Resolution Guarantee
+            </div>
+          </div>
+          <div className="border-r border-border/50 pr-4">
+            <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+              24/7
+            </div>
+            <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+              Catalog Access
+            </div>
+          </div>
+          <div>
+            <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+              Direct
+            </div>
+            <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+              Engineering Support
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Information Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 py-8 border-b border-border">
+          {contactInfo.map((info) => {
+            const Icon = info.icon;
+            return (
+              <div
+                key={info.title}
+                className="border border-border rounded-xl bg-card p-6 hover:border-foreground/40 transition-colors"
+              >
+                <div className="w-11 h-11 rounded-lg border border-border bg-muted/40 flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5 text-primary" />
+                </div>
+                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1.5">
+                  {info.title}
+                </div>
+                {info.link ? (
+                  <a
+                    href={info.link}
+                    target={info.link.startsWith("http") ? "_blank" : undefined}
+                    rel={info.link.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="text-sm sm:text-base font-semibold text-foreground hover:text-primary transition-colors block break-words"
+                  >
+                    {info.content}
+                  </a>
+                ) : (
+                  <p className="text-sm sm:text-base font-semibold text-foreground break-words">
+                    {info.content}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Contact Form and Details Layout */}
+        <div className="py-14 border-b border-border grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Form */}
+          <div className="lg:col-span-7">
+            <div className="border border-border rounded-xl bg-card p-6 sm:p-9">
+              <div className="mb-6">
+                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                  Online Inquiry
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  Send Us a Direct Message
                 </h2>
-                <p className="text-muted-foreground font-medium">
-                  Fill out the form below and we&apos;ll respond within 24 hours.
+                <p className="text-sm text-muted-foreground mt-1">
+                  Fill in your requirements below and our technical desk will respond promptly.
                 </p>
               </div>
 
               {status === "success" && (
-                <div className="mb-6 p-5 bg-primary/10 border-2 border-primary/30 rounded-2xl flex items-start backdrop-blur-sm">
-                  <CheckCircle className="w-6 h-6 text-primary mr-3 shrink-0 mt-0.5" />
+                <div className="mb-6 p-4 border border-primary/40 bg-muted/40 rounded-lg flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-foreground font-black">
-                      Message sent successfully!
+                    <p className="text-sm font-bold text-foreground">
+                      Message submitted successfully
                     </p>
-                    <p className="text-foreground/70 text-sm mt-1 font-medium">
-                      We&apos;ll get back to you within 24 hours.
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                      Thank you for contacting us. Our operations team will respond to {formData.email || "your email"} within 24 hours.
                     </p>
                   </div>
                 </div>
               )}
 
               {status === "error" && (
-                <div className="mb-6 p-5 bg-destructive/10 border-2 border-destructive/30 rounded-2xl flex items-start">
-                  <AlertCircle className="w-6 h-6 text-destructive mr-3 shrink-0 mt-0.5" />
+                <div className="mb-6 p-4 border border-destructive/40 bg-muted/40 rounded-lg flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-destructive font-black">
-                      Failed to send message
+                    <p className="text-sm font-bold text-destructive">
+                      Unable to deliver message
                     </p>
-                    <p className="text-destructive/80 text-sm mt-1 font-medium">
-                      Please try again or contact us directly via email.
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                      Please check your network connection or email us directly at support@lzfly.com.
                     </p>
                   </div>
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-black text-foreground mb-2">
-                    Your Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-5 py-4 border-2 border-border rounded-2xl focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all bg-card font-medium"
-                    placeholder="John Doe"
-                  />
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-xs font-bold text-foreground uppercase tracking-wider mb-2"
+                    >
+                      Your Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2.5 text-sm bg-background border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+                      placeholder="Jane Doe"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-xs font-bold text-foreground uppercase tracking-wider mb-2"
+                    >
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full px-3.5 py-2.5 text-sm bg-background border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+                      placeholder="jane@company.com"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-black text-foreground mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-5 py-4 border-2 border-border rounded-2xl focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all bg-card font-medium"
-                    placeholder="john@example.com"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-black text-foreground mb-2">
-                    Subject *
+                  <label
+                    htmlFor="subject"
+                    className="block text-xs font-bold text-foreground uppercase tracking-wider mb-2"
+                  >
+                    Subject
                   </label>
                   <input
                     type="text"
@@ -253,14 +322,17 @@ export default function ContactPage() {
                     required
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-5 py-4 border-2 border-border rounded-2xl focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all bg-card font-medium"
-                    placeholder="How can we help you?"
+                    className="w-full px-3.5 py-2.5 text-sm bg-background border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors"
+                    placeholder="Inquiry regarding design licenses or system specs..."
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-black text-foreground mb-2">
-                    Message *
+                  <label
+                    htmlFor="message"
+                    className="block text-xs font-bold text-foreground uppercase tracking-wider mb-2"
+                  >
+                    Message
                   </label>
                   <textarea
                     id="message"
@@ -268,170 +340,145 @@ export default function ContactPage() {
                     required
                     value={formData.message}
                     onChange={handleChange}
-                    rows={6}
-                    className="w-full px-5 py-4 border-2 border-border rounded-2xl focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all resize-none bg-card font-medium"
-                    placeholder="Tell us more about your inquiry..."
+                    rows={5}
+                    className="w-full px-3.5 py-2.5 text-sm bg-background border border-border rounded-lg text-foreground focus:border-primary focus:outline-none transition-colors resize-none"
+                    placeholder="Provide details about your project or questions..."
                   />
                 </div>
 
-                <button
+                <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-primary hover:bg-primary/90 text-secondary py-4 px-6 rounded-2xl font-black transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 shadow-2xl"
+                  className="w-full bg-primary text-secondary hover:bg-primary/90 font-bold rounded-lg text-sm py-3 transition-colors disabled:opacity-50"
                 >
                   {loading ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-secondary border-t-transparent rounded-full animate-spin"></div>
-                      <span>Sending...</span>
-                    </>
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-secondary border-t-transparent rounded-full animate-spin" />
+                      <span>Sending inquiry...</span>
+                    </div>
                   ) : (
-                    <>
-                      <Send className="w-5 h-5" />
-                      <span>Send Message</span>
-                    </>
+                    <div className="flex items-center justify-center gap-2">
+                      <Send className="w-4 h-4" />
+                      <span>Transmit Message</span>
+                    </div>
                   )}
-                </button>
+                </Button>
               </form>
             </div>
+          </div>
 
-            {/* Quick Links & Info */}
-            <div className="space-y-8">
-              <div className="bg-card rounded-3xl shadow-2xl p-10 border-2 border-border">
-                <h3 className="text-3xl font-black text-foreground mb-8">
-                  Quick Links
-                </h3>
-                <div className="space-y-4">
-                  <Link
-                    href="/designs"
-                    className="group flex items-center p-5 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-all border-2 border-primary/20 hover:border-primary"
-                  >
-                    <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mr-4 shrink-0 group-hover:scale-110 transition-transform duration-300">
-                      <Globe className="w-7 h-7 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="font-black text-foreground group-hover:text-primary transition-colors">
-                        Browse Designs
-                      </p>
-                      <p className="text-sm text-muted-foreground font-medium">
-                        Explore our collection
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/pricing"
-                    className="group flex items-center p-5 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-all border-2 border-primary/20 hover:border-primary"
-                  >
-                    <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mr-4 shrink-0 group-hover:scale-110 transition-transform duration-300">
-                      <MessageSquare className="w-7 h-7 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="font-black text-foreground group-hover:text-primary transition-colors">
-                        View Pricing
-                      </p>
-                      <p className="text-sm text-muted-foreground font-medium">
-                        Check our subscription plans
-                      </p>
-                    </div>
-                  </Link>
-
-                  <Link
-                    href="/about"
-                    className="group flex items-center p-5 rounded-2xl bg-primary/10 hover:bg-primary/20 transition-all border-2 border-primary/20 hover:border-primary"
-                  >
-                    <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mr-4 shrink-0 group-hover:scale-110 transition-transform duration-300">
-                      <Mail className="w-7 h-7 text-secondary" />
-                    </div>
-                    <div>
-                      <p className="font-black text-foreground group-hover:text-primary transition-colors">
-                        About Us
-                      </p>
-                      <p className="text-sm text-muted-foreground font-medium">
-                        Learn more about our story
-                      </p>
-                    </div>
-                  </Link>
-                </div>
+          {/* Quick Shortcuts & FAQ Column */}
+          <div className="lg:col-span-5 space-y-5">
+            {/* Quick Links Card */}
+            <div className="border border-border rounded-xl bg-card p-6 sm:p-7">
+              <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                Helpful Resources
               </div>
+              <h3 className="text-lg font-bold text-foreground mb-4">
+                Self-Service Options
+              </h3>
 
-              {/* Response Time Info */}
-              <div className="bg-card rounded-3xl shadow-2xl p-10 border-2 border-border">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-                  <Clock className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="text-3xl font-black mb-4 text-foreground">Quick Response Time</h3>
-                <p className="text-muted-foreground mb-4 font-medium">
-                  We typically respond to inquiries within 24 hours during
-                  business days.
-                </p>
-                <p className="text-sm text-muted-foreground font-medium">
-                  For urgent matters, please call us directly at{" "}
-                  <span className="font-black text-primary">+1 (555) 123-4567</span>
-                </p>
+              <div className="space-y-2.5">
+                <Link
+                  href="/designs"
+                  className="flex items-center justify-between p-3.5 rounded-lg border border-border hover:border-foreground/40 bg-muted/20 hover:bg-muted/40 transition-colors"
+                >
+                  <div>
+                    <div className="text-sm font-bold text-foreground">
+                      Asset Directory
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      Browse all production-ready design packs
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                </Link>
+
+                <Link
+                  href="/pricing"
+                  className="flex items-center justify-between p-3.5 rounded-lg border border-border hover:border-foreground/40 bg-muted/20 hover:bg-muted/40 transition-colors"
+                >
+                  <div>
+                    <div className="text-sm font-bold text-foreground">
+                      Subscription Tiers
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      Compare personal and studio memberships
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                </Link>
+
+                <Link
+                  href="/about"
+                  className="flex items-center justify-between p-3.5 rounded-lg border border-border hover:border-foreground/40 bg-muted/20 hover:bg-muted/40 transition-colors"
+                >
+                  <div>
+                    <div className="text-sm font-bold text-foreground">
+                      About Organization
+                    </div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      Learn about our standards and architecture
+                    </div>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground" />
+                </Link>
               </div>
+            </div>
+
+            {/* SLA Commitment Card */}
+            <div className="border border-border rounded-xl bg-card p-6 sm:p-7">
+              <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                Support Commitment
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">
+                Priority Turnaround
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                All inquiries submitted during standard business hours are acknowledged
+                within 4 hours. Critical download or billing issues receive immediate priority.
+              </p>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* FAQ Section */}
-      <section className="py-24 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-black text-foreground mb-6">
+        {/* FAQs */}
+        <div className="pt-14">
+          <div className="mb-8">
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+              Knowledge Base
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
               Frequently Asked Questions
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
-              Find quick answers to common questions below.
-            </p>
           </div>
 
-          <div className="max-w-4xl mx-auto space-y-8">
-            {faqCategories.map((category, catIndex) => {
-              const Icon = category.icon;
-              return (
-                <div key={catIndex}>
-                  <div className="flex items-center mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center mr-4">
-                      <Icon className="w-6 h-6 text-secondary" />
-                    </div>
-                    <h3 className="text-3xl font-black text-foreground">
-                      {category.category}
-                    </h3>
-                  </div>
-                  <div className="space-y-4">
-                    {category.questions.map((faq, faqIndex) => (
-                      <div
-                        key={faqIndex}
-                        className="bg-card rounded-2xl shadow-lg p-8 border-2 border-border hover:border-primary transition-colors duration-300"
-                      >
-                        <h4 className="font-black text-foreground mb-3 flex items-start text-lg">
-                          <span className="text-primary mr-3 text-2xl">Q:</span>
-                          {faq.q}
-                        </h4>
-                        <p className="text-muted-foreground ml-10 font-medium">{faq.a}</p>
-                      </div>
-                    ))}
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {faqCategories.map((cat) => (
+              <div key={cat.category} className="space-y-4">
+                <div className="text-xs font-bold uppercase tracking-wider text-primary">
+                  {cat.category}
                 </div>
-              );
-            })}
-          </div>
-
-          <div className="text-center mt-16">
-            <p className="text-muted-foreground mb-6 font-medium text-lg">
-              Still have questions? We&apos;re here to help!
-            </p>
-            <a
-              href="mailto:support@designhub.com"
-              className="inline-flex items-center px-8 py-4 bg-primary hover:bg-primary/90 text-secondary font-black rounded-2xl transition-all duration-300 hover:scale-105 shadow-2xl"
-            >
-              <Mail className="w-6 h-6 mr-2" />
-              Email Support
-            </a>
+                <div className="space-y-3.5">
+                  {cat.questions.map((faq) => (
+                    <div
+                      key={faq.q}
+                      className="border border-border rounded-xl bg-card p-6 hover:border-foreground/40 transition-colors"
+                    >
+                      <h4 className="text-sm sm:text-base font-bold text-foreground mb-2">
+                        {faq.q}
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {faq.a}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
+      </main>
     </div>
   );
 }

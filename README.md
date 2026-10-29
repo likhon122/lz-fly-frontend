@@ -1,749 +1,291 @@
-# 🎨 Design Portfolio Marketplace - Frontend
+# 🎨 LZ Fly — Frontend Web Application
 
-> A modern, responsive Next.js 15 application for a design marketplace platform with OAuth authentication, Stripe payments, and real-time updates.
+[![Next.js](https://img.shields.io/badge/Next.js-15.5.5-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.x-61DAFB?logo=react)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.x-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
+[![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-RTK_Query-764ABC?logo=redux)](https://redux-toolkit.js.org/)
+[![Stripe Elements](https://img.shields.io/badge/Stripe-Elements-008CDD?logo=stripe)](https://stripe.com/)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+An ultra-modern, high-performance web application for the **LZ Fly** digital asset marketplace and subscription platform. Engineered with **Next.js 15 App Router**, **React 19**, **Turbopack**, **Tailwind CSS 4**, **RTK Query**, **NextAuth.js**, and **Stripe Elements**.
 
 ---
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Tech Stack](#tech-stack)
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Project Structure](#project-structure)
-- [Key Features](#key-features)
-- [Deployment](#deployment)
-- [Troubleshooting](#troubleshooting)
+- [Overview & Philosophy](#-overview--philosophy)
+- [Design System & Aesthetic Guidelines](#-design-system--aesthetic-guidelines)
+- [Architecture & Tech Stack](#-architecture--tech-stack)
+- [Project Directory Structure](#-project-directory-structure)
+- [Environment Configuration](#-environment-configuration)
+- [Getting Started](#-getting-started)
+- [Authentication & OAuth Flow](#-authentication--oauth-flow)
+- [State Management & RTK Query](#-state-management--rtk-query)
+- [Stripe Payment Engine & Modal Lifecycle](#-stripe-payment-engine--modal-lifecycle)
+- [Page & Route Map](#-page--route-map)
+- [Scripts & Development](#-scripts--development)
+- [Deployment Guide](#-deployment-guide)
 
 ---
 
-## 🌟 Overview
+## 🌟 Overview & Philosophy
 
-This is a full-featured frontend application for a design marketplace where users can:
+**LZ Fly Frontend** is crafted to provide a frictionless, lightning-fast digital asset shopping experience. Whether browsing thousands of digital templates, subscribing to unlimited download plans, or managing assets in user/admin portals, the UI delivers instant feedback, zero layout shifts, and accessible contrast.
 
-- Browse and search design templates
-- Purchase designs with Stripe
-- OAuth login with Google/GitHub
-- Like and review designs
-- Download purchased designs
-- Manage profile and purchases
-- Admin dashboard for management
+### Key Highlights:
+- **Zero-Latency Navigation**: Optimized with Next.js 15 App Router and Turbopack compiler.
+- **Hybrid Authentication**: Seamless switching between credentials-based login and Google/GitHub OAuth with automatic token synchronization.
+- **In-App Checkout Experience**: Embedded Stripe Elements with dynamic order review breakdown, real-time polling, and instant download activation.
+- **Role-Based Portals**: Tailored interfaces for standard users and administrators with full CRUD capabilities.
 
 ---
 
-## 🛠️ Tech Stack
+## 📐 Design System & Aesthetic Guidelines
 
-- **Framework**: Next.js 15.5.5 (App Router)
-- **UI Library**: React 19
-- **Styling**: Tailwind CSS 4.1
-- **State Management**: Redux Toolkit with Redux Persist
-- **API Layer**: RTK Query
-- **Authentication**: NextAuth v4 (OAuth)
-- **Payment**: Stripe Elements & Payment Intents
-- **UI Components**: shadcn/ui with Radix UI
-- **Icons**: Lucide React
-- **Type Safety**: TypeScript
+The platform strictly adheres to an **Ultra-Professional Minimalist Design System**:
+
+| Constraint | Rule | Purpose |
+| :--- | :--- | :--- |
+| **Gradients** | **0% Gradients** (`bg-gradient-*`, `from-*`, `to-*` prohibited) | Clean, flat modern aesthetic |
+| **Box Shadows** | **0% Shadows** (`shadow-*`, `drop-shadow-*` prohibited) | Crisp surface borders without artificial depth |
+| **Blurs** | **0% Blurs** (`backdrop-blur-*`, `blur-*` prohibited) | High rendering performance and clarity |
+| **Surfaces** | Semantic tokens: `bg-card`, `bg-background`, `bg-muted/30` | Full light & dark theme compliance |
+| **Borders** | Crisp 1px solid: `border border-border` | Clear visual structure and demarcation |
+| **Typography** | `text-foreground`, `text-muted-foreground`, larger scale | High legibility and contrast ratios |
 
 ---
 
-## ✨ Features
+## 🛠 Architecture & Tech Stack
 
-### Authentication
+```mermaid
+flowchart LR
+    Browser["Next.js App Router (Client / SSR)"] --> |NextAuth| OAuthProviders["Google / GitHub OAuth"]
+    Browser --> |RTK Query Hooks| ReduxStore["Redux Toolkit Store + LocalStorage"]
+    ReduxStore --> |Bearer Token| BackendAPI["Express.js API (Port 3001)"]
+    Browser --> |Stripe Elements| StripeGateway["Stripe Payments Cloud"]
+    StripeGateway --> |Webhooks| BackendAPI
+```
 
-- ✅ Email/Password registration and login
-- ✅ OAuth with Google and GitHub
-- ✅ JWT token-based authentication
-- ✅ Persistent sessions with Redux Persist
-- ✅ Automatic token refresh
-- ✅ Protected routes
+- **Framework**: [Next.js 15.5.5](https://nextjs.org/) (App Router, Turbopack, Server Actions)
+- **UI & Components**: React 19, [Radix UI](https://www.radix-ui.com/), [Lucide React Icons](https://lucide.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **State & Data Fetching**: [Redux Toolkit](https://redux-toolkit.js.org/) & [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
+- **Authentication**: [NextAuth.js v4](https://next-auth.js.org/) + Custom JWT Sync Hook
+- **Payments**: [@stripe/stripe-js](https://stripe.com/docs/js) & [@stripe/react-stripe-js](https://stripe.com/docs/stripe-js/react)
+- **Forms & Validation**: React Hook Form with Zod
 
-### Design Browsing
+---
 
-- ✅ Grid/List view of designs
-- ✅ Category filtering
-- ✅ Search functionality
-- ✅ Price range filtering
-- ✅ Sorting options
-- ✅ Pagination
-- ✅ Like/Unlike designs
-- ✅ View design details
+## 📂 Project Directory Structure
 
-### Payment System
+```text
+lz-fly-frontend/
+├── src/
+│   ├── app/                            # Next.js 15 App Router directory
+│   │   ├── (auth)/                     # Auth routes: /login, /register
+│   │   ├── about/                      # About page
+│   │   ├── admin/                      # Comprehensive Admin Dashboard
+│   │   │   ├── categories/             # Category management
+│   │   │   ├── designs/                # Asset catalog management & likers
+│   │   │   ├── downloads/              # Download quota analytics
+│   │   │   ├── payments/               # Payment audit trail
+│   │   │   ├── pricing-plans/          # Subscription plan tiers
+│   │   │   ├── purchases/              # Orders and customer transactions
+│   │   │   ├── reviews/                # Review moderation queue
+│   │   │   └── users/                  # User accounts & role assignment
+│   │   ├── api/auth/[...nextauth]/     # NextAuth OAuth callback handler
+│   │   ├── categories/                 # Category browser
+│   │   ├── contact/                    # Contact support page
+│   │   ├── dashboard/                  # User Personal Dashboard
+│   │   │   ├── available-downloads/    # Direct ZIP download portal
+│   │   │   ├── downloads-history/      # Historical downloads log
+│   │   │   ├── liked-designs/          # Bookmarked assets
+│   │   │   ├── payment-history/        # Invoices and receipts
+│   │   │   ├── purchases/              # Active subscriptions & items
+│   │   │   └── reviews/                # Authored reviews
+│   │   ├── designs/                    # Catalog search & [id] detail page
+│   │   ├── payment/                    # /success and /failed return views
+│   │   ├── pricing/                    # Pricing tiers & subscription purchase
+│   │   ├── layout.tsx                  # Root HTML layout & font registration
+│   │   ├── loading.tsx                 # Ultra-clean minimalist loader
+│   │   ├── page.tsx                    # Landing homepage
+│   │   └── globals.css                 # Theme variables & base styling
+│   ├── components/                     # Reusable modular UI components
+│   │   ├── ui/                         # Base primitives (button, dialog, input)
+│   │   ├── AuthWrapper.tsx             # Route protection & role enforcement
+│   │   ├── LZLoader.tsx                # Polished minimalist branding loader
+│   │   ├── PaymentForm.tsx             # Embedded Stripe Elements form
+│   │   ├── PaymentStatusChecker.tsx    # Live transaction polling badge
+│   │   ├── PurchaseModal.tsx           # Multi-step checkout modal dialog
+│   │   ├── SessionSync.tsx             # NextAuth to Express token sync
+│   │   ├── StripeProvider.tsx          # Stripe context wrapper
+│   │   └── VideoCarousel.tsx           # Minimalist hero media presentation
+│   ├── hooks/                          # Custom React hooks (useSessionSync, etc.)
+│   ├── lib/                            # Type declarations & utility helpers
+│   ├── services/
+│   │   └── api.ts                      # RTK Query API slice definitions
+│   └── store/
+│       ├── features/authSlice.ts       # Authentication slice with persistence
+│       ├── hooks.ts                    # Typed useDispatch & useSelector
+│       ├── index.ts                    # Redux store configuration
+│       └── ReduxProvider.tsx           # Client root Redux provider
+├── public/                             # Static media, SVGs, and hero videos
+├── .env.local                          # Local environment variables
+├── package.json                        # Scripts & dependencies
+└── tsconfig.json                       # TypeScript compiler settings
+```
 
-- ✅ Stripe checkout integration
-- ✅ Payment Intent flow
-- ✅ Multiple currency support
-- ✅ Secure card processing
-- ✅ Payment confirmation
-- ✅ Purchase history
+---
 
-### User Dashboard
+## ⚙️ Environment Configuration
 
-- ✅ View purchased designs
-- ✅ Download files
-- ✅ Track download history
-- ✅ View payment history
-- ✅ Profile management
-- ✅ Liked designs collection
+Create a `.env.local` file in the `lz-fly-frontend/` directory:
 
-### Reviews & Ratings
+```env
+# Backend API Base Endpoint
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
 
-- ✅ Write reviews for purchased designs
-- ✅ Star rating system (1-5)
-- ✅ Edit/Delete own reviews
-- ✅ View all reviews for a design
-- ✅ Average rating display
+# NextAuth Authentication
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_jwt_secret_key_min_32_characters
 
-### Admin Features
+# OAuth Credentials (Google Cloud Console)
+GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-- ✅ User management
-- ✅ Design management
-- ✅ Payment monitoring
-- ✅ Analytics dashboard
-- ✅ Category management
+# OAuth Credentials (GitHub Developer Settings)
+GITHUB_ID=your_github_client_id
+GITHUB_SECRET=your_github_client_secret
+
+# Stripe Public Key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51...
+```
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 1. Prerequisites
+- **Node.js**: v18.0.0 or higher
+- **Backend API**: Running on `http://localhost:3001`
 
-- **Node.js**: v18+ (LTS recommended)
-- **npm** or **yarn** or **pnpm**
-- **Backend API**: Running backend server (see backend README)
-- **Google OAuth**: Client ID & Secret
-- **GitHub OAuth**: Client ID & Secret
-
-### Installation
-
-1. **Navigate to frontend directory**
-
-   ```bash
-   cd frontend
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Create environment file**
-
-   ```bash
-   cp .env.example .env.local
-   ```
-
-4. **Configure environment variables** (see [Environment Variables](#environment-variables))
-
-5. **Start development server**
-   ```bash
-   npm run dev
-   ```
-6. **Login As a admin **
-   *Email*
-   ```bash
-   admin@gmail.com
-   ```
-   *Password*
-   ```bash
-   admin122evy@
-   ```
-
-The app will be available at `http://localhost:3000`
-Backend Live Link `https://lz-fly-backend.vercel.app/`
-Backend Repository `https://github.com/likhon122/lz-fly-backend`
-
----
-
-## 🔐 Environment Variables
-
-Create a `.env.local` file in the frontend root directory:
-
+### 2. Installation
 ```bash
-# Backend API URL (Required)
-# Point this to your backend API server
-NEXT_PUBLIC_API_URL=http://localhost:5000/api
-
-# App Configuration
-NEXT_PUBLIC_APP_NAME="Graphic Lab"
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# Production Configuration (update these for production)
-# NEXT_PUBLIC_API_URL=https://your-api-domain.com/api
-# NEXT_PUBLIC_APP_URL=https://your-domain.com
-
-# ============================================
-# NextAuth Configuration (OAuth)
-# ============================================
-
-# NextAuth Secret (Required)
-# Generate with: openssl rand -base64 32
-AUTH_SECRET=your-random-secret-here-change-in-production
-
-# Trust host (Required for NextAuth v5)
-AUTH_TRUST_HOST=true
-
-# Google OAuth Credentials
-# Get from: https://console.cloud.google.com/apis/credentials
-AUTH_GOOGLE_ID=your-google-client-id.apps.googleusercontent.com
-AUTH_GOOGLE_SECRET=your-google-client-secret
-
-# GitHub OAuth Credentials
-# Get from: https://github.com/settings/developers
-AUTH_GITHUB_ID=your-github-client-id
-AUTH_GITHUB_SECRET=your-github-client-secret
+cd lz-fly-frontend
+npm install
 ```
 
-### 🔑 Getting OAuth Credentials
-
-#### Google OAuth
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com)
-2. Create new project or select existing
-3. Enable "Google+ API"
-4. Go to "Credentials" → "Create Credentials" → "OAuth client ID"
-5. Application type: "Web application"
-6. Authorized redirect URIs:
-   - `http://localhost:3000/api/auth/callback/google`
-   - `https://your-domain.com/api/auth/callback/google` (production)
-7. Copy Client ID and Client Secret
-
-#### GitHub OAuth
-
-1. Go to [GitHub Settings](https://github.com/settings/developers)
-2. Click "New OAuth App"
-3. Fill in details:
-   - Application name: Your App Name
-   - Homepage URL: `http://localhost:3000`
-   - Authorization callback URL: `http://localhost:3000/api/auth/callback/github`
-4. Register application
-5. Copy Client ID and generate Client Secret
-
-#### Generate AUTH_SECRET
-
+### 3. Development Server
 ```bash
-# On Linux/Mac
-openssl rand -base64 32
-
-# On Windows (PowerShell)
-[Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
-```
-
----
-
-## 📁 Project Structure
-
-```
-frontend/
-├── src/
-│   ├── app/                        # Next.js App Router
-│   │   ├── (auth)/
-│   │   │   ├── login/             # Login page
-│   │   │   └── register/          # Registration page
-│   │   ├── about/                 # About page
-│   │   ├── admin/                 # Admin dashboard
-│   │   │   ├── users/
-│   │   │   ├── designs/
-│   │   │   ├── payments/
-│   │   │   └── layout.tsx
-│   │   ├── api/
-│   │   │   └── auth/              # NextAuth API routes
-│   │   ├── categories/            # Category pages
-│   │   ├── contact/               # Contact page
-│   │   ├── dashboard/             # User dashboard
-│   │   │   ├── purchases/
-│   │   │   ├── downloads/
-│   │   │   ├── likes/
-│   │   │   └── layout.tsx
-│   │   ├── designs/               # Design pages
-│   │   │   └── [id]/             # Design detail page
-│   │   ├── payment/               # Payment pages
-│   │   ├── pricing/               # Pricing plans
-│   │   ├── privacy/               # Privacy policy
-│   │   ├── terms/                 # Terms of service
-│   │   ├── layout.tsx             # Root layout
-│   │   ├── page.tsx               # Home page
-│   │   └── globals.css            # Global styles
-│   ├── components/                # React components
-│   │   ├── ui/                    # shadcn/ui components
-│   │   ├── AuthButtons.tsx
-│   │   ├── AuthWrapper.tsx
-│   │   ├── CategoriesSection.tsx
-│   │   ├── ConditionalLayout.tsx
-│   │   ├── DesignCard.tsx
-│   │   ├── Footer.tsx
-│   │   ├── Header.tsx
-│   │   ├── LikeButton.tsx
-│   │   ├── NextAuthProvider.tsx
-│   │   ├── ReviewForm.tsx
-│   │   ├── ReviewList.tsx
-│   │   ├── SessionSync.tsx
-│   │   ├── Sidebar.tsx
-│   │   ├── ToastProvider.tsx
-│   │   └── UserProfile.tsx
-│   ├── hooks/                     # Custom React hooks
-│   │   ├── useLike.ts
-│   │   └── useToast.ts
-│   ├── lib/                       # Utility libraries
-│   │   └── utils.ts
-│   ├── services/                  # API services
-│   │   └── api.ts                # RTK Query API
-│   ├── store/                     # Redux store
-│   │   ├── authSlice.ts
-│   │   ├── cartSlice.ts
-│   │   ├── ReduxProvider.tsx
-│   │   └── store.ts
-│   ├── types/                     # TypeScript types
-│   │   ├── auth.ts
-│   │   ├── design.ts
-│   │   ├── payment.ts
-│   │   └── next-auth.d.ts
-│   └── auth.ts                    # NextAuth configuration
-├── public/                        # Static assets
-│   └── images/
-├── .env.local                     # Environment variables
-├── .env.example                   # Example env file
-├── next.config.ts                 # Next.js configuration
-├── tailwind.config.ts             # Tailwind CSS config
-├── tsconfig.json                  # TypeScript config
-├── components.json                # shadcn/ui config
-└── package.json
-```
-
----
-
-## 🎯 Key Features
-
-### 1. Authentication Flow
-
-The app uses a hybrid authentication system:
-
-1. **NextAuth** handles OAuth (Google/GitHub)
-2. **Backend JWT** handles all API requests
-3. **Redux Persist** maintains auth state
-
-```typescript
-// Login Flow
-User clicks "Login with Google"
-  → NextAuth redirects to Google
-  → User authorizes
-  → Google redirects back to app
-  → NextAuth calls backend /auth/oauth
-  → Backend creates/updates user, returns JWT
-  → JWT stored in Redux + NextAuth session
-  → All API calls use backend JWT token
-```
-
-### 2. State Management
-
-- **Redux Toolkit** for global state
-- **Redux Persist** for localStorage persistence
-- **RTK Query** for API caching and optimistic updates
-
-```typescript
-// Store Structure
-{
-  auth: {
-    user: User | null,
-    token: string | null,
-    isAuthenticated: boolean
-  },
-  cart: {
-    items: CartItem[]
-  },
-  api: {
-    // RTK Query cache
-  }
-}
-```
-
-### 3. Payment Flow
-
-```typescript
-// Stripe Payment Flow
-1. User clicks "Buy Now"
-2. Frontend calls /payments/create-payment-intent
-3. Backend creates Stripe PaymentIntent
-4. Frontend shows Stripe card form
-5. User enters card details
-6. Stripe validates card
-7. Frontend confirms payment
-8. Stripe webhook notifies backend
-9. Backend creates Purchase record
-10. User redirected to success page
-```
-
-### 4. Like System
-
-- Optimistic UI updates (instant feedback)
-- Atomic database operations
-- Processing lock to prevent double-clicks
-- Automatic state rollback on error
-
-### 5. Review System
-
-- Star rating (1-5 stars)
-- Text review
-- Edit/Delete own reviews
-- Average rating calculation
-- Review count display
-
----
-
-## 💻 Development
-
-### Available Scripts
-
-```bash
-# Development server with Turbopack
 npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-# Production build
+### 4. Production Build & Check
+```bash
+# Typecheck
+npx tsc --noEmit
+
+# Production build with Next.js Turbopack
 npm run build
 
 # Start production server
 npm start
-
-# Linting
-npm run lint
-```
-
-### Adding New Components
-
-This project uses **shadcn/ui**. To add new components:
-
-```bash
-npx shadcn@latest add button
-npx shadcn@latest add card
-npx shadcn@latest add dialog
-```
-
-### Environment-Specific Behavior
-
-```typescript
-// Development
-- Verbose logging
-- Debug mode enabled
-- Hot reload with Turbopack
-- Source maps
-
-// Production
-- Minified code
-- No console logs
-- Optimized bundle
-- Static generation where possible
 ```
 
 ---
 
-## 🚢 Deployment
+## 🔑 Authentication & OAuth Flow
 
-### Vercel (Recommended)
+The application provides a unified authentication bridge between NextAuth and the Express REST API:
 
-1. **Push code to GitHub**
-
-   ```bash
-   git push origin main
-   ```
-
-2. **Import project in Vercel**
-
-   - Go to [Vercel](https://vercel.com)
-   - Click "New Project"
-   - Import your repository
-   - Select `frontend` as root directory
-
-3. **Configure environment variables**
-
-   - Add all variables from `.env.local`
-   - Make sure to update URLs for production
-
-4. **Deploy**
-   - Vercel automatically deploys on push
-   - Custom domain available in settings
-
-### Netlify
-
-```bash
-# Install Netlify CLI
-npm i -g netlify-cli
-
-# Login
-netlify login
-
-# Deploy
-netlify deploy --prod
-```
-
-### Docker
-
-```dockerfile
-# Dockerfile (create this)
-FROM node:18-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-RUN npm run build
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
-```
-
-```bash
-# Build and run
-docker build -t design-marketplace-frontend .
-docker run -p 3000:3000 design-marketplace-frontend
-```
+1. **OAuth Sign-In**: User triggers Google or GitHub login via [`OAuthButtons.tsx`](file:///z:/projects/lz-fly/lz-fly-frontend/src/components/OAuthButtons.tsx).
+2. **Session Capture**: NextAuth callback processes tokens at `/api/auth/callback/[provider]`.
+3. **Backend Sync**: [`SessionSync.tsx`](file:///z:/projects/lz-fly/lz-fly-frontend/src/components/SessionSync.tsx) listens for the session, forwards user details to `POST /api/auth/oauth-sync`, and receives a long-lived JWT access token.
+4. **Redux Store**: The token and user profile (including `role`: `user`, `admin`, or `super_admin`) are saved to Redux and persisted in `localStorage` for automatic authorization headers on every RTK Query call.
 
 ---
 
-## 🐛 Troubleshooting
+## ⚡ State Management & RTK Query
 
-### Common Issues
+All data fetching, caching, and server state synchronizations are handled by **RTK Query** in [`src/services/api.ts`](file:///z:/projects/lz-fly/lz-fly-frontend/src/services/api.ts).
 
-#### 1. OAuth Redirect Error
-
-```
-Error: Redirect URI mismatch
-```
-
-**Solution**:
-
-- Check OAuth redirect URIs match exactly
-- Google: `http://localhost:3000/api/auth/callback/google`
-- GitHub: `http://localhost:3000/api/auth/callback/github`
-
-#### 2. API Connection Failed
-
-```
-Error: Network request failed
-```
-
-**Solution**:
-
-- Ensure backend is running on `http://localhost:5000`
-- Check `NEXT_PUBLIC_API_URL` in `.env.local`
-- Verify CORS settings in backend
-
-#### 3. Redux Persist Hydration Error
-
-```
-Warning: Text content did not match
-```
-
-**Solution**:
-
-- This is normal on first load
-- Redux Persist rehydrates state from localStorage
-- Error should disappear after hydration
-
-#### 4. Stripe Elements Not Loading
-
-```
-Error: Stripe.js failed to load
-```
-
-**Solution**:
-
-- Check internet connection
-- Verify Stripe publishable key in backend
-- Check browser console for errors
-
-#### 5. Session Not Persisting
-
-```
-User logged out after page refresh
-```
-
-**Solution**:
-
-- Check Redux Persist is configured
-- Verify `AUTH_SECRET` is set
-- Clear browser localStorage and try again
-
-#### 6. Image Upload Failed
-
-```
-Error: Cloudinary upload failed
-```
-
-**Solution**:
-
-- Check backend Cloudinary credentials
-- Verify file size is under limit
-- Check file format is supported
+### Automated Cache Invalidation Tags:
+- `Purchases`: Invalidated immediately upon payment confirmation.
+- `Downloads`: Refreshed when quota changes or files are downloaded.
+- `Designs`: Updated when reviews are posted or likes are toggled.
+- `PricingPlans`: Refreshed after admin tier adjustments.
 
 ---
 
-## 🎨 Customization
+## 💳 Stripe Payment Engine & Modal Lifecycle
 
-### Changing Theme Colors
+The checkout experience is powered by [`PurchaseModal.tsx`](file:///z:/projects/lz-fly/lz-fly-frontend/src/components/PurchaseModal.tsx):
 
-Edit `tailwind.config.ts`:
-
-```typescript
-theme: {
-  extend: {
-    colors: {
-      primary: {
-        DEFAULT: '#your-color',
-        50: '#lighter',
-        // ... more shades
-      }
-    }
-  }
-}
+```mermaid
+stateDiagram-v2
+    [*] --> Details: User clicks "Purchase / Subscribe"
+    Details --> Processing: Click "Proceed to Payment"
+    Processing --> Payment: Backend returns ClientSecret & PaymentIntentID
+    Payment --> Success: Stripe confirms PaymentIntent status === "succeeded"
+    Payment --> Error: Card declined / network timeout
+    Error --> Details: "Try Again"
+    Success --> [*]: Cache invalidated & Instant Download enabled
 ```
 
-### Changing App Name
-
-Update `.env.local`:
-
-```bash
-NEXT_PUBLIC_APP_NAME="Your App Name"
-```
-
-### Adding New Pages
-
-```bash
-# Create new page
-src/app/your-page/page.tsx
-```
-
-```typescript
-// src/app/your-page/page.tsx
-export default function YourPage() {
-  return (
-    <div>
-      <h1>Your Page</h1>
-    </div>
-  );
-}
-```
+1. **Review Order (`details`)**: Summarizes product image/icon, plan duration, original price, discount badges, inclusion checklist, and SSL security badges.
+2. **Processing (`processing`)**: Contacts backend `POST /api/payments/create-payment-intent` to register the session.
+3. **Checkout (`payment`)**: Renders embedded [`PaymentForm.tsx`](file:///z:/projects/lz-fly/lz-fly-frontend/src/components/PaymentForm.tsx) inside [`StripeProvider.tsx`](file:///z:/projects/lz-fly/lz-fly-frontend/src/components/StripeProvider.tsx) with "Back" button navigation.
+4. **Status Confirmation (`success`)**: Mounts [`PaymentStatusChecker.tsx`](file:///z:/projects/lz-fly/lz-fly-frontend/src/components/PaymentStatusChecker.tsx) which polls backend verification and triggers automatic cache invalidation.
 
 ---
 
-## 🔒 Security Best Practices
+## 🗺 Page & Route Map
 
-- ✅ Environment variables for sensitive data
-- ✅ NextAuth for OAuth security
-- ✅ HTTPS in production
-- ✅ JWT tokens with expiration
-- ✅ Input validation on frontend
-- ✅ XSS protection with React
-- ✅ CSRF protection with NextAuth
-- ✅ Secure cookies with httpOnly flag
+### Public & Marketing
+- `/` — Homepage with hero showcase, category filters, and featured assets
+- `/categories` — Grid browser of all digital product categories
+- `/designs` — Searchable catalog with sorting, price filters, and pagination
+- `/designs/[id]` — Detailed asset page with preview lightbox, specs, author, and purchase action
+- `/pricing` — SaaS subscription tiers with feature comparisons and active plan status
+- `/about` — Platform story, design philosophy, and mission
+- `/contact` — Support and inquiry submission form
 
----
+### User Dashboard (`/dashboard`)
+- `/dashboard` — Account overview, download quota counter, and quick links
+- `/dashboard/purchases` — Receipts, orders, and active subscriptions
+- `/dashboard/available-downloads` — One-click direct downloads for purchased assets
+- `/dashboard/downloads-history` — Complete historical download logs
+- `/dashboard/liked-designs` — Personal favorites collection
+- `/dashboard/reviews` — Submitted feedback and star ratings
 
-## 📱 Responsive Design
-
-The app is fully responsive with breakpoints:
-
-- **Mobile**: < 640px (sm)
-- **Tablet**: 640px - 1024px (md, lg)
-- **Desktop**: > 1024px (xl, 2xl)
-
-All components adapt to screen size automatically.
-
----
-
-## 🧪 Testing
-
-### Manual Testing Checklist
-
-- [ ] Register new user
-- [ ] Login with email/password
-- [ ] Login with Google
-- [ ] Login with GitHub
-- [ ] Browse designs
-- [ ] Filter by category
-- [ ] Search designs
-- [ ] Like/unlike design
-- [ ] View design details
-- [ ] Add review
-- [ ] Purchase design
-- [ ] Download purchased design
-- [ ] View dashboard
-- [ ] Logout
+### Admin Dashboard (`/admin`)
+- `/admin` — System analytics, user growth, and revenue overview
+- `/admin/designs` — Product catalog management, upload, update, and likers inspection
+- `/admin/categories` — Category creation, icon management, and visibility toggles
+- `/admin/pricing-plans` — Plan creation, pricing tiers, and quota limits
+- `/admin/users` — User account inspection, role modifications, and suspensions
+- `/admin/purchases` — Master transaction ledger
+- `/admin/payments` — Stripe transaction tracking and status verification
+- `/admin/downloads` — System-wide asset download telemetry
+- `/admin/reviews` — Customer review moderation and deletion
 
 ---
 
-## 📊 Performance Optimization
+## 📜 Available Scripts
 
-- ✅ Next.js App Router for optimal routing
-- ✅ Image optimization with `next/image`
-- ✅ Code splitting by route
-- ✅ React Server Components where possible
-- ✅ Redux Persist for offline capability
-- ✅ Optimistic UI updates
-- ✅ Lazy loading components
-- ✅ Turbopack for fast builds
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+| Script | Command | Purpose |
+| :--- | :--- | :--- |
+| **Development** | `npm run dev` | Starts Next.js development server with Turbopack |
+| **Type Check** | `npx tsc --noEmit` | Validates TypeScript types across the entire project |
+| **Production Build** | `npm run build` | Compiles optimized production bundle |
+| **Start Production** | `npm start` | Runs production server on port 3000 |
+| **Linting** | `npm run lint` | Inspects code against Next.js ESLint rules |
 
 ---
 
-## 📄 License
-
-This project is licensed under the ISC License.
-
----
-
-## 👤 Author
-
-**Rimon Hossain**
-
----
-
-## 📞 Support
-
-For issues or questions:
-
-- Check [Troubleshooting](#troubleshooting) section
-- Verify environment variables are set correctly
-- Check backend is running
-- Review browser console for errors
-
----
-
-## 🎯 Quick Start Checklist
-
-- [ ] Node.js v18+ installed
-- [ ] Backend API running at `http://localhost:5000`
-- [ ] `.env.local` file created with all variables
-- [ ] Dependencies installed (`npm install`)
-- [ ] OAuth credentials configured (Google + GitHub)
-- [ ] Frontend running (`npm run dev`)
-- [ ] Can access app at `http://localhost:3000`
-- [ ] Can register and login
-
----
-
-## 📚 Additional Resources
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [NextAuth.js Documentation](https://next-auth.js.org)
-- [Redux Toolkit Documentation](https://redux-toolkit.js.org)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [Stripe Documentation](https://stripe.com/docs)
-- [shadcn/ui Documentation](https://ui.shadcn.com)
-
----
-
-**Made with ❤️ for fly designers and developers**
+<p align="center">
+  <b>LZ Fly</b> • Next-Generation Digital Asset Marketplace Frontend<br>
+  Designed for speed, clarity, and an uncompromising ultra-professional user experience.
+</p>

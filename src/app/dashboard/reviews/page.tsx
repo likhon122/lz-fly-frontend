@@ -9,14 +9,13 @@ import {
   useDeleteReviewMutation,
   useGetDesignReviewsQuery,
 } from "@/services/api";
-import { Star, Edit, Trash2, Plus, BarChart3 } from "lucide-react";
+import { Star, Edit, Trash2, Plus, ArrowRight, ExternalLink, MessageSquare, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/components/ToastProvider";
 import { useConfirm } from "@/components/ConfirmProvider";
 
-// Separate component for design review to properly handle hooks
 function DesignReviewCard({
   design,
   currentUserId,
@@ -39,227 +38,119 @@ function DesignReviewCard({
   const statistics = designReviewData?.data?.statistics;
   const allReviews = designReviewData?.data?.reviews || [];
   const existingReview = allReviews.find(
-    (r: any) => r.reviewer._id === currentUserId
+    (r: any) => r.reviewer?._id === currentUserId || r.reviewer === currentUserId
   );
 
+  const previewUrl =
+    (design as any)?.previewImageUrls?.[0] || design.previewImageUrl;
+
   return (
-    <div className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
-      {/* Design Header with Image */}
-      <div className="flex items-start gap-4 p-6 border-b border-gray-100">
-        {((design as any)?.previewImageUrls?.[0] || design.previewImageUrl) && (
-          <div className="relative w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gradient-to-br from-blue-500 to-purple-600">
-            <Image
-              src={
-                (design as any)?.previewImageUrls?.[0] || design.previewImageUrl
-              }
-              alt={design.title}
-              fill
-              className="object-cover"
-            />
-          </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <Link href={`/designs/${design._id}`}>
-            <h3 className="text-lg font-bold text-foreground hover:text-primary transition-colors">
-              {design.title}
-            </h3>
-          </Link>
-          <div className="flex items-center gap-3 mt-1">
-            <span className="text-sm font-semibold text-foreground">
-              {design.currencyDisplay || "৳"}
-              {
-             
-              (design.discountedPrice != null
-                ? design.discountedPrice
-                : design.basePrice ?? design.price ?? 0
-              ).toFixed(2)}
-            </span>
-          </div>
-
-          {/* Review Statistics */}
-          {statistics && statistics.totalReviews > 0 && (
-            <div className="mt-3 space-y-2">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i < Math.round(statistics.averageRating || 0)
-                          ? "text-yellow-500 fill-yellow-500"
-                          : "text-gray-300"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm font-semibold text-foreground">
-                  {statistics.averageRating?.toFixed(1)}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  ({statistics.totalReviews}{" "}
-                  {statistics.totalReviews === 1 ? "review" : "reviews"})
-                </span>
+    <div className="border border-border rounded-xl bg-card overflow-hidden hover:border-foreground/40 transition-colors">
+      {/* Header with thumbnail & title */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 border-b border-border">
+        <div className="flex items-center gap-4 min-w-0">
+          <div className="relative w-16 h-16 rounded-lg bg-muted border border-border overflow-hidden shrink-0">
+            {previewUrl ? (
+              <Image
+                src={previewUrl}
+                alt={design.title}
+                fill
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm font-bold">
+                LZ
               </div>
-
-              {/* Rating Distribution */}
-              {statistics.ratingDistribution &&
-                statistics.ratingDistribution.length > 0 && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <BarChart3 className="w-3 h-3" />
-                    {Object.entries(statistics.ratingDistribution[0]).map(
-                      ([rating, count]) => (
-                        <span key={rating}>
-                          {rating}★: {count as number}
-                        </span>
-                      )
-                    )}
-                  </div>
-                )}
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            <Link href={`/designs/${design._id}`}>
+              <h3 className="text-base font-bold text-foreground hover:underline truncate">
+                {design.title}
+              </h3>
+            </Link>
+            <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
+              <span>
+                ${(design.discountedPrice != null
+                  ? design.discountedPrice
+                  : design.basePrice ?? design.price ?? 0
+                ).toFixed(2)}
+              </span>
+              {statistics && statistics.totalReviews > 0 && (
+                <span>
+                  • {statistics.averageRating?.toFixed(1)} ★ ({statistics.totalReviews} total)
+                </span>
+              )}
             </div>
-          )}
+          </div>
         </div>
-        {existingReview && (
-          <div className="flex gap-2 flex-shrink-0">
+
+        {existingReview ? (
+          <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
             <button
               onClick={() => onEditReview(existingReview, design._id)}
-              className="p-2 text-primary hover:bg-blue-50 rounded-lg transition-colors"
+              className="px-3 py-1.5 rounded-lg border border-border text-foreground hover:bg-muted text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5"
               title="Edit review"
             >
               <Edit className="w-4 h-4" />
+              <span>Edit</span>
             </button>
             <button
               onClick={() => onDeleteReview(existingReview._id)}
-              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="px-3 py-1.5 rounded-lg border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 dark:bg-red-950/30 dark:border-red-900/40 dark:text-red-400"
               title="Delete review"
             >
               <Trash2 className="w-4 h-4" />
+              <span>Delete</span>
             </button>
           </div>
+        ) : (
+          <Button
+            onClick={() => onWriteReview(design._id)}
+            className="bg-primary text-primary-foreground font-bold rounded-lg text-sm px-4 py-2 hover:bg-primary/90 transition-colors flex items-center gap-1.5 self-end sm:self-auto"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Write Review</span>
+          </Button>
         )}
       </div>
 
-      {/* My Review Section */}
-      {existingReview ? (
-        <div className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-b border-gray-100">
-          <div className="flex items-center justify-between mb-3">
+      {/* Your review display */}
+      {existingReview && (
+        <div className="p-6 bg-muted/20 border-b border-border">
+          <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-2">
-              <div className="px-3 py-1 bg-primary text-white text-xs font-semibold rounded-full">
-                Your Review
+              <span className="inline-flex px-2.5 py-0.5 rounded text-xs font-semibold bg-primary text-primary-foreground uppercase tracking-wider">
+                Your Feedback
+              </span>
+              <div className="flex items-center ml-1">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < existingReview.rating
+                        ? "text-amber-500 fill-amber-500"
+                        : "text-muted-foreground/30"
+                    }`}
+                  />
+                ))}
               </div>
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${
-                    i < existingReview.rating
-                      ? "text-yellow-500 fill-yellow-500"
-                      : "text-gray-300"
-                  }`}
-                />
-              ))}
-              <span className="ml-1 text-base font-bold text-foreground">
+              <span className="text-sm font-bold text-foreground ml-1">
                 {existingReview.rating}/5
               </span>
             </div>
             <span className="text-xs text-muted-foreground">
               {new Date(existingReview.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
-                month: "long",
+                month: "short",
                 day: "numeric",
               })}
             </span>
           </div>
-          {existingReview.title && (
-            <h4 className="font-bold text-foreground mb-2 text-base">
-              {existingReview.title}
-            </h4>
-          )}
-          <p className="text-foreground text-sm leading-relaxed">
+
+          <p className="text-sm sm:text-base text-foreground leading-relaxed">
             {existingReview.comment}
           </p>
-          {existingReview.updatedAt !== existingReview.createdAt && (
-            <p className="text-xs text-muted-foreground mt-3 italic">
-              Edited on{" "}
-              {new Date(existingReview.updatedAt).toLocaleDateString()}
-            </p>
-          )}
-        </div>
-      ) : (
-        <div className="p-6 text-center bg-muted/50 border-b border-gray-100">
-          <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-muted-foreground text-sm mb-4">
-            You haven&apos;t reviewed this design yet
-          </p>
-          <button
-            onClick={() => onWriteReview(design._id)}
-            className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium text-sm rounded-lg hover:shadow-lg transition-shadow"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Write a review
-          </button>
-        </div>
-      )}
-
-      {/* All Reviews Section */}
-      {allReviews.length > 0 && (
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-              All Reviews ({allReviews.length})
-            </h4>
-            <Link
-              href={`/designs/${design._id}#reviews`}
-              className="text-sm text-primary hover:text-blue-700 font-medium"
-            >
-              View All
-            </Link>
-          </div>
-          <div className="space-y-4">
-            {allReviews.slice(0, 3).map((review: any) => (
-              <div
-                key={review._id}
-                className="bg-muted/50 rounded-lg p-4 hover:bg-muted transition-colors"
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
-                      {review.reviewer.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground text-sm">
-                        {review.reviewer.name}
-                      </p>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-3 h-3 ${
-                              i < review.rating
-                                ? "text-yellow-500 fill-yellow-500"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(review.createdAt).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
-                </div>
-                {review.title && (
-                  <h5 className="font-semibold text-foreground text-sm mb-1">
-                    {review.title}
-                  </h5>
-                )}
-                <p className="text-foreground text-sm line-clamp-2">
-                  {review.comment}
-                </p>
-              </div>
-            ))}
-          </div>
         </div>
       )}
     </div>
@@ -271,10 +162,6 @@ export default function MyReviewsPage() {
     limit: 100,
     status: "completed",
   });
-
-  console.log(purchasesData);
-
-
 
   const [createReview] = useCreateReviewMutation();
   const [updateReview] = useUpdateReviewMutation();
@@ -292,18 +179,11 @@ export default function MyReviewsPage() {
   });
 
   const purchases = useMemo(() => purchasesData?.data || [], [purchasesData]);
-
-
-  // Get current user ID
   const currentUserId = purchases[0]?.user || "";
 
-
-
-  // Get all purchased designs (individual and from active subscriptions)
   const purchasedDesigns = useMemo(() => {
     const designs: any[] = [];
     const designIds = new Set<string>();
-
 
     purchases.forEach((p: any) => {
       if (
@@ -311,7 +191,6 @@ export default function MyReviewsPage() {
         p.design &&
         !designIds.has(p.design._id)
       ) {
-        console.log(p);
         designs.push(p.design);
         designIds.add(p.design._id);
       }
@@ -320,9 +199,6 @@ export default function MyReviewsPage() {
     return designs;
   }, [purchases]);
 
- 
-
-  // Handle edit review
   const handleEditReview = (review: any, designId: string) => {
     setEditingReview(review);
     setFormData({
@@ -333,7 +209,6 @@ export default function MyReviewsPage() {
     setShowModal(true);
   };
 
-  // Handle write new review
   const handleWriteReview = (designId: string) => {
     setFormData({
       designId: designId,
@@ -346,7 +221,6 @@ export default function MyReviewsPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate comment length (min 10 chars as per backend)
     if (formData.comment.trim().length < 10) {
       toast.error("Comment must be at least 10 characters long");
       return;
@@ -355,28 +229,29 @@ export default function MyReviewsPage() {
     try {
       if (editingReview) {
         await updateReview({ id: editingReview._id, ...formData }).unwrap();
-        toast.success("Review updated successfully!");
+        toast.success("Review updated successfully");
       } else {
         await createReview(formData).unwrap();
-        toast.success("Review created successfully!");
+        toast.success("Review published successfully");
       }
       handleCloseModal();
     } catch (error: any) {
-      toast.error(error?.data?.message || "An error occurred");
+      toast.error(error?.data?.message || "Failed to submit review");
     }
   };
 
   const handleDelete = async (id: string) => {
     const ok = await confirmDialog.confirm(
       "Are you sure you want to delete this review?",
-      { title: "Delete review", confirmLabel: "Delete", cancelLabel: "Cancel" }
+      { title: "Delete Review", confirmLabel: "Delete", cancelLabel: "Cancel" }
     );
     if (!ok) return;
+
     try {
       await deleteReview(id).unwrap();
-      toast.success("Review deleted successfully!");
+      toast.success("Review deleted successfully");
     } catch (error: any) {
-      toast.error(error?.data?.message || "An error occurred");
+      toast.error(error?.data?.message || "Failed to delete review");
     }
   };
 
@@ -390,28 +265,93 @@ export default function MyReviewsPage() {
     });
   };
 
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Breadcrumb Navigation */}
+      <nav>
+        <div className="flex items-center space-x-2 text-sm font-semibold">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Home
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Dashboard
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <span className="text-foreground">Reviews</span>
+        </div>
+      </nav>
+
+      {/* Header Section (Matching Categories Style) */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">My Reviews</h1>
-          <p className="mt-2 text-muted-foreground">
-            Share your thoughts on purchased designs
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2.5">
+            Feedback & Ratings
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            My Reviews
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1.5 max-w-xl leading-relaxed">
+            Manage your feedback, review ratings, and testimonials for purchased assets.
           </p>
         </div>
-        <Button
-          onClick={() => setShowModal(true)}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-        >
-          <Plus className="w-5 h-5 mr-2" />
-          Write Review
-        </Button>
+        <div className="flex items-center gap-2.5">
+          <Link href="/designs">
+            <Button
+              variant="outline"
+              className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-sm px-4 py-2.5 transition-colors"
+            >
+              Browse Catalog
+              <ArrowRight className="w-4 h-4 ml-1.5" />
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Metrics Strip */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-border">
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {purchasedDesigns.length}
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Purchased Designs
+          </div>
+        </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-primary">
+            Community
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Public Feedback
+          </div>
+        </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            Verified
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Buyer Trust
+          </div>
+        </div>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            5 ★
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Rating System
+          </div>
+        </div>
       </div>
 
       {/* Reviews List */}
-      <div className="grid grid-cols-1 gap-6">
+      <div className="space-y-5">
         {purchasedDesigns.map((design: any) => (
           <DesignReviewCard
             key={design._id}
@@ -424,117 +364,108 @@ export default function MyReviewsPage() {
         ))}
 
         {purchasedDesigns.length === 0 && (
-          <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-12 text-center">
-            <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">
-              No purchased designs
+          <div className="p-14 text-center rounded-xl border border-border bg-card">
+            <MessageSquare className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
+            <h3 className="text-base font-bold text-foreground">
+              No purchased designs available for review
             </h3>
-            <p className="text-muted-foreground mb-6">
-              Purchase designs to leave reviews!
+            <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
+              Once you purchase individual creative assets, you can rate and review them here.
             </p>
-            <Link
-              href="/designs"
-              className="inline-block px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:shadow-lg transition-shadow"
-            >
-              Browse Designs
-            </Link>
+            <div className="mt-5">
+              <Link href="/designs">
+                <Button className="bg-primary text-primary-foreground font-semibold rounded-lg text-sm px-5 py-2.5 hover:bg-primary/90 transition-colors">
+                  Browse Marketplace
+                </Button>
+              </Link>
+            </div>
           </div>
         )}
       </div>
 
-      {/* Review Modal */}
+      {/* Review Modal (0 Gradient, 0 Shadow, 0 Blur, Clean Border Dialog) */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-card rounded-2xl shadow-xl max-w-md w-full">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                {editingReview ? "Edit Review" : "Write Review"}
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="border border-border bg-card rounded-xl max-w-md w-full p-7">
+            <div className="flex items-center justify-between pb-4 border-b border-border mb-5">
+              <h2 className="text-base sm:text-lg font-bold text-foreground">
+                {editingReview ? "Edit Your Review" : "Write Asset Review"}
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {!formData.designId && (
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Select Design *
-                    </label>
-                    <select
-                      required
-                      value={formData.designId}
-                      onChange={(e) =>
-                        setFormData({ ...formData, designId: e.target.value })
-                      }
-                      className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                    >
-                      <option value="">Choose a design</option>
-                      {purchasedDesigns.map((design: any) => (
-                        <option key={design._id} value={design._id}>
-                          {design.title}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Rating *
-                  </label>
-                  <div className="flex items-center space-x-2">
-                    {[1, 2, 3, 4, 5].map((rating) => (
-                      <button
-                        key={rating}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, rating })}
-                        className="focus:outline-none"
-                      >
-                        <Star
-                          className={`w-8 h-8 ${
-                            rating <= formData.rating
-                              ? "text-yellow-500 fill-yellow-500"
-                              : "text-gray-300"
-                          }`}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Comment *
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    value={formData.comment}
-                    onChange={(e) =>
-                      setFormData({ ...formData, comment: e.target.value })
-                    }
-                    minLength={10}
-                    maxLength={1000}
-                    className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                    placeholder="Share your experience with this design (min 10 chars)"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {formData.comment.length}/1000 characters
-                  </p>
-                </div>
-                <div className="flex space-x-3 pt-4">
-                  <Button
-                    type="button"
-                    onClick={handleCloseModal}
-                    variant="outline"
-                    className="flex-1"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                  >
-                    {editingReview ? "Update" : "Submit"}
-                  </Button>
-                </div>
-              </form>
+              <button
+                onClick={handleCloseModal}
+                className="p-1.5 text-muted-foreground hover:text-foreground rounded"
+                aria-label="Close dialog"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-2">
+                  Rating
+                </label>
+                <div className="flex items-center gap-2">
+                  {[1, 2, 3, 4, 5].map((rating) => (
+                    <button
+                      key={rating}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, rating })}
+                      className="p-1 hover:scale-110 transition-transform focus:outline-none"
+                    >
+                      <Star
+                        className={`w-7 h-7 ${
+                          rating <= formData.rating
+                            ? "text-amber-500 fill-amber-500"
+                            : "text-muted-foreground/30"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                  <span className="text-sm font-bold text-foreground ml-2">
+                    {formData.rating} out of 5
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-foreground mb-2">
+                  Review Comment (minimum 10 characters)
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  value={formData.comment}
+                  onChange={(e) =>
+                    setFormData({ ...formData, comment: e.target.value })
+                  }
+                  minLength={10}
+                  maxLength={1000}
+                  className="w-full p-3.5 text-sm bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none transition-colors resize-none"
+                  placeholder="Share details of your experience using this design asset..."
+                />
+                <div className="text-xs text-muted-foreground mt-1 text-right">
+                  {formData.comment.length} / 1000
+                </div>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCloseModal}
+                  className="border-border text-foreground text-sm font-semibold px-4 py-2 hover:bg-muted"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="bg-primary text-primary-foreground text-sm font-bold px-5 py-2 hover:bg-primary/90"
+                >
+                  {editingReview ? "Save Changes" : "Publish Review"}
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       )}

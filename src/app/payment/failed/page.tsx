@@ -1,24 +1,9 @@
 "use client";
 
-/**
- * Payment Failed Page
- *
- * NOTE: Currently not actively used in the payment flow.
- * The app uses modal-based error handling via PurchaseModal.
- *
- * This page can be used for:
- * - External Stripe redirect failures
- * - Webhook failure notifications
- * - Direct error links in emails
- *
- * To activate: Update PaymentForm return_url to redirect here on errors,
- * or use as webhook failure landing page.
- */
-
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { XCircle, AlertTriangle, Loader2 } from "lucide-react";
+import { XCircle, AlertCircle, Loader2, ArrowLeft, RefreshCw, LifeBuoy } from "lucide-react";
 
 function PaymentFailedContent() {
   const searchParams = useSearchParams();
@@ -26,82 +11,71 @@ function PaymentFailedContent() {
   const paymentIntentId = searchParams.get("payment_intent");
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto bg-card rounded-3xl shadow-2xl border-2 border-border p-8">
+    <div className="container mx-auto px-4 py-16 min-h-[80vh] flex items-center justify-center bg-background">
+      <div className="max-w-xl w-full bg-card rounded-xl border border-border p-6 sm:p-8">
         <div className="text-center">
-          <div className="w-20 h-20 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <XCircle className="w-10 h-10 text-destructive" />
+          <div className="w-14 h-14 rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 flex items-center justify-center mx-auto mb-4 text-red-600 dark:text-red-400">
+            <XCircle className="w-7 h-7" />
           </div>
 
-          <h1 className="text-3xl font-black text-foreground mb-3">
-            Payment Failed
+          <h1 className="text-2xl font-bold text-foreground mb-2">
+            Payment Incomplete
           </h1>
+          <p className="text-sm text-muted-foreground mb-6">
+            We could not complete your transaction. No charges have been made.
+          </p>
 
-          <div className="bg-destructive/10 border-2 border-destructive/30 rounded-2xl p-4 mb-6">
-            <div className="flex items-start">
-              <AlertTriangle className="w-5 h-5 text-destructive mr-3 shrink-0 mt-0.5" />
-              <div className="text-left">
-                <p className="text-destructive font-black mb-1">Error Details:</p>
-                <p className="text-destructive/90 text-sm font-medium">
-                  {error ||
-                    "Your payment could not be processed. Please try again."}
+          <div className="bg-red-50/50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-5 text-left">
+            <div className="flex items-start gap-2.5">
+              <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-xs font-semibold text-red-700 dark:text-red-400">Transaction Status:</p>
+                <p className="text-xs text-red-600 dark:text-red-300 mt-0.5">
+                  {error || "Your payment could not be processed. Please verify your card details and try again."}
                 </p>
                 {paymentIntentId && (
-                  <p className="text-destructive/80 text-xs mt-2 font-medium">
-                    Payment Intent: {paymentIntentId}
+                  <p className="text-[11px] text-muted-foreground font-mono mt-2">
+                    Ref: {paymentIntentId}
                   </p>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="bg-primary/10 border-2 border-primary/20 rounded-2xl p-4 mb-6">
-            <h3 className="font-black text-foreground mb-2">
-              Common Reasons for Payment Failure:
+          <div className="bg-muted/30 border border-border rounded-lg p-4 mb-6 text-left">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+              Common solutions
             </h3>
-            <ul className="text-sm text-muted-foreground font-medium text-left space-y-1">
-              <li>• Insufficient funds in your account</li>
-              <li>• Card expired or incorrect details</li>
-              <li>• Payment declined by your bank</li>
-              <li>• Network or connection issues</li>
-              <li>• 3D Secure authentication failed</li>
+            <ul className="text-xs text-muted-foreground space-y-1.5 list-disc list-inside">
+              <li>Check your card balance or daily limit</li>
+              <li>Confirm expiration date and CVC security code</li>
+              <li>Ensure 3D Secure verification was approved in banking app</li>
+              <li>Try an alternate card or payment method</li>
             </ul>
           </div>
 
-          <div className="flex gap-4 justify-center flex-wrap">
+          <div className="flex flex-col sm:flex-row gap-2.5 justify-center">
             <Link
               href="/pricing"
-              className="bg-primary hover:bg-primary/90 text-secondary px-8 py-3 rounded-2xl font-black transition-all hover:scale-105 shadow-2xl"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors text-center flex items-center justify-center gap-2"
             >
-              Try Again
+              <RefreshCw className="w-4 h-4" />
+              <span>Try Again</span>
             </Link>
             <Link
               href="/contact"
-              className="bg-muted hover:bg-muted/80 text-foreground px-8 py-3 rounded-2xl font-black transition-all hover:scale-105 border-2 border-border"
+              className="border border-border bg-card hover:bg-muted text-foreground px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors text-center flex items-center justify-center gap-2"
             >
-              Contact Support
+              <LifeBuoy className="w-4 h-4" />
+              <span>Contact Support</span>
             </Link>
             <Link
               href="/dashboard"
-              className="bg-card hover:bg-muted text-foreground px-8 py-3 rounded-2xl font-black transition-all hover:scale-105 border-2 border-border"
+              className="border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors text-center flex items-center justify-center gap-2"
             >
-              Go to Dashboard
+              <ArrowLeft className="w-4 h-4" />
+              <span>Dashboard</span>
             </Link>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-border">
-            <p className="text-sm text-muted-foreground font-medium">
-              Need help? Our support team is available 24/7
-            </p>
-            <p className="text-sm text-muted-foreground/80 mt-1 font-medium">
-              Email:{" "}
-              <a
-                href="mailto:support@example.com"
-                className="text-primary hover:underline font-black"
-              >
-                support@example.com
-              </a>
-            </p>
           </div>
         </div>
       </div>
@@ -113,12 +87,10 @@ export default function PaymentFailedPage() {
   return (
     <Suspense
       fallback={
-        <div className="container mx-auto px-4 py-12 min-h-screen bg-background">
-          <div className="max-w-2xl mx-auto bg-card rounded-3xl shadow-2xl border-2 border-border p-8">
-            <div className="flex flex-col items-center justify-center py-12">
-              <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
-              <p className="text-foreground font-black">Loading...</p>
-            </div>
+        <div className="container mx-auto px-4 py-16 min-h-[80vh] flex items-center justify-center bg-background">
+          <div className="max-w-xl w-full bg-card rounded-xl border border-border p-8 flex flex-col items-center justify-center space-y-3">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <p className="text-sm font-semibold text-muted-foreground">Loading payment details...</p>
           </div>
         </div>
       }

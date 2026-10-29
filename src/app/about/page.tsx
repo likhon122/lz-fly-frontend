@@ -1,15 +1,17 @@
 "use client";
 
-import { Award, Users, Target, Sparkles, Shield, Heart } from "lucide-react";
+import React from "react";
+import { Award, Users, Target, Sparkles, Shield, Heart, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function AboutPage() {
   const stats = [
-    { label: "Active Designs", value: "500+", icon: Sparkles },
-    { label: "Happy Customers", value: "10K+", icon: Users },
-    { label: "Years Experience", value: "5+", icon: Award },
-    { label: "Success Rate", value: "98%", icon: Target },
+    { label: "Active Designs", value: "500+" },
+    { label: "Global Creators", value: "10K+" },
+    { label: "Years in Industry", value: "5+" },
+    { label: "Satisfaction Rate", value: "98%" },
   ];
 
   const values = [
@@ -17,25 +19,25 @@ export default function AboutPage() {
       icon: Award,
       title: "Quality First",
       description:
-        "Every design in our collection is carefully curated and meets our strict quality standards. We believe in delivering excellence.",
+        "Every design in our catalog is systematically reviewed and verified against strict design system and production standards.",
     },
     {
       icon: Users,
       title: "Customer-Centric",
       description:
-        "Our customers are at the heart of everything we do. We're committed to providing exceptional service and support.",
+        "We build for creators, engineers, and digital founders. Our tools and templates are engineered to accelerate real-world workflows.",
     },
     {
       icon: Shield,
       title: "Trust & Security",
       description:
-        "Your data and transactions are protected with industry-standard security. We take your privacy seriously.",
+        "Every transaction, asset download, and account credential is protected with industry-standard encryption and strict access controls.",
     },
     {
       icon: Heart,
       title: "Community Driven",
       description:
-        "We foster a vibrant community of designers and creators. Together, we grow and inspire each other.",
+        "We foster a collaborative global network of world-class designers and developers who share knowledge and elevate digital craft.",
     },
   ];
 
@@ -44,230 +46,227 @@ export default function AboutPage() {
       name: "Sarah Johnson",
       role: "Founder & CEO",
       image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-      bio: "Passionate about design and innovation",
+      bio: "10+ years scaling digital design systems and developer platforms.",
     },
     {
       name: "Michael Chen",
-      role: "Lead Designer",
+      role: "Lead Systems Architect",
       image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
-      bio: "Creating beautiful experiences since 2015",
+      bio: "Pioneering component libraries and production design frameworks.",
     },
     {
       name: "Emily Rodriguez",
       role: "Creative Director",
       image: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-      bio: "Bringing visions to life through design",
+      bio: "Crafting visual identities and accessible UI standards across devices.",
     },
     {
       name: "David Park",
-      role: "Head of Customer Success",
+      role: "Head of Community",
       image: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-      bio: "Ensuring every customer has a great experience",
+      bio: "Empowering creators with tutorials, guidelines, and prompt support.",
     },
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden py-24 border-b border-border">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--primary)/0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--primary)/0.2)_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-          <div className="absolute top-20 left-20 w-72 h-72 bg-primary rounded-full blur-3xl animate-pulse opacity-20"></div>
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary rounded-full blur-3xl animate-pulse delay-700 opacity-20"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-6xl md:text-7xl font-black mb-6 animate-fade-in gradient-text">
-              About DesignHub
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Breadcrumb Navigation */}
+        <nav className="mb-6">
+          <div className="flex items-center space-x-2 text-sm font-semibold">
+            <Link
+              href="/"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Home
+            </Link>
+            <span className="text-muted-foreground/40">/</span>
+            <span className="text-foreground">About</span>
+          </div>
+        </nav>
+
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 border-b border-border">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">
+              Organization
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight">
+              About LZ Fly
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-10 leading-relaxed font-medium">
-              We&apos;re on a mission to empower creators with stunning,
-              professional designs that bring their visions to life.
+            <p className="text-base sm:text-lg text-muted-foreground mt-2 max-w-2xl leading-relaxed">
+              We empower modern creators, developers, and studios with production-grade
+              design components, templates, and UI systems.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link
-                href="/designs"
-                className="px-8 py-4 bg-primary text-secondary font-black rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-2xl"
+          </div>
+          <div className="flex items-center gap-2">
+            <Link href="/designs">
+              <Button
+                variant="outline"
+                className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-sm px-5 py-2.5 transition-colors"
               >
-                Explore Designs
-              </Link>
-              <Link
-                href="/contact"
-                className="px-8 py-4 bg-card text-foreground font-black rounded-2xl hover:bg-muted transition-all duration-300 border-2 border-border shadow-2xl"
-              >
-                Get in Touch
-              </Link>
-            </div>
+                Browse Designs
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
-      </section>
 
-      {/* Stats Section */}
-      <section className="py-16 -mt-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <div
-                  key={index}
-                  className="group bg-card rounded-3xl shadow-2xl p-8 text-center hover:shadow-primary/20 border-2 border-border hover:border-primary hover:scale-105 transition-all duration-500"
-                >
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                    <Icon className="w-8 h-8 text-primary" />
-                  </div>
-                  <p className="text-4xl font-black text-primary mb-2 drop-shadow-lg">
-                    {stat.value}
-                  </p>
-                  <p className="text-muted-foreground text-sm font-bold uppercase tracking-wider">{stat.label}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Our Story Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-5xl font-black text-foreground mb-6">
-                Our Story
-              </h2>
-              <div className="w-24 h-2 bg-primary mx-auto rounded-full shadow-lg shadow-primary/30"></div>
-            </div>
-            <div className="space-y-6">
-              <p className="text-foreground/80 leading-relaxed text-lg font-medium">
-                DesignHub was born from a simple belief: great design should
-                be accessible to everyone. What started as a small collection of
-                handcrafted designs has grown into a thriving marketplace
-                serving thousands of creators worldwide.
-              </p>
-              <p className="text-foreground/80 leading-relaxed text-lg font-medium">
-                Our journey began in 2018 when our founder, inspired by the
-                challenges of finding quality design resources, decided to
-                create a platform that would bridge the gap between talented
-                designers and people who need their work.
-              </p>
-              <p className="text-foreground/80 leading-relaxed text-lg font-medium">
-                Today, we&apos;re proud to be a trusted partner for designers,
-                developers, marketers, and entrepreneurs. Every design in our
-                collection represents hours of creativity, passion, and
-                dedication to excellence.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section className="py-24 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-black text-foreground mb-6">
-              Our Core Values
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
-              These principles guide everything we do and shape how we serve our
-              community.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {values.map((value, index) => {
-              const Icon = value.icon;
-              return (
-                <div
-                  key={index}
-                  className="group bg-card rounded-3xl shadow-2xl p-10 hover:shadow-primary/20 transition-all duration-500 border-2 border-border hover:border-primary"
-                >
-                  <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-xl">
-                    <Icon className="w-10 h-10 text-primary" />
-                  </div>
-                  <h3 className="text-3xl font-black text-foreground mb-4 group-hover:text-primary transition-colors duration-300">
-                    {value.title}
-                  </h3>
-                  <p className="text-foreground/70 leading-relaxed font-medium text-lg">
-                    {value.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-black text-foreground mb-6">
-              Meet Our Team
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-medium">
-              The talented individuals behind DesignHub who work tirelessly to
-              bring you the best design experience.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-            {team.map((member, index) => (
+        {/* Minimalist Metrics Strip (0 gradients, 0 box shadow, 0 blur) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-8 border-b border-border">
+          {stats.map((stat, idx) => (
+            <div
+              key={stat.label}
+              className={`${
+                idx < stats.length - 1 ? "border-r border-border/50 pr-4" : ""
+              }`}
+            >
               <div
-                key={index}
-                className="group bg-card rounded-3xl shadow-2xl overflow-hidden hover:shadow-primary/20 transition-all duration-500 border-2 border-border hover:border-primary"
+                className={`text-3xl sm:text-4xl font-extrabold ${
+                  idx === 0 ? "text-primary" : "text-foreground"
+                }`}
               >
-                <div className="aspect-square bg-primary/5 overflow-hidden relative">
+                {stat.value}
+              </div>
+              <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Mission & Story Section */}
+        <div className="py-14 border-b border-border grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-5">
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+              Our Vision
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
+              Engineering the standard for modern digital aesthetics.
+            </h2>
+          </div>
+          <div className="lg:col-span-7 space-y-4 text-base sm:text-lg text-muted-foreground leading-relaxed">
+            <p>
+              LZ Fly was founded on a simple premise: professional digital creation
+              should not require reinventing common interface patterns from scratch.
+              High-growth product teams need reliable, accessible, and clean architectural
+              foundations that ship fast.
+            </p>
+            <p>
+              Today, our repository hosts verified assets spanning web dashboards,
+              mobile design systems, component specs, and iconography. We ensure every
+              download is production-ready, cleanly layered, and commercially licensed.
+            </p>
+          </div>
+        </div>
+
+        {/* Values Section */}
+        <div className="py-14 border-b border-border">
+          <div className="mb-8">
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+              Guiding Principles
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+              Core Values
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {values.map((v) => {
+              const Icon = v.icon;
+              return (
+                <div
+                  key={v.title}
+                  className="border border-border rounded-xl bg-card p-7 hover:border-foreground/40 transition-colors"
+                >
+                  <div className="w-11 h-11 rounded-lg border border-border bg-muted/40 flex items-center justify-center mb-4">
+                    <Icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground mb-2">
+                    {v.title}
+                  </h3>
+                  <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                    {v.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Leadership Team */}
+        <div className="py-14 border-b border-border">
+          <div className="mb-8">
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+              Leadership
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+              Meet the Team
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {team.map((member) => (
+              <div
+                key={member.name}
+                className="border border-border rounded-xl bg-card overflow-hidden hover:border-foreground/40 transition-colors flex flex-col"
+              >
+                <div className="aspect-square bg-muted relative border-b border-border">
                   <Image
                     src={member.image}
                     alt={member.name}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 25vw"
+                    className="object-cover"
                   />
                 </div>
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-black text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                    {member.name}
-                  </h3>
-                  <p className="text-primary font-black mb-3 text-sm uppercase tracking-wider">
-                    {member.role}
-                  </p>
-                  <p className="text-muted-foreground text-sm font-medium">{member.bio}</p>
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-foreground">
+                      {member.name}
+                    </h3>
+                    <p className="text-sm font-semibold text-primary mt-0.5">
+                      {member.role}
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2.5 leading-relaxed">
+                      {member.bio}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-muted/30 border-t border-border">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-5xl md:text-6xl font-black mb-6 gradient-text">
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-10 font-medium">
-              Join thousands of satisfied customers and discover the perfect
-              designs for your next project.
-            </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link
-                href="/designs"
-                className="px-8 py-4 bg-primary text-secondary font-black rounded-2xl hover:bg-primary/90 transition-all duration-300 hover:scale-105 shadow-2xl"
-              >
-                Browse Designs
+        {/* Bottom CTA Strip */}
+        <div className="pt-14">
+          <div className="border border-border rounded-xl bg-card p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                Ready to accelerate your creative workflow?
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground mt-2 max-w-xl">
+                Join thousands of designers and engineering teams who build faster with LZ Fly.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 shrink-0">
+              <Link href="/designs">
+                <Button className="bg-primary text-secondary hover:bg-primary/90 font-bold rounded-lg text-sm px-6 py-3 transition-colors">
+                  Explore Designs
+                </Button>
               </Link>
-              <Link
-                href="/pricing"
-                className="px-8 py-4 bg-card text-foreground font-black rounded-2xl hover:bg-muted transition-all duration-300 border-2 border-border shadow-2xl"
-              >
-                View Pricing
+              <Link href="/contact">
+                <Button
+                  variant="outline"
+                  className="border-border hover:border-foreground/40 bg-card text-foreground font-bold rounded-lg text-sm px-6 py-3 transition-colors"
+                >
+                  Contact Us
+                </Button>
               </Link>
             </div>
           </div>
         </div>
-      </section>
+      </main>
     </div>
   );
 }

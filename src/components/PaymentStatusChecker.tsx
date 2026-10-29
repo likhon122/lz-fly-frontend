@@ -10,7 +10,6 @@ interface PaymentStatusCheckerProps {
   onFailure?: () => void;
 }
 
-// Backend Payment/Purchase object structure
 interface PaymentData {
   _id: string;
   user: string;
@@ -40,39 +39,6 @@ interface PaymentData {
   updatedAt: string;
 }
 
-/**
- * Payment Status Checker Component
- * Checks payment status from backend and displays result
- *
- * Backend Response Structure:
- * {
- *   success: boolean,
- *   message: string,
- *   data: {
- *     _id: string,
- *     user: string,
- *     purchaseType: string,
- *     design: string,
- *     amount: number,
- *     currencyDisplay: string,
- *     currency: string,
- *     paymentMethod: string,
- *     paymentDetails: object,
- *     stripePaymentIntentId: string,
- *     status: "pending" | "succeeded" | "failed" | "canceled" | "refunded" | "completed" | "active",
- *     purchaseDate: string,
- *     activatedAt: string,
- *     itemMaxDownloads: number,
- *     itemDownloadsUsed: number,
- *     createdAt: string,
- *     updatedAt: string
- *   }
- * }
- *
- * @param paymentIntentId - Stripe payment intent ID
- * @param onSuccess - Callback when payment is successful
- * @param onFailure - Callback when payment fails
- */
 const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
   paymentIntentId,
   onSuccess,
@@ -88,7 +54,7 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
     refetch,
   } = useGetPaymentStatusQuery(paymentIntentId, {
     skip: !shouldFetch || !paymentIntentId,
-    pollingInterval: 3000, // Poll every 3 seconds until status is final
+    pollingInterval: 3000,
     skipPollingIfUnfocused: true,
   });
 
@@ -97,7 +63,6 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
 
     const status = paymentData.data.status;
 
-    // Stop polling when payment reaches a final state
     if (
       [
         "succeeded",
@@ -120,10 +85,12 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4">
-        <Loader2 className="w-12 h-12 animate-spin text-blue-600" />
-        <p className="text-gray-700 font-medium">Checking payment status...</p>
-        <p className="text-sm text-gray-500">Please wait</p>
+      <div className="flex flex-col items-center justify-center py-10 space-y-3">
+        <div className="w-12 h-12 rounded-lg border border-border bg-muted/40 flex items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+        </div>
+        <p className="text-base font-semibold text-foreground">Verifying payment status...</p>
+        <p className="text-xs text-muted-foreground">Confirming transaction with bank</p>
       </div>
     );
   }
@@ -135,37 +102,32 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
         : "We couldn't verify your payment status. Please contact support.";
 
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-          <XCircle className="w-8 h-8 text-red-600" />
+      <div className="flex flex-col items-center justify-center py-10 space-y-3">
+        <div className="w-12 h-12 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 flex items-center justify-center text-red-600 dark:text-red-400">
+          <XCircle className="w-6 h-6" />
         </div>
-        <p className="text-gray-900 font-bold text-xl">
-          Unable to Verify Payment
-        </p>
-        <p className="text-gray-600 text-center max-w-md">{errorMessage}</p>
+        <p className="text-lg font-bold text-foreground">Unable to Verify Payment</p>
+        <p className="text-sm text-muted-foreground text-center max-w-md">{errorMessage}</p>
       </div>
     );
   }
 
   const payment = paymentData.data as PaymentData;
 
-  // Ensure payment data is valid
   if (!payment || typeof payment !== "object") {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-          <XCircle className="w-8 h-8 text-red-600" />
+      <div className="flex flex-col items-center justify-center py-10 space-y-3">
+        <div className="w-12 h-12 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 flex items-center justify-center text-red-600 dark:text-red-400">
+          <XCircle className="w-6 h-6" />
         </div>
-        <p className="text-gray-900 font-bold text-xl">Invalid Payment Data</p>
-        <p className="text-gray-600 text-center max-w-md">
+        <p className="text-lg font-bold text-foreground">Invalid Payment Data</p>
+        <p className="text-sm text-muted-foreground text-center max-w-md">
           Unable to retrieve payment information. Please contact support.
         </p>
       </div>
     );
   }
 
-  // Extract status from payment object
-  // Backend returns full payment/purchase object with status field
   const status = payment.status;
   const amount = payment.amount;
   const currency = payment.currencyDisplay || payment.currency || "$";
@@ -174,20 +136,25 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
   // Success State
   if (status === "succeeded" || status === "completed" || status === "active") {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-          <CheckCircle className="w-8 h-8 text-green-600" />
+      <div className="flex flex-col items-center justify-center py-8 space-y-3 text-center">
+        <div className="w-14 h-14 rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/40 flex items-center justify-center text-green-600 dark:text-green-400">
+          <CheckCircle className="w-7 h-7" />
         </div>
-        <p className="text-gray-900 font-bold text-2xl">Payment Successful!</p>
-        <p className="text-gray-600 text-center max-w-md">
-          Your payment of {currency}{" "}
-          {typeof amount === "number" ? amount.toFixed(2) : amount} has been
-          processed successfully.
-        </p>
-        {purchaseId && (
-          <p className="text-sm text-gray-500">
-            Purchase ID: {String(purchaseId)}
+        <div className="space-y-1">
+          <p className="text-xl font-bold text-foreground">Payment Successful</p>
+          <p className="text-sm text-muted-foreground max-w-md">
+            Your payment of{" "}
+            <span className="font-semibold text-foreground">
+              {currency}{typeof amount === "number" ? amount.toFixed(2) : amount}
+            </span>{" "}
+            has been confirmed and processed securely.
           </p>
+        </div>
+        {purchaseId && (
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-border bg-muted/40 text-xs text-muted-foreground font-mono">
+            <span>Ref ID:</span>
+            <span className="text-foreground font-semibold">{String(purchaseId)}</span>
+          </div>
         )}
       </div>
     );
@@ -196,15 +163,16 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
   // Failed State
   if (status === "failed" || status === "canceled") {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-          <XCircle className="w-8 h-8 text-red-600" />
+      <div className="flex flex-col items-center justify-center py-8 space-y-3 text-center">
+        <div className="w-14 h-14 rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40 flex items-center justify-center text-red-600 dark:text-red-400">
+          <XCircle className="w-7 h-7" />
         </div>
-        <p className="text-gray-900 font-bold text-2xl">Payment Failed</p>
-        <p className="text-gray-600 text-center max-w-md">
-          {payment.errorMessage ||
-            "Your payment could not be processed. Please try again."}
-        </p>
+        <div className="space-y-1">
+          <p className="text-xl font-bold text-foreground">Payment Failed</p>
+          <p className="text-sm text-muted-foreground max-w-md">
+            {payment.errorMessage || "Your payment could not be processed. Please check your card details and try again."}
+          </p>
+        </div>
       </div>
     );
   }
@@ -212,14 +180,16 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
   // Pending State
   if (status === "pending") {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4">
-        <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
-          <Clock className="w-8 h-8 text-yellow-600" />
+      <div className="flex flex-col items-center justify-center py-8 space-y-3 text-center">
+        <div className="w-14 h-14 rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 flex items-center justify-center text-amber-600 dark:text-amber-400">
+          <Clock className="w-7 h-7" />
         </div>
-        <p className="text-gray-900 font-bold text-2xl">Payment Pending</p>
-        <p className="text-gray-600 text-center max-w-md">
-          Your payment is being processed. This may take a few moments.
-        </p>
+        <div className="space-y-1">
+          <p className="text-xl font-bold text-foreground">Payment Pending</p>
+          <p className="text-sm text-muted-foreground max-w-md">
+            Your payment is currently being confirmed by your payment provider. This may take a moment.
+          </p>
+        </div>
       </div>
     );
   }
@@ -227,16 +197,18 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
   // Refunded State
   if (status === "refunded") {
     return (
-      <div className="flex flex-col items-center justify-center py-12 space-y-4">
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-          <CheckCircle className="w-8 h-8 text-gray-600" />
+      <div className="flex flex-col items-center justify-center py-8 space-y-3 text-center">
+        <div className="w-14 h-14 rounded-xl border border-border bg-muted/40 flex items-center justify-center text-muted-foreground">
+          <CheckCircle className="w-7 h-7" />
         </div>
-        <p className="text-gray-900 font-bold text-2xl">Payment Refunded</p>
-        <p className="text-gray-600 text-center max-w-md">
-          This payment has been refunded to your original payment method.
-        </p>
+        <div className="space-y-1">
+          <p className="text-xl font-bold text-foreground">Payment Refunded</p>
+          <p className="text-sm text-muted-foreground max-w-md">
+            This payment was refunded to your original payment method.
+          </p>
+        </div>
         {payment.refundedAt && (
-          <p className="text-sm text-gray-500">
+          <p className="text-xs text-muted-foreground font-medium" suppressHydrationWarning>
             Refunded on {new Date(payment.refundedAt).toLocaleDateString()}
           </p>
         )}
@@ -246,13 +218,13 @@ const PaymentStatusChecker: React.FC<PaymentStatusCheckerProps> = ({
 
   // Default/Unknown State
   return (
-    <div className="flex flex-col items-center justify-center py-12 space-y-4">
-      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-        <Clock className="w-8 h-8 text-gray-600" />
+    <div className="flex flex-col items-center justify-center py-8 space-y-3 text-center">
+      <div className="w-14 h-14 rounded-xl border border-border bg-muted/40 flex items-center justify-center text-muted-foreground">
+        <Clock className="w-7 h-7" />
       </div>
-      <p className="text-gray-900 font-bold text-xl">Processing Payment</p>
-      <p className="text-gray-600 text-center max-w-md">
-        Payment status: {String(status || "unknown")}
+      <p className="text-lg font-bold text-foreground">Processing Payment</p>
+      <p className="text-sm text-muted-foreground max-w-md">
+        Current status: <span className="font-semibold text-foreground capitalize">{String(status || "processing")}</span>
       </p>
     </div>
   );

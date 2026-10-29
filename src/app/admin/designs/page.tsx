@@ -378,7 +378,7 @@ export default function DesignsPage() {
           </Button>
           <Button
             onClick={() => setShowModal(true)}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors"
           >
             <Plus className="w-5 h-5 mr-2" />
             Add Design
@@ -387,7 +387,7 @@ export default function DesignsPage() {
       </div>
 
       {/* Basic Filters */}
-      <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4">
+      <div className="bg-card rounded-xl border border-border p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -453,7 +453,7 @@ export default function DesignsPage() {
 
       {/* Advanced Filters */}
       {showFilters && (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-foreground">
               Advanced Filters
@@ -530,7 +530,7 @@ export default function DesignsPage() {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
         </div>
       ) : designs.length === 0 ? (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+        <div className="bg-card rounded-xl border border-border p-12 text-center">
           <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-foreground mb-2">
             No designs found
@@ -552,7 +552,7 @@ export default function DesignsPage() {
             !subCategoryFilter && (
               <Button
                 onClick={() => setShowModal(true)}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Add Design
@@ -564,7 +564,7 @@ export default function DesignsPage() {
           {designs.map((design: any) => (
             <div
               key={design._id}
-              className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl dark:shadow-primary/10 transition-shadow"
+              className="bg-card rounded-xl border border-border overflow-hidden hover:border-foreground/40 transition-colors"
             >
               <div className="relative h-48 bg-muted">
                 {design.previewImageUrls &&
@@ -703,15 +703,15 @@ export default function DesignsPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="bg-card rounded-3xl shadow-2xl max-w-4xl w-full my-8 max-h-[90vh] overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 sm:p-5 text-white">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-card rounded-xl border border-border max-w-4xl w-full my-8 max-h-[90vh] overflow-hidden">
+            <div className="bg-card border-b border-border p-4 sm:p-5 text-foreground">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold">
-                    {editingDesign ? "✏️ Edit Design" : "🎨 Create New Design"}
+                  <h2 className="text-xl sm:text-2xl font-bold">
+                    {editingDesign ? "Edit Design" : "Create New Design"}
                   </h2>
-                  <p className="text-blue-100 mt-1">
+                  <p className="text-muted-foreground mt-1 text-sm font-medium">
                     {editingDesign
                       ? "Update your design details"
                       : "Share your creative work with the world"}
@@ -1554,7 +1554,7 @@ export default function DesignsPage() {
                   </Button>
                   <Button
                     type="submit"
-                    className="px-5 sm:px-6 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold shadow-xl dark:shadow-primary/10 hover:shadow-2xl dark:shadow-primary/20 transform hover:-translate-y-0.5 transition-all duration-200"
+                    className="px-5 sm:px-6 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors"
                     disabled={isCreating || isUpdating}
                   >
                     {isCreating || isUpdating ? (

@@ -16,10 +16,38 @@ interface AuthState {
   isAuthenticated: boolean;
 }
 
+const getInitialToken = (): string | null => {
+  if (typeof window !== "undefined") {
+    return (
+      localStorage.getItem("token") ||
+      localStorage.getItem("accessToken") ||
+      null
+    );
+  }
+  return null;
+};
+
+const getInitialUser = (): User | null => {
+  if (typeof window !== "undefined") {
+    const raw = localStorage.getItem("user");
+    if (raw) {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+};
+
+const initialToken = getInitialToken();
+const initialUser = getInitialUser();
+
 const initialState: AuthState = {
-  user: null,
-  token: null,
-  isAuthenticated: false,
+  user: initialUser,
+  token: initialToken,
+  isAuthenticated: !!(initialToken || initialUser),
 };
 
 const authSlice = createSlice({
@@ -31,13 +59,28 @@ const authSlice = createSlice({
       action: PayloadAction<{ user: User; token?: string }>
     ) => {
       state.user = action.payload.user;
-      state.token = action.payload.token || state.token;
+      if (action.payload.token) {
+        state.token = action.payload.token;
+      }
       state.isAuthenticated = true;
+
+      if (typeof window !== "undefined") {
+        if (action.payload.token) {
+          localStorage.setItem("token", action.payload.token);
+        }
+        localStorage.setItem("user", JSON.stringify(action.payload.user));
+      }
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("token");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
+      }
     },
   },
 });

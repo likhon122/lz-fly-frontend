@@ -5,347 +5,186 @@ import FeaturedDesigns from "@/components/FeaturedDesigns";
 import { VideoCarousel } from "@/components/VideoCarousel";
 import {
   ArrowRight,
-  Sparkles,
-  TrendingUp,
-  Shield,
+  ShieldCheck,
   Zap,
   Star,
   Download,
-  Users
+  Users,
 } from "lucide-react";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
-      {/* Ultra-Modern Hero Section with Video Background */}
-      <section className="relative overflow-hidden h-screen flex items-center justify-center">
-        {/* Video Background Carousel */}
+      {/* ═══════════ HERO ═══════════ */}
+      <section className="relative overflow-hidden flex items-center justify-center min-h-[85vh] md:min-h-[90vh] bg-neutral-950 text-white">
+        {/* Video background — sits behind everything */}
         <VideoCarousel />
 
-        {/* Minimal Animated Pattern Overlay */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none z-10">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--primary)/0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--primary)/0.1)_1px,transparent_1px)] bg-[size:6rem_6rem]" />
-        </div>
+        {/* Content — this h1 IS the LCP element (pure text = instant paint) */}
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+          <div className="max-w-3xl">
+            {/* Pill */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 bg-white/10 text-white text-xs font-semibold tracking-wide uppercase mb-6">
+              <span className="w-2 h-2 rounded-full bg-primary" />
+              LZ FLY ARCHITECTURE • VERIFIED ASSET CATALOG
+            </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-20 w-full">
-          {/* Hero Content - Perfectly Centered */}
-          <div className="text-center max-w-6xl mx-auto">
-            {/* Main Headline */}
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tight leading-tight">
-              <span className="text-white drop-shadow-[0_4px_25px_rgba(0,0,0,0.95)]">
-                Premium Design Templates
-              </span>
+            {/* H1 — large text is the LCP candidate, renders in <100ms */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-6">
+              Design templates
               <br />
-              <span className="gradient-text inline-block mt-4 drop-shadow-[0_4px_30px_rgba(135,230,75,0.7)]">
-                For Creative Professionals
-              </span>
+              <span className="text-primary">built to ship.</span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-base md:text-lg lg:text-xl text-white/90 drop-shadow-[0_3px_15px_rgba(0,0,0,0.95)] mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
-              Elevate your projects with our curated collection of world-class
-              design assets.
-              <br className="hidden md:block" />
-              Professional quality, instant access, unlimited creativity.
+            <p className="text-base sm:text-lg text-white/90 max-w-xl mb-8 leading-relaxed font-medium">
+              Production-ready UI kits, templates & creative assets.
+              Curated by senior designers. Instantly downloadable with commercial license.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center mb-20">
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-4 mb-14">
               <Link href="/designs">
                 <Button
                   size="lg"
-                  className="text-lg px-12 py-7 bg-primary hover:bg-primary/90 text-secondary shadow-[0_0_50px_rgba(135,230,75,0.6)] hover:shadow-[0_0_70px_rgba(135,230,75,0.9)] hover:scale-110 transition-all duration-300 group font-black rounded-2xl"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg px-7 py-3.5 text-sm sm:text-base transition-colors group"
                 >
                   Browse Collection
-                  <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
                 </Button>
               </Link>
               <Link href="/pricing">
                 <Button
-                  variant="outline"
                   size="lg"
-                  className="text-lg px-12 py-7 border-2 border-white/70 bg-white/5 backdrop-blur-2xl text-white hover:border-primary hover:bg-primary/10 hover:text-white font-black rounded-2xl transition-all duration-300 hover:scale-110"
+                  className="border-2 border-white/60 bg-white/10 hover:bg-white hover:text-neutral-950 text-white font-bold rounded-lg px-7 py-3.5 text-sm sm:text-base transition-colors"
                 >
                   View Pricing
                 </Button>
               </Link>
             </div>
 
-            {/* Trust Indicators - Minimal & Clean */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              <div className="text-center group">
-                <div className="text-5xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)] mb-2 group-hover:scale-110 transition-transform">
-                  5K+
-                </div>
-                <div className="text-xs text-white/80 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] font-bold uppercase tracking-widest">
-                  Designs
-                </div>
+            {/* Stat row */}
+            <div className="flex flex-wrap gap-8 sm:gap-12 text-white/70 text-sm">
+              <div>
+                <span className="block text-2xl sm:text-3xl font-extrabold text-white">5K+</span>
+                Curated Assets
               </div>
-              <div className="text-center group">
-                <div className="text-5xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)] mb-2 group-hover:scale-110 transition-transform">
-                  100+
-                </div>
-                <div className="text-xs text-white/80 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] font-bold uppercase tracking-widest">
-                  Categories
-                </div>
+              <div>
+                <span className="block text-2xl sm:text-3xl font-extrabold text-white">100+</span>
+                Design Disciplines
               </div>
-              <div className="text-center group">
-                <div className="text-5xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)] mb-2 group-hover:scale-110 transition-transform">
-                  500+
-                </div>
-                <div className="text-xs text-white/80 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] font-bold uppercase tracking-widest">
-                  Designers
-                </div>
+              <div>
+                <span className="block text-2xl sm:text-3xl font-extrabold text-white">10K+</span>
+                Active Creators
               </div>
-              <div className="text-center group">
-                <div className="text-5xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.95)] mb-2 group-hover:scale-110 transition-transform">
-                  24/7
-                </div>
-                <div className="text-xs text-white/80 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] font-bold uppercase tracking-widest">
-                  Support
-                </div>
-              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Crisp border separator */}
+        <div className="absolute bottom-0 left-0 right-0 border-b border-border z-10 pointer-events-none" />
+      </section>
+
+      {/* ═══════════ TRUST METRICS STRIP ═══════════ */}
+      <section className="border-b border-border bg-card">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div className="p-5 rounded-xl border border-border bg-background">
+              <div className="text-2xl sm:text-3xl font-black text-foreground">5,000+</div>
+              <div className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">Production Assets</div>
+            </div>
+            <div className="p-5 rounded-xl border border-border bg-background">
+              <div className="text-2xl sm:text-3xl font-black text-foreground">100+</div>
+              <div className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">Curated Disciplines</div>
+            </div>
+            <div className="p-5 rounded-xl border border-border bg-background">
+              <div className="text-2xl sm:text-3xl font-black text-foreground">10,000+</div>
+              <div className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">Global Creators</div>
+            </div>
+            <div className="p-5 rounded-xl border border-border bg-background">
+              <div className="text-2xl sm:text-3xl font-black text-foreground">100%</div>
+              <div className="text-xs sm:text-sm text-muted-foreground font-medium mt-1">Commercial License</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-32 bg-background dark:bg-card/30 relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--primary))_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--primary))_1px,transparent_1px)] bg-[size:4rem_4rem]" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-sm font-black text-primary uppercase tracking-wider">
-                Why Choose Us
-              </span>
-            </div>
-            <h2 className="text-5xl md:text-6xl font-black text-foreground mb-6">
-              Built for <span className="gradient-text">Creators</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-medium leading-relaxed">
-              Everything you need to bring your creative vision to life, backed
-              by our commitment to quality and innovation
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature Card 1 */}
-            <div className="group relative bg-card p-10 rounded-3xl border-2 border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative">
-                <div className="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform shadow-lg">
-                  <Zap className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-foreground transition-colors">
-                  Lightning Fast
-                </h3>
-                <p className="text-muted-foreground leading-relaxed font-medium">
-                  Download immediately after purchase. No waiting, no delays.
-                  Start creating instantly with full access to all files and
-                  assets.
-                </p>
-                <div className="mt-6 pt-6 border-t border-border">
-                  <div className="flex items-center gap-2 text-sm font-bold text-primary">
-                    <span>Instant Access</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Feature Card 2 */}
-            <div className="group relative bg-card p-10 rounded-3xl border-2 border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative">
-                <div className="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform shadow-lg">
-                  <Shield className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-foreground transition-colors">
-                  Premium Quality
-                </h3>
-                <p className="text-muted-foreground leading-relaxed font-medium">
-                  Every design reviewed by expert curators. Professional quality
-                  guaranteed in every template. Your success is our top
-                  priority.
-                </p>
-                <div className="mt-6 pt-6 border-t border-border">
-                  <div className="flex items-center gap-2 text-sm font-bold text-primary">
-                    <span>Expert Verified</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Feature Card 3 */}
-            <div className="group relative bg-card p-10 rounded-3xl border-2 border-border hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative">
-                <div className="w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-transform shadow-lg">
-                  <TrendingUp className="w-8 h-8 text-primary" />
-                </div>
-                <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-foreground transition-colors">
-                  Always Fresh
-                </h3>
-                <p className="text-muted-foreground leading-relaxed font-medium">
-                  New designs every week. Stay ahead with trending styles and
-                  cutting-edge designs from top creators worldwide.
-                </p>
-                <div className="mt-6 pt-6 border-t border-border">
-                  <div className="flex items-center gap-2 text-sm font-bold text-primary">
-                    <span>Weekly Updates</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Additional Stats */}
-          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center p-6 bg-card rounded-2xl border border-border">
-              <div className="text-4xl font-black text-primary mb-2">99%</div>
-              <div className="text-sm text-muted-foreground font-bold uppercase tracking-wider">
-                Satisfaction
-              </div>
-            </div>
-            <div className="text-center p-6 bg-card rounded-2xl border border-border">
-              <div className="text-4xl font-black text-primary mb-2">10K+</div>
-              <div className="text-sm text-muted-foreground font-bold uppercase tracking-wider">
-                Happy Clients
-              </div>
-            </div>
-            <div className="text-center p-6 bg-card rounded-2xl border border-border">
-              <div className="text-4xl font-black text-primary mb-2">50+</div>
-              <div className="text-sm text-muted-foreground font-bold uppercase tracking-wider">
-                Countries
-              </div>
-            </div>
-            <div className="text-center p-6 bg-card rounded-2xl border border-border">
-              <div className="text-4xl font-black text-primary mb-2">24/7</div>
-              <div className="text-sm text-muted-foreground font-bold uppercase tracking-wider">
-                Support
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-32 bg-muted/30 dark:bg-background">
+      {/* ═══════════ CATEGORIES ═══════════ */}
+      <section className="py-16 sm:py-20 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <CategoriesSection />
         </div>
       </section>
 
-      {/* Featured Designs Section */}
-      <section className="py-32 bg-background dark:bg-card/30">
+      {/* ═══════════ FEATURED DESIGNS ═══════════ */}
+      <section className="py-16 sm:py-20 bg-muted/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FeaturedDesigns />
         </div>
       </section>
 
-      {/* CTA Section - Ultra Modern */}
-      <section className="relative py-40 overflow-hidden bg-gradient-to-br from-primary/10 via-background to-primary/5 dark:from-primary/5 dark:via-card dark:to-primary/10">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl animate-blob" />
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-2000" />
-          <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl animate-blob animation-delay-4000" />
-        </div>
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Premium Badge */}
-          <div className="inline-flex items-center gap-3 bg-card backdrop-blur-sm rounded-full px-6 py-3 mb-10 border-2 border-primary/40 shadow-2xl">
-            <Star className="w-5 h-5 text-primary animate-pulse" />
-            <span className="text-sm font-black text-foreground tracking-wide">
-              🎉 LIMITED TIME OFFER - JOIN 10,000+ CREATORS
-            </span>
-          </div>
-
-          <h2 className="text-5xl md:text-7xl font-black text-foreground mb-8 leading-tight">
-            Ready to Elevate
-            <br />
-            <span className="gradient-text">Your Design Game?</span>
-          </h2>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-14 max-w-4xl mx-auto leading-relaxed font-medium">
-            Join thousands of successful designers and unlock unlimited access
-            to premium templates. Start creating professional designs in
-            minutes, not hours.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
-            <Link href="/register">
-              <Button
-                size="lg"
-                className="text-xl px-14 py-8 bg-primary hover:bg-primary/90 text-secondary shadow-2xl hover:shadow-primary/50 hover:scale-110 transition-all duration-300 font-black rounded-2xl group"
-              >
-                <Users className="w-6 h-6 mr-3" />
-                Start Free Trial
-                <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-              </Button>
-            </Link>
-            <Link href="/designs">
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-xl px-14 py-8 border-2 border-border bg-card hover:bg-muted hover:border-primary font-black rounded-2xl transition-all duration-300 hover:scale-110"
-              >
-                <Download className="w-6 h-6 mr-3" />
-                Browse Designs
-              </Button>
-            </Link>
-          </div>
-
-          {/* Trust Badges - Enhanced */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="flex flex-col items-center gap-3 p-6 bg-card rounded-2xl border-2 border-border group hover:border-primary/50 transition-all">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Shield className="w-7 h-7 text-primary" />
-              </div>
-              <span className="text-base font-black text-foreground">
-                Secure Payment
-              </span>
-              <span className="text-sm text-muted-foreground text-center">
-                256-bit SSL encryption
-              </span>
+      {/* ═══════════ CTA ═══════════ */}
+      <section className="py-20 sm:py-28 border-t border-border">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-card rounded-2xl border border-border p-8 sm:p-14 text-center">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs font-bold tracking-wider uppercase mb-6">
+              <Star className="w-3.5 h-3.5 text-primary fill-primary" />
+              <span>Enterprise Ready Architecture</span>
             </div>
-            <div className="flex flex-col items-center gap-3 p-6 bg-card rounded-2xl border-2 border-border group hover:border-primary/50 transition-all">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Download className="w-7 h-7 text-primary" />
-              </div>
-              <span className="text-base font-black text-foreground">
-                Instant Download
-              </span>
-              <span className="text-sm text-muted-foreground text-center">
-                No waiting, start now
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-3 p-6 bg-card rounded-2xl border-2 border-border group hover:border-primary/50 transition-all">
-              <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Star className="w-7 h-7 text-primary" />
-              </div>
-              <span className="text-base font-black text-foreground">
-                Premium Quality
-              </span>
-              <span className="text-sm text-muted-foreground text-center">
-                Expert-verified designs
-              </span>
-            </div>
-          </div>
 
-          {/* Money Back Guarantee */}
-          <div className="mt-12 inline-flex items-center gap-2 text-muted-foreground">
-            <Shield className="w-5 h-5" />
-            <span className="text-sm font-bold">
-              30-Day Money Back Guarantee • No Questions Asked
-            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground mb-4 tracking-tight leading-tight">
+              Ready to accelerate your creative workflow?
+            </h2>
+
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+              Instant access to thousands of production-ready templates and assets
+              designed for teams and independent creators who ship fast.
+            </p>
+
+            <div className="flex flex-wrap gap-4 justify-center mb-12">
+              <Link href="/register">
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg px-8 py-3 text-sm sm:text-base transition-colors group"
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Start Free Trial
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              </Link>
+              <Link href="/designs">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-border hover:border-foreground/40 bg-background text-foreground font-semibold rounded-lg px-8 py-3 text-sm sm:text-base transition-colors"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Browse Catalog
+                </Button>
+              </Link>
+            </div>
+
+            {/* Trust row */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-8 border-t border-border">
+              {[
+                { icon: ShieldCheck, title: "256-Bit SSL Checkout", desc: "Stripe encrypted payments" },
+                { icon: Zap, title: "Instant ZIP Delivery", desc: "Immediate download access" },
+                { icon: Star, title: "Commercial License", desc: "Perpetual worldwide rights" },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-3.5 rounded-xl border border-border bg-background"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-muted/40 border border-border flex items-center justify-center shrink-0">
+                    <item.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <div className="text-sm font-bold text-foreground">{item.title}</div>
+                    <div className="text-xs text-muted-foreground">{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

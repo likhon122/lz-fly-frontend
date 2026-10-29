@@ -5,6 +5,23 @@ import React, { useState } from "react";
 import { useGetCategoriesQuery } from "@/services/api";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  Search,
+  LayoutGrid,
+  List,
+  ArrowRight,
+  X,
+  Globe,
+  Smartphone,
+  Layout,
+  Box,
+  Sparkles,
+  Palette,
+  Image as ImageIcon,
+  Type,
+  Layers,
+  Folder,
+} from "lucide-react";
 
 interface Subcategory {
   id: string;
@@ -25,6 +42,21 @@ interface Category {
   updatedAt: string;
   subcategories: Subcategory[];
 }
+
+// Map category names to clean Lucide icons
+const getCategoryIcon = (name: string) => {
+  const n = name.toLowerCase();
+  if (n.includes("web") || n.includes("site") || n.includes("html")) return Globe;
+  if (n.includes("mobile") || n.includes("app") || n.includes("ios") || n.includes("android")) return Smartphone;
+  if (n.includes("ui") || n.includes("ux") || n.includes("dashboard") || n.includes("layout")) return Layout;
+  if (n.includes("3d") || n.includes("render") || n.includes("model")) return Box;
+  if (n.includes("brand") || n.includes("logo") || n.includes("identity")) return Sparkles;
+  if (n.includes("illustrat") || n.includes("art") || n.includes("vector") || n.includes("draw")) return Palette;
+  if (n.includes("photo") || n.includes("media") || n.includes("camera")) return ImageIcon;
+  if (n.includes("font") || n.includes("type") || n.includes("text")) return Type;
+  if (n.includes("system") || n.includes("component") || n.includes("template")) return Layers;
+  return Folder;
+};
 
 export default function CategoriesPage() {
   const { data: categoriesData, isLoading: categoriesLoading } =
@@ -47,590 +79,389 @@ export default function CategoriesPage() {
       updatedAt: sc.updatedAt ?? sc.updated_at ?? "",
     })),
   }));
+
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Filter categories based on search
+  // Filter categories based on search query
   const filteredCategories = categories.filter(
     (category) =>
       category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      category.description.toLowerCase().includes(searchQuery.toLowerCase())
+      category.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.subcategories.some((sc) =>
+        sc.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
   );
 
-  // Gradient colors for categories
-  const gradients = [
-    "from-blue-500 via-blue-600 to-purple-600",
-    "from-purple-500 via-pink-500 to-red-500",
-    "from-green-500 via-teal-500 to-cyan-500",
-    "from-orange-500 via-red-500 to-pink-500",
-    "from-indigo-500 via-purple-500 to-pink-500",
-    "from-yellow-500 via-orange-500 to-red-500",
-    "from-teal-500 via-green-500 to-emerald-500",
-    "from-rose-500 via-pink-500 to-fuchsia-500",
-    "from-cyan-500 via-blue-500 to-indigo-500",
-    "from-lime-500 via-green-500 to-teal-500",
-    "from-amber-500 via-orange-500 to-red-500",
-    "from-violet-500 via-purple-500 to-pink-500",
-  ];
-
-  const icons = [
-    // Design
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-      />
-    </svg>,
-    // Web
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-      />
-    </svg>,
-    // Mobile
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-      />
-    </svg>,
-    // Photo
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-      />
-    </svg>,
-    // UI/UX
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-      />
-    </svg>,
-    // Brand
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-      />
-    </svg>,
-    // Print
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-      />
-    </svg>,
-    // 3D
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-      />
-    </svg>,
-    // Illustration
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-      />
-    </svg>,
-    // Animation
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>,
-    // Typography
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-      />
-    </svg>,
-    // Marketing
-    <svg
-      className="w-10 h-10"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
-      />
-    </svg>,
-  ];
+  const totalSpecialties = categories.reduce(
+    (acc, cat) => acc + cat.subcategories.length,
+    0
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Breadcrumb */}
-        <nav className="mb-4">
-          <div className="flex items-center space-x-2 text-sm">
+    <div className="min-h-screen bg-background">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        {/* Breadcrumb Navigation */}
+        <nav className="mb-6">
+          <div className="flex items-center space-x-2 text-xs font-semibold">
             <Link
               href="/"
-              className="text-muted-foreground hover:text-primary transition-colors"
+              className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Home
             </Link>
-            <span className="text-gray-400">/</span>
-            <span className="text-foreground font-medium">Categories</span>
+            <span className="text-muted-foreground/40">/</span>
+            <span className="text-foreground">Categories</span>
           </div>
         </nav>
 
-        {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground mb-1">
-            Design Categories
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Explore {categories.length} design categories
-          </p>
+        {/* Page Header Header Section */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-8 border-b border-border">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-border bg-muted/40 text-foreground text-xs font-semibold uppercase tracking-wider mb-3">
+              Asset Directory
+            </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              Design Categories
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1.5 max-w-xl leading-relaxed">
+              Explore production-ready templates and assets organized by creative
+              disciplines and specialties.
+            </p>
+          </div>
+          <Link href="/designs">
+            <Button
+              variant="outline"
+              className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-xs px-4 py-2 transition-colors"
+            >
+              Browse All Designs
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </Button>
+          </Link>
         </div>
 
-        {/* Search & View Controls */}
-        <div className="mb-6 bg-card rounded-lg p-4 shadow-sm border border-border">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            {/* Search Input */}
-            <div className="relative flex-1 w-full">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="w-5 h-5 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                placeholder="Search categories..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-card border border-border rounded-lg focus:border-primary focus:ring-2 focus:ring-primary focus:outline-none transition-colors text-foreground placeholder-gray-500"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-muted-foreground"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              )}
+        {/* Minimalist Metrics Strip (0 gradients, 0 box shadow, 0 blur) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-border">
+          <div className="border-r border-border/50 pr-4">
+            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">
+              {categories.length}
             </div>
+            <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider mt-1">
+              Main Disciplines
+            </div>
+          </div>
+          <div className="border-r border-border/50 pr-4">
+            <div className="text-2xl sm:text-3xl font-extrabold text-primary">
+              {totalSpecialties}
+            </div>
+            <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider mt-1">
+              Curated Specialties
+            </div>
+          </div>
+          <div className="border-r border-border/50 pr-4">
+            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">
+              {categories.filter((c) => c.isActive).length}
+            </div>
+            <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider mt-1">
+              Active Domains
+            </div>
+          </div>
+          <div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-foreground">
+              100%
+            </div>
+            <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider mt-1">
+              Production Verified
+            </div>
+          </div>
+        </div>
+
+        {/* Toolbar: Search & View Switcher */}
+        <div className="py-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* Search Box */}
+          <div className="relative flex-1 max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
+              <Search className="w-4 h-4" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search categories or specialties..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-8 py-2 text-sm bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Right Controls */}
+          <div className="flex items-center justify-between sm:justify-end gap-3">
+            <span className="text-xs font-semibold text-muted-foreground">
+              Showing {filteredCategories.length} of {categories.length}
+            </span>
 
             {/* View Mode Toggle */}
-            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+            <div className="inline-flex items-center border border-border rounded-lg p-0.5 bg-muted/40">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-2 rounded transition-all ${
+                className={`p-1.5 rounded transition-colors ${
                   viewMode === "grid"
-                    ? "bg-card text-primary shadow-sm"
+                    ? "bg-card text-foreground border border-border/80 font-bold"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
                 title="Grid view"
+                aria-label="Grid view"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                  />
-                </svg>
+                <LayoutGrid className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setViewMode("list")}
-                className={`p-2 rounded transition-all ${
+                className={`p-1.5 rounded transition-colors ${
                   viewMode === "list"
-                    ? "bg-card text-primary shadow-sm"
+                    ? "bg-card text-foreground border border-border/80 font-bold"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
                 title="List view"
+                aria-label="List view"
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+                <List className="w-4 h-4" />
               </button>
-            </div>
-
-            {/* Results Count */}
-            <div className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-semibold">
-              {filteredCategories.length}{" "}
-              {filteredCategories.length === 1 ? "category" : "categories"}
             </div>
           </div>
         </div>
 
-        {/* Content */}
+        {/* Content Section */}
         {categoriesLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="relative">
-              <div className="w-16 h-16 border-4 border-border rounded-full"></div>
-              <div className="w-16 h-16 border-4 border-blue-600 rounded-full animate-spin border-t-transparent absolute top-0 left-0"></div>
-            </div>
-            <p className="mt-6 text-lg text-muted-foreground font-semibold">
-              Loading categories...
-            </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-card border border-border rounded-xl p-5 space-y-4"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 bg-muted/70 rounded-lg animate-pulse" />
+                  <div className="w-14 h-4 bg-muted/70 rounded animate-pulse" />
+                </div>
+                <div className="h-5 bg-muted/70 rounded w-1/2 animate-pulse" />
+                <div className="h-4 bg-muted/60 rounded w-full animate-pulse" />
+                <div className="flex gap-2 pt-2 border-t border-border/50">
+                  <div className="h-6 w-16 bg-muted/60 rounded animate-pulse" />
+                  <div className="h-6 w-20 bg-muted/60 rounded animate-pulse" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : filteredCategories.length > 0 ? (
           <>
-            {/* Grid View */}
+            {/* GRID VIEW */}
             {viewMode === "grid" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {filteredCategories.map((category, index) => (
-                  <div
-                    key={category.id}
-                    className="group bg-card rounded-lg border border-border shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
-                  >
-                    {/* Icon Header with Gradient */}
-                    <div
-                      className={`relative h-32 bg-gradient-to-br ${
-                        gradients[index % gradients.length]
-                      } flex items-center justify-center`}
-                    >
-                      <div className="text-white">
-                        {icons[index % icons.length]}
-                      </div>
-                    </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredCategories.map((category) => {
+                  const IconComp = getCategoryIcon(category.name);
 
-                    {/* Content */}
-                    <div className="p-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                          {category.name}
-                        </h3>
-                        {category.isActive && (
-                          <span className="flex items-center gap-1 text-xs font-medium text-primary">
-                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                            Active
-                          </span>
+                  return (
+                    <div
+                      key={category.id}
+                      className="group bg-card border border-border hover:border-primary/80 rounded-xl p-5 transition-colors flex flex-col justify-between"
+                    >
+                      <div>
+                        {/* Card Top: Icon & Active Indicator */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="w-10 h-10 rounded-lg bg-muted/60 border border-border/80 flex items-center justify-center text-foreground group-hover:text-primary transition-colors">
+                            <IconComp className="w-5 h-5" />
+                          </div>
+                          {category.isActive && (
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-border bg-muted/40 text-[11px] font-semibold text-foreground">
+                              <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                              Active
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Category Name & Count */}
+                        <h2 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
+                          <Link href={`/designs?mainCategory=${category.id}`}>
+                            {category.name}
+                          </Link>
+                        </h2>
+
+                        <p className="text-xs text-muted-foreground mt-1.5 mb-4 line-clamp-2 leading-relaxed">
+                          {category.description || "Collection of premium design templates and production assets."}
+                        </p>
+
+                        {/* Subcategories Chips */}
+                        {category.subcategories.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pt-3 border-t border-border/50 mb-2">
+                            {category.subcategories.slice(0, 4).map((subcat) => (
+                              <Link
+                                key={subcat.id}
+                                href={`/designs?subCategory=${subcat.id}`}
+                                className="inline-flex items-center px-2 py-1 rounded border border-border/80 bg-muted/30 hover:bg-muted text-foreground/80 hover:text-foreground text-[11px] font-medium transition-colors"
+                              >
+                                {subcat.name}
+                              </Link>
+                            ))}
+                            {category.subcategories.length > 4 && (
+                              <span className="inline-flex items-center px-2 py-1 rounded border border-border/60 bg-muted/20 text-muted-foreground text-[11px] font-medium">
+                                +{category.subcategories.length - 4} more
+                              </span>
+                            )}
+                          </div>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                        {category.description}
-                      </p>
-                      {category.subcategories.length > 0 && (
-                        <div className="mt-2">
-                          <span className="text-xs font-semibold text-muted-foreground">
-                            Subcategories:
-                          </span>
-                          <ul className="list-disc ml-4 mt-1">
-                            {category.subcategories.map((subcat) => (
-                              <li
-                                key={subcat.id}
-                                className="text-xs text-muted-foreground"
-                              >
-                                <Link
-                                  href={`/designs?subCategory=${subcat.id}`}
-                                  className="hover:underline text-primary"
-                                >
-                                  {subcat.name}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      <div className="flex items-center text-primary text-sm font-medium group-hover:text-primary/90 mt-2">
+
+                      {/* Card Footer */}
+                      <div className="pt-3 mt-4 border-t border-border/50 flex items-center justify-between text-xs">
                         <Link
                           href={`/designs?mainCategory=${category.id}`}
-                          className="flex items-center gap-1"
+                          className="font-bold text-primary inline-flex items-center gap-1 hover:underline"
                         >
-                          <span>Explore</span>
-                          <svg
-                            className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
+                          Explore templates
+                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                         </Link>
+                        <span className="text-[11px] font-medium text-muted-foreground">
+                          {category.subcategories.length} specialties
+                        </span>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
 
-            {/* List View */}
+            {/* LIST VIEW */}
             {viewMode === "list" && (
               <div className="space-y-3">
-                {filteredCategories.map((category, index) => (
-                  <Link
-                    key={category.id}
-                    href={`/designs?mainCategory=${category.id}`}
-                    className="group block"
-                  >
-                    <div className="bg-card rounded-lg p-4 shadow-sm hover:shadow-md border border-border transition-all duration-200">
-                      <div className="flex items-center gap-4">
+                {filteredCategories.map((category) => {
+                  const IconComp = getCategoryIcon(category.name);
+
+                  return (
+                    <div
+                      key={category.id}
+                      className="group bg-card border border-border hover:border-primary/80 rounded-xl p-4 sm:p-5 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    >
+                      <div className="flex items-start sm:items-center gap-4 flex-1 min-w-0">
                         {/* Icon */}
-                        <div
-                          className={`flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br ${
-                            gradients[index % gradients.length]
-                          } flex items-center justify-center text-white`}
-                        >
-                          {icons[index % icons.length]}
+                        <div className="w-10 h-10 rounded-lg bg-muted/60 border border-border/80 flex items-center justify-center text-foreground group-hover:text-primary transition-colors shrink-0">
+                          <IconComp className="w-5 h-5" />
                         </div>
 
-                        {/* Content */}
+                        {/* Details */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                              {category.name}
-                            </h3>
+                          <div className="flex items-center gap-2">
+                            <h2 className="text-base font-bold text-foreground group-hover:text-primary transition-colors truncate">
+                              <Link href={`/designs?mainCategory=${category.id}`}>
+                                {category.name}
+                              </Link>
+                            </h2>
                             {category.isActive && (
-                              <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2 py-0.5 rounded text-xs font-medium">
-                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-border bg-muted/40 text-[10px] font-semibold text-foreground shrink-0">
+                                <span className="w-1 h-1 rounded-full bg-primary" />
                                 Active
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground line-clamp-1">
-                            {category.description}
-                          </p>
-                        </div>
 
-                        {/* Action */}
-                        <div className="flex-shrink-0">
-                          <Button
-                            size="sm"
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
-                          >
-                            Browse
-                            <svg
-                              className="w-4 h-4 ml-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </Button>
+                          <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                            {category.description || "Collection of premium design templates and production assets."}
+                          </p>
+
+                          {/* Subcategory inline tags */}
+                          {category.subcategories.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mt-2">
+                              {category.subcategories.slice(0, 5).map((subcat) => (
+                                <Link
+                                  key={subcat.id}
+                                  href={`/designs?subCategory=${subcat.id}`}
+                                  className="inline-flex items-center px-2 py-0.5 rounded border border-border/80 bg-muted/30 hover:bg-muted text-foreground/80 hover:text-foreground text-[10px] font-medium transition-colors"
+                                >
+                                  {subcat.name}
+                                </Link>
+                              ))}
+                              {category.subcategories.length > 5 && (
+                                <span className="inline-flex items-center px-1.5 py-0.5 rounded border border-border/60 text-muted-foreground text-[10px] font-medium">
+                                  +{category.subcategories.length - 5}
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
+
+                      {/* Action Button */}
+                      <div className="flex items-center gap-3 shrink-0 self-end sm:self-center">
+                        <span className="text-xs text-muted-foreground font-medium hidden md:inline">
+                          {category.subcategories.length} specialties
+                        </span>
+                        <Link href={`/designs?mainCategory=${category.id}`}>
+                          <Button
+                            size="sm"
+                            className="bg-card hover:bg-primary hover:text-white text-foreground border border-border hover:border-primary font-bold rounded-lg text-xs px-3.5 py-1.5 transition-colors inline-flex items-center gap-1.5"
+                          >
+                            Browse
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
-                  </Link>
-                ))}
+                  );
+                })}
               </div>
             )}
           </>
         ) : (
-          <div className="text-center py-20">
-            <div className="bg-card rounded-lg p-12 max-w-lg mx-auto border border-border shadow-sm">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-100 flex items-center justify-center">
-                <svg
-                  className="w-10 h-10 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+          /* Empty Search State */
+          <div className="py-16 text-center border border-dashed border-border rounded-xl bg-card/40 my-6">
+            <div className="w-12 h-12 mx-auto mb-3 rounded-lg bg-muted border border-border flex items-center justify-center text-muted-foreground">
+              <Search className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-foreground mb-1">
+              No categories found
+            </h3>
+            <p className="text-xs text-muted-foreground max-w-sm mx-auto mb-5 leading-relaxed">
+              No categories matched your search term &quot;{searchQuery}&quot;. Try adjusting your keywords.
+            </p>
+            <div className="flex items-center justify-center gap-2">
+              <Button
+                onClick={() => setSearchQuery("")}
+                className="bg-primary hover:bg-primary/90 text-white font-bold rounded-lg text-xs px-4 py-2 transition-colors"
+              >
+                Clear Search Filter
+              </Button>
+              <Link href="/designs">
+                <Button
+                  variant="outline"
+                  className="border-border text-foreground font-semibold rounded-lg text-xs px-4 py-2 transition-colors"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-3">
-                {searchQuery ? "No Results Found" : "No Categories Available"}
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                {searchQuery
-                  ? `No categories match "${searchQuery}". Try a different search term.`
-                  : "No design categories are currently available."}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                {searchQuery && (
-                  <Button
-                    onClick={() => setSearchQuery("")}
-                    className="bg-blue-600 hover:bg-blue-700 font-semibold rounded-lg"
-                  >
-                    Clear Search
-                  </Button>
-                )}
-                <Link href="/">
-                  <Button
-                    variant="outline"
-                    className="font-semibold rounded-lg"
-                  >
-                    Back to Home
-                  </Button>
-                </Link>
-              </div>
+                  View All Designs
+                </Button>
+              </Link>
             </div>
           </div>
         )}
 
-        {/* Call to Action */}
+        {/* Minimalist Bottom Callout (0 gradient, 0 box shadow, 0 blur) */}
         {!categoriesLoading && filteredCategories.length > 0 && (
-          <div className="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-8 text-center shadow-sm">
-            <h3 className="text-2xl font-bold text-white mb-2">
-              Ready to Explore?
-            </h3>
-            <p className="text-white/90 mb-4">
-              Browse through {categories.length} categories and discover amazing
-              designs
-            </p>
-            <Link href="/designs">
-              <Button
-                size="lg"
-                className="bg-card text-primary hover:bg-gray-50 shadow-sm font-semibold rounded-lg"
-              >
-                View All Designs
-                <svg
-                  className="w-5 h-5 ml-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
+          <div className="mt-12 border border-border rounded-xl bg-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div>
+              <h3 className="text-lg font-bold text-foreground">
+                Looking for specific template formats?
+              </h3>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 max-w-xl leading-relaxed">
+                Filter across all templates by file format (Figma, Framer, Blender, Sketch), design styles, and commercial licenses.
+              </p>
+            </div>
+            <Link href="/designs" className="shrink-0">
+              <Button className="bg-primary hover:bg-primary/90 text-white font-bold rounded-lg px-6 py-2.5 text-xs transition-colors inline-flex items-center gap-2">
+                Browse Full Catalog
+                <ArrowRight className="w-3.5 h-3.5" />
               </Button>
             </Link>
           </div>

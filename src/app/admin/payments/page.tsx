@@ -252,30 +252,30 @@ export default function AdminPaymentsPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {/* Total Revenue */}
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-emerald-500/30 dark:border-emerald-500/20 p-4 sm:p-5">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between mb-2">
-            <DollarSign className="w-8 h-8 text-primary" />
-            <TrendingUp className="w-5 h-5 text-primary" />
+            <DollarSign className="w-6 h-6 text-primary" />
+            <TrendingUp className="w-4 h-4 text-muted-foreground" />
           </div>
-          <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">Total Revenue</p>
-          <p className="text-2xl font-bold text-green-900">
+          <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Total Revenue</p>
+          <p className="text-2xl font-bold text-foreground mt-1">
             ${(stats.totalRevenue || 0).toFixed(2)}
           </p>
-          <p className="text-xs text-primary mt-1">
+          <p className="text-xs text-muted-foreground mt-1 font-medium">
             {stats.successfulPayments || 0} successful payments
           </p>
         </div>
 
         {/* Success Rate */}
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-primary/30 dark:border-primary/20 p-4 sm:p-5">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between mb-2">
-            <BarChart3 className="w-8 h-8 text-primary" />
+            <BarChart3 className="w-6 h-6 text-primary" />
           </div>
-          <p className="text-sm text-primary font-medium">Success Rate</p>
-          <p className="text-2xl font-bold text-blue-900">
+          <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Success Rate</p>
+          <p className="text-2xl font-bold text-foreground mt-1">
             {stats.successRate || 0}%
           </p>
-          <p className="text-xs text-primary mt-1">
+          <p className="text-xs text-muted-foreground mt-1 font-medium">
             {stats.totalPayments || 0} total payments
           </p>
         </div>
@@ -659,8 +659,8 @@ export default function AdminPaymentsPage() {
 
       {/* Payment Details Modal */}
       {isDetailsModalOpen && selectedPayment && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-card rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="bg-card rounded-xl border border-border max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-card border-b border-border px-6 py-4 flex items-center justify-between">
               <h3 className="text-xl font-bold text-foreground">
                 Payment Details
@@ -811,8 +811,8 @@ export default function AdminPaymentsPage() {
 
       {/* Refund Modal */}
       {isRefundModalOpen && selectedPayment && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-card rounded-2xl shadow-2xl max-w-md w-full p-4 sm:p-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="bg-card rounded-xl border border-border max-w-md w-full p-6">
             <h3 className="text-xl font-bold text-foreground mb-4">
               Process Refund
             </h3>

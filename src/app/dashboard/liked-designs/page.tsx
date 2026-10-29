@@ -5,30 +5,10 @@ import { useGetMyLikesQuery } from "@/services/api";
 import { LikeButton } from "@/components/LikeButton";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { Heart, Loader2, ShoppingCart } from "lucide-react";
+import { Heart, Loader2, ArrowRight, ExternalLink, ChevronLeft, ChevronRight, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface LikedDesign {
-  design: {
-    _id: string;
-    title: string;
-    description: string;
-    previewImageUrl?: string;
-    price: number;
-    basePrice?: number;
-    discountedPrice?: number;
-    currencyDisplay?: string;
-    currencyCode?: string;
-    likesCount: number;
-    downloadCount: number;
-    category?: { name: string };
-  };
-  createdAt: string;
-}
-
 export default function LikedDesignsPage() {
-  const router = useRouter();
   const [page, setPage] = useState(1);
   const limit = 12;
 
@@ -37,307 +17,219 @@ export default function LikedDesignsPage() {
   const likedDesigns = data?.data || [];
   const pagination = data?.pagination;
 
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
-            <Heart className="w-7 h-7 text-white fill-white" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-black text-foreground">
-              My Liked Designs
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Your collection of favorite designs
-            </p>
-          </div>
-        </div>
-        <div className="text-center py-20">
-          <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto" />
-          <p className="mt-4 text-muted-foreground">Loading your liked designs...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
-            <Heart className="w-7 h-7 text-white fill-white" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-black text-foreground">
-              My Liked Designs
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Your collection of favorite designs
-            </p>
-          </div>
-        </div>
-        <div className="text-center py-20 bg-card rounded-2xl shadow-sm border border-gray-100">
-          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-red-400 to-pink-600 text-white">
-            <svg
-              className="w-12 h-12"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-foreground mb-3">
-            Error Loading Likes
-          </h2>
-          <p className="text-muted-foreground mb-6">
-            Failed to load your liked designs. Please try again later.
-          </p>
-          <Button
-            onClick={() => router.push("/designs")}
-            className="bg-gradient-to-r from-blue-600 to-purple-600"
-          >
-            Browse Designs
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg">
-            <Heart className="w-7 h-7 text-white fill-white" />
+    <div className="space-y-8">
+      {/* Breadcrumb Navigation */}
+      <nav>
+        <div className="flex items-center space-x-2 text-sm font-semibold">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Home
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Dashboard
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <span className="text-foreground">Liked Designs</span>
+        </div>
+      </nav>
+
+      {/* Header Section (Matching Categories Style) */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2.5">
+            Saved Bookmarks
           </div>
-          <div>
-            <h1 className="text-3xl font-black text-foreground">
-              My Liked Designs
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Your collection of favorite designs
-            </p>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            My Liked Designs
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1.5 max-w-xl leading-relaxed">
+            Your personal collection of bookmarked creative assets, templates, and UI components.
+          </p>
+        </div>
+        <Link href="/designs">
+          <Button
+            variant="outline"
+            className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-sm px-4 py-2.5 transition-colors"
+          >
+            Explore More Designs
+            <ArrowRight className="w-4 h-4 ml-1.5" />
+          </Button>
+        </Link>
+      </div>
+
+      {/* Metrics Strip */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-border">
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {pagination?.totalItems || likedDesigns.length}
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Bookmarked Assets
           </div>
         </div>
-
-        {/* Stats */}
-        <div className="inline-flex items-center gap-6 bg-card rounded-2xl px-6 py-4 border border-gray-100 shadow-sm">
-          <div className="flex items-center gap-2">
-            <Heart className="w-5 h-5 text-red-500 fill-red-500" />
-            <div>
-              <span className="text-2xl font-bold text-foreground">
-                {pagination?.totalItems || 0}
-              </span>
-              <span className="text-muted-foreground text-sm ml-2">
-                {pagination?.totalItems === 1 ? "Design" : "Designs"} Liked
-              </span>
-            </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-primary">
+            Instant
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            One-Click Access
+          </div>
+        </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            Synced
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Cloud Saved
+          </div>
+        </div>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            Original
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Verified Files
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      {likedDesigns.length === 0 ? (
-        <div className="text-center py-20 bg-card rounded-2xl shadow-sm border border-gray-100">
-          <div className="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-gray-200 to-gray-300">
-            <Heart className="w-12 h-12 text-muted-foreground" />
-          </div>
-          <h2 className="text-3xl font-bold text-foreground mb-3">
-            No Liked Designs Yet
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-            Start exploring and like your favorite designs to build your
-            collection!
+      {/* Main Content Grid */}
+      {isLoading ? (
+        <div className="py-24 text-center">
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wider">
+            Loading saved bookmarks...
           </p>
-          <Button
-            onClick={() => router.push("/designs")}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-          >
-            Browse Designs
-          </Button>
+        </div>
+      ) : error ? (
+        <div className="p-8 text-center rounded-xl border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-900/40">
+          <p className="text-sm font-semibold text-red-700 dark:text-red-400">
+            Failed to load bookmarks. Please try again later.
+          </p>
+        </div>
+      ) : likedDesigns.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {likedDesigns.map((item: any) => {
+            const design = item.design;
+            if (!design) return null;
+            const previewUrl =
+              design.previewImageUrls?.[0] || design.previewImageUrl;
+
+            return (
+              <div
+                key={design._id}
+                className="border border-border rounded-xl bg-card overflow-hidden flex flex-col hover:border-foreground/40 transition-colors"
+              >
+                {/* Thumbnail */}
+                <div className="relative aspect-[16/10] bg-muted border-b border-border overflow-hidden">
+                  {previewUrl ? (
+                    <Image
+                      src={previewUrl}
+                      alt={design.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      <Layers className="w-10 h-10" />
+                    </div>
+                  )}
+
+                  {/* Like Button on Thumbnail */}
+                  <div className="absolute top-3 right-3">
+                    <LikeButton
+                      designId={design._id}
+                      initialLikesCount={design.likesCount || 0}
+                      variant="icon"
+                      size="sm"
+                    />
+                  </div>
+
+                  {/* Category Pill */}
+                  {design.category?.name && (
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2.5 py-1 rounded text-xs font-semibold bg-background/90 text-foreground border border-border uppercase tracking-wider">
+                        {design.category.name}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Details */}
+                <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                  <div>
+                    <h3 className="text-base font-bold text-foreground truncate">
+                      {design.title}
+                    </h3>
+                    <p className="text-sm font-bold text-foreground mt-1">
+                      ${(design.discountedPrice ?? design.basePrice ?? design.price ?? 0).toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 pt-3 border-t border-border">
+                    <Link
+                      href={`/designs/${design._id}`}
+                      className="text-sm font-semibold text-primary hover:underline flex items-center gap-1.5"
+                    >
+                      <span>View Asset</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       ) : (
-        <>
-          {/* Designs Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {likedDesigns.map((like: LikedDesign) => {
-              const design = like.design;
-              return (
-                <Link
-                  href={`/designs/${design._id}`}
-                  key={design._id}
-                  className="group"
-                >
-                  <div className="bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:scale-[1.02]">
-                    {/* Image */}
-                    <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
-                      {(design as any)?.previewImageUrls?.[0] ||
-                      design.previewImageUrl ? (
-                        <Image
-                          src={
-                            (design as any)?.previewImageUrls?.[0] ||
-                            design.previewImageUrl
-                          }
-                          alt={design.title}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <svg
-                            className="w-16 h-16 text-muted-foreground"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={1.5}
-                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                          </svg>
-                        </div>
-                      )}
-
-                      {/* Quick Actions Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div className="absolute bottom-4 right-4 flex gap-2">
-                          <LikeButton
-                            designId={design._id}
-                            initialLikesCount={design.likesCount}
-                            variant="icon"
-                            size="md"
-                            showCount={false}
-                            className="backdrop-blur-md bg-card/90 hover:bg-card shadow-lg"
-                          />
-                          <button className="backdrop-blur-md bg-card/90 hover:bg-card p-2 rounded-full shadow-lg transition-all hover:scale-110">
-                            <ShoppingCart className="w-4 h-4 text-foreground" />
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Category Badge */}
-                      <div className="absolute top-3 left-3">
-                        <span className="backdrop-blur-md bg-primary/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                          {design.category?.name || "Uncategorized"}
-                        </span>
-                      </div>
-
-                      {/* Liked Date Badge */}
-                      <div className="absolute top-3 right-3">
-                        <span className="backdrop-blur-md bg-red-500/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
-                          <Heart className="w-3 h-3 fill-white" />
-                          {new Date(like.createdAt).toLocaleDateString(
-                            "en-US",
-                            { month: "short", day: "numeric" }
-                          )}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-5">
-                      <h3 className="font-bold text-foreground text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                        {design.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                        {design.description}
-                      </p>
-
-                      {/* Stats */}
-                      <div className="flex items-center justify-between text-sm">
-                        <LikeButton
-                          designId={design._id}
-                          initialLikesCount={design.likesCount}
-                          variant="compact"
-                          size="sm"
-                          showCount={true}
-                        />
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-1 text-muted-foreground">
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                              />
-                            </svg>
-                            <span className="font-semibold">
-                              {design.downloadCount || 0}
-                            </span>
-                          </div>
-                          <div className="text-primary font-bold">
-                            {design.currencyDisplay ||
-                              `$${
-                                design.discountedPrice ??
-                                design.basePrice ??
-                                design.price ??
-                                0
-                              }`}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+        <div className="p-14 text-center rounded-xl border border-border bg-card">
+          <Heart className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-foreground">No liked designs yet</h3>
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
+            Click the heart icon on any template or design while browsing to save it to your bookmarks.
+          </p>
+          <div className="mt-5">
+            <Link href="/designs">
+              <Button className="bg-primary text-primary-foreground font-semibold rounded-lg text-sm px-5 py-2.5 hover:bg-primary/90 transition-colors">
+                Browse Marketplace
+              </Button>
+            </Link>
           </div>
+        </div>
+      )}
 
-          {/* Pagination */}
-          {pagination && pagination.totalPages > 1 && (
-            <div className="mt-8 flex justify-center items-center gap-2">
-              <Button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                variant="outline"
-                className="px-4 py-2 rounded-xl"
-              >
-                Previous
-              </Button>
-              <div className="flex items-center gap-2">
-                {Array.from({ length: pagination.totalPages }, (_, i) => (
-                  <button
-                    key={i + 1}
-                    onClick={() => setPage(i + 1)}
-                    className={`w-10 h-10 rounded-xl font-semibold transition-all ${
-                      page === i + 1
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                        : "bg-card text-foreground hover:bg-muted/50 border border-border"
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-              </div>
-              <Button
-                onClick={() =>
-                  setPage((p) => Math.min(pagination.totalPages, p + 1))
-                }
-                disabled={page === pagination.totalPages}
-                variant="outline"
-                className="px-4 py-2 rounded-xl"
-              >
-                Next
-              </Button>
-            </div>
-          )}
-        </>
+      {/* Pagination */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between pt-5 border-t border-border">
+          <div className="text-sm text-muted-foreground">
+            Page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalItems} bookmarks)
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page <= 1 || isLoading}
+              className="px-4 py-2 rounded-lg border border-border bg-card text-foreground hover:bg-muted text-sm font-semibold disabled:opacity-40 transition-colors flex items-center gap-1.5"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Previous</span>
+            </button>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={page >= pagination.totalPages || isLoading}
+              className="px-4 py-2 rounded-lg border border-border bg-card text-foreground hover:bg-muted text-sm font-semibold disabled:opacity-40 transition-colors flex items-center gap-1.5"
+            >
+              <span>Next</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

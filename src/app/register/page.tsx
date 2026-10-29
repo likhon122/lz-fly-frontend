@@ -7,8 +7,21 @@ import { useRegisterMutation } from "@/services/api";
 import { useAppDispatch } from "@/store/hooks";
 import { setCredentials } from "@/store/features/authSlice";
 import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react";
-import { Loader2 } from "lucide-react";
+import OAuthButtons from "@/components/OAuthButtons";
+import {
+  ArrowLeft,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  User,
+  ShieldCheck,
+  Sparkles,
+  Layers,
+  ArrowRight,
+  AlertCircle,
+  Check,
+} from "lucide-react";
 
 interface FormErrors {
   name?: string;
@@ -28,50 +41,18 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [isGitHubLoading, setIsGitHubLoading] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [register, { isLoading }] = useRegisterMutation();
 
-  const handleGoogleSignIn = async () => {
-    setIsGoogleLoading(true);
-    setErrors({});
-    try {
-      await signIn("google", {
-        callbackUrl: "/dashboard",
-        redirect: true
-      });
-    } catch (err) {
-      console.error("Google sign-in error:", err);
-      setErrors({ general: "Failed to sign in with Google" });
-      setIsGoogleLoading(false);
-    }
-  };
-
-  const handleGitHubSignIn = async () => {
-    setIsGitHubLoading(true);
-    setErrors({});
-    try {
-      await signIn("github", {
-        callbackUrl: "/dashboard",
-        redirect: true
-      });
-    } catch (err) {
-      console.error("GitHub sign-in error:", err);
-      setErrors({ general: "Failed to sign in with GitHub" });
-      setIsGitHubLoading(false);
-    }
-  };
-
-  // Calculate password strength
   const calculatePasswordStrength = (password: string) => {
     let strength = 0;
     if (password.length >= 6) strength += 25;
@@ -83,25 +64,21 @@ export default function RegisterPage() {
     return Math.min(strength, 100);
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
-    // Update password strength
     if (name === "password") {
       setPasswordStrength(calculatePasswordStrength(value));
     }
 
-    // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors((prev: FormErrors) => ({
         ...prev,
-        [name]: ""
+        [name]: "",
       }));
     }
   };
@@ -109,8 +86,8 @@ export default function RegisterPage() {
   const validateForm = (): FormErrors => {
     const newErrors: FormErrors = {};
 
-    if (formData.name.length < 2 || formData.name.length > 50) {
-      newErrors.name = "Name must be between 2-50 characters";
+    if (formData.name.trim().length < 2 || formData.name.length > 50) {
+      newErrors.name = "Name must be between 2 and 50 characters";
     }
 
     if (!formData.email.includes("@")) {
@@ -127,7 +104,7 @@ export default function RegisterPage() {
 
     if (!hasUppercase || !hasLowercase || !hasNumber) {
       newErrors.password =
-        "Password must contain uppercase, lowercase, and number";
+        "Password must contain uppercase, lowercase, and numbers";
     }
 
     if (formData.password !== formData.confirmPassword) {
@@ -141,7 +118,6 @@ export default function RegisterPage() {
     e.preventDefault();
     setErrors({});
 
-    // Client-side validation
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -152,15 +128,13 @@ export default function RegisterPage() {
       const response = await register(formData).unwrap();
 
       if (response.success) {
-        // Set user data and token in Redux store
         dispatch(
           setCredentials({
             user: response.data.user,
-            token: response.data.token // ✅ Include the token
-          })
+            token: response.data.token,
+          }),
         );
 
-        // Redirect based on user role
         const userRole = response.data.user.role;
         if (userRole === "super_admin" || userRole === "admin") {
           router.push("/admin");
@@ -169,648 +143,417 @@ export default function RegisterPage() {
         }
       }
     } catch (error: unknown) {
-      console.error("Registration error:", error);
-
       const errorData = error as {
         data?: { errors?: ApiError[]; message?: string };
       };
 
       if (errorData.data?.errors) {
-        // Handle validation errors from server
         const fieldErrors: FormErrors = {};
         errorData.data.errors.forEach((err: ApiError) => {
           fieldErrors[err.field as keyof FormErrors] = err.message;
         });
         setErrors(fieldErrors);
       } else {
-        // Handle general errors
         setErrors({
           general:
-            errorData.data?.message || "Registration failed. Please try again."
+            errorData.data?.message || "Registration failed. Please try again.",
         });
       }
     }
   };
 
-  const getPasswordStrengthColor = () => {
-    if (passwordStrength < 30) return "bg-destructive";
-    if (passwordStrength < 60) return "bg-orange-500";
-    if (passwordStrength < 80) return "bg-yellow-500";
-    return "bg-primary";
-  };
-
-  const getPasswordStrengthText = () => {
+  const getStrengthLabel = () => {
     if (passwordStrength < 30) return "Weak";
-    if (passwordStrength < 60) return "Fair";
+    if (passwordStrength < 60) return "Moderate";
     if (passwordStrength < 80) return "Good";
     return "Strong";
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Subtle Pattern Overlay */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-5">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(39,165,46,0.1)_1.5px,transparent_1.5px),linear-gradient(to_right,rgba(39,165,46,0.1)_1.5px,transparent_1.5px)] bg-size-[48px_48px]"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-primary rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-
-      {/* Back to Home Button */}
-      <div className="absolute top-6 left-6 z-20">
-        <Link href="/">
-          <Button
-            variant="outline"
-            className="backdrop-blur-sm bg-card border-2 border-border hover:border-primary shadow-xl hover:shadow-primary/20 transition-all rounded-2xl font-black"
+    <div className="min-h-screen bg-background flex flex-col justify-between">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {/* Navigation Breadcrumb / Return */}
+        <div className="flex items-center justify-between pb-6 border-b border-border mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
           >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <ArrowLeft className="w-4 h-4" />
+            Return to Storefront
+          </Link>
+          <div className="text-sm text-muted-foreground font-medium">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="font-bold text-foreground hover:text-primary transition-colors"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            Back to Home
-          </Button>
-        </Link>
+              Sign In
+            </Link>
+          </div>
+        </div>
       </div>
 
-      <div className="relative min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="w-full max-w-6xl">
-          {/* Main Card with Split Layout */}
-          <div className="backdrop-blur-sm bg-card rounded-3xl shadow-2xl border-2 border-border overflow-hidden">
-            <div className="grid lg:grid-cols-2">
-              {/* Left Side - Branding */}
-              <div className="hidden lg:flex relative bg-primary p-12 items-center justify-center overflow-hidden">
-                {/* Decorative Elements */}
-                <div className="absolute top-0 left-0 w-64 h-64 bg-secondary/10 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-secondary/10 rounded-full translate-x-1/2 translate-y-1/2"></div>
+      <div className="max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-12 my-auto">
+        <div className="border border-border rounded-xl bg-card overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+          {/* Left Column: Form */}
+          <div className="lg:col-span-7 p-6 sm:p-10">
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-3">
+                New Membership
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+                Create Account
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                Join our curated platform to download production-grade designs and manage licenses.
+              </p>
+            </div>
 
-                <div className="relative z-10 text-secondary max-w-md">
-                  {/* Logo/Icon */}
-                  <div className="w-20 h-20 rounded-2xl bg-secondary/20 backdrop-blur-sm flex items-center justify-center mb-8 shadow-2xl">
-                    <svg
-                      className="w-12 h-12 text-secondary"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                      />
-                    </svg>
+            {/* General Error Banner */}
+            {errors.general && (
+              <div className="mb-5 p-4 rounded-lg border border-destructive/40 bg-muted/40 flex items-start gap-3 text-sm text-destructive">
+                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                <span className="font-semibold">{errors.general}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Full Name */}
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground mb-2"
+                >
+                  Full Name
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
+                    <User className="w-4 h-4" />
                   </div>
-
-                  <h1 className="text-4xl font-black mb-4 leading-tight">
-                    Join Our Creative Community
-                  </h1>
-                  <p className="text-lg text-secondary/90 mb-8 leading-relaxed font-medium">
-                    Start your journey with thousands of designers and creators.
-                    Access premium templates and showcase your work.
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={`w-full pl-10 pr-3.5 py-2.5 text-sm bg-background border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors ${
+                      errors.name
+                        ? "border-destructive focus:border-destructive"
+                        : "border-border focus:border-primary"
+                    }`}
+                    placeholder="Jane Doe"
+                  />
+                </div>
+                {errors.name && (
+                  <p className="mt-1.5 text-xs text-destructive font-semibold">
+                    {errors.name}
                   </p>
+                )}
+              </div>
 
-                  {/* Features List */}
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="font-black mb-1">
-                          1000+ Premium Designs
-                        </h3>
-                        <p className="text-sm text-secondary/80 font-medium">
-                          Access our entire collection of stunning templates
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="font-black mb-1">Community Support</h3>
-                        <p className="text-sm text-secondary/80 font-medium">
-                          Connect with designers worldwide
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <div className="shrink-0 w-8 h-8 rounded-full bg-secondary/20 backdrop-blur-sm flex items-center justify-center">
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="font-black mb-1">Regular Updates</h3>
-                        <p className="text-sm text-secondary/80 font-medium">
-                          New designs added daily
-                        </p>
-                      </div>
-                    </div>
+              {/* Email Address */}
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground mb-2"
+                >
+                  Email Address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
+                    <Mail className="w-4 h-4" />
                   </div>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full pl-10 pr-3.5 py-2.5 text-sm bg-background border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors ${
+                      errors.email
+                        ? "border-destructive focus:border-destructive"
+                        : "border-border focus:border-primary"
+                    }`}
+                    placeholder="jane@company.com"
+                  />
+                </div>
+                {errors.email && (
+                  <p className="mt-1.5 text-xs text-destructive font-semibold">
+                    {errors.email}
+                  </p>
+                )}
+              </div>
 
-                  {/* Stats */}
-                  <div className="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-secondary/20">
-                    <div>
-                      <div className="text-3xl font-black mb-1">50+</div>
-                      <div className="text-sm text-secondary/80 font-bold">Categories</div>
+              {/* Password and Confirm Password Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Password */}
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground mb-2"
+                  >
+                    Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
+                      <Lock className="w-4 h-4" />
                     </div>
-                    <div>
-                      <div className="text-3xl font-black mb-1">100+</div>
-                      <div className="text-sm text-secondary/80 font-bold">Designers</div>
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      required
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={`w-full pl-10 pr-10 py-2.5 text-sm bg-background border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors ${
+                        errors.password
+                          ? "border-destructive focus:border-destructive"
+                          : "border-border focus:border-primary"
+                      }`}
+                      placeholder="Min. 6 chars"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-muted-foreground hover:text-foreground"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password */}
+                <div>
+                  <label
+                    htmlFor="confirmPassword"
+                    className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-foreground mb-2"
+                  >
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground">
+                      <Lock className="w-4 h-4" />
                     </div>
-                    <div>
-                      <div className="text-3xl font-black mb-1">24/7</div>
-                      <div className="text-sm text-secondary/80 font-bold">Support</div>
-                    </div>
+                    <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      required
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className={`w-full pl-10 pr-10 py-2.5 text-sm bg-background border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors ${
+                        errors.confirmPassword
+                          ? "border-destructive focus:border-destructive"
+                          : "border-border focus:border-primary"
+                      }`}
+                      placeholder="Repeat password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-muted-foreground hover:text-foreground"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="w-4 h-4" />
+                      ) : (
+                        <Eye className="w-4 h-4" />
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
 
-              {/* Right Side - Form */}
-              <div className="p-8 sm:p-10 flex flex-col justify-center">
-                {/* Header */}
-                <div className="mb-6">
-                  <h2 className="text-3xl sm:text-4xl font-black text-foreground mb-2">
-                    Create Account
-                  </h2>
-                  <p className="text-muted-foreground font-medium">
-                    Already have an account?{" "}
-                    <Link
-                      href="/login"
-                      className="font-black text-primary hover:underline transition-colors"
-                    >
-                      Sign in
-                    </Link>
-                  </p>
+              {/* Password Errors */}
+              {(errors.password || errors.confirmPassword) && (
+                <div className="space-y-1">
+                  {errors.password && (
+                    <p className="text-xs text-destructive font-semibold">
+                      {errors.password}
+                    </p>
+                  )}
+                  {errors.confirmPassword && (
+                    <p className="text-xs text-destructive font-semibold">
+                      {errors.confirmPassword}
+                    </p>
+                  )}
                 </div>
+              )}
 
-                {/* OAuth Buttons */}
-                <div className="space-y-3 mb-6">
-                  <button
-                    type="button"
-                    onClick={handleGoogleSignIn}
-                    disabled={isGoogleLoading || isGitHubLoading || isLoading}
-                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-card border-2 border-border rounded-2xl hover:border-primary hover:shadow-xl disabled:bg-muted disabled:cursor-not-allowed transition-all font-black text-foreground"
-                  >
-                    {isGoogleLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin text-primary" />
-                    ) : (
-                      <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path
-                          fill="#4285F4"
-                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        />
-                        <path
-                          fill="#34A853"
-                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        />
-                        <path
-                          fill="#FBBC05"
-                          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        />
-                        <path
-                          fill="#EA4335"
-                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        />
-                      </svg>
-                    )}
-                    {isGoogleLoading ? "Connecting..." : "Continue with Google"}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleGitHubSignIn}
-                    disabled={isGoogleLoading || isGitHubLoading || isLoading}
-                    className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-foreground border-2 border-foreground rounded-2xl hover:bg-foreground/90 hover:shadow-xl disabled:bg-muted disabled:border-muted disabled:cursor-not-allowed transition-all font-black text-background"
-                  >
-                    {isGitHubLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <svg
-                        className="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    )}
-                    {isGitHubLoading ? "Connecting..." : "Continue with GitHub"}
-                  </button>
-                </div>
-
-                {/* Divider */}
-                <div className="relative mb-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t-2 border-border"></div>
-                  </div>
-                  <div className="relative flex justify-center">
-                    <span className="px-4 bg-card text-sm font-black text-muted-foreground">
-                      OR
+              {/* Password Strength Indicator */}
+              {formData.password && (
+                <div className="p-3 rounded-lg border border-border bg-muted/20">
+                  <div className="flex items-center justify-between text-xs mb-1.5">
+                    <span className="text-muted-foreground">Password strength:</span>
+                    <span className="font-bold text-foreground">
+                      {getStrengthLabel()}
                     </span>
                   </div>
+                  <div className="w-full bg-border h-2 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full transition-all duration-300 ${
+                        passwordStrength < 40
+                          ? "bg-destructive"
+                          : passwordStrength < 70
+                          ? "bg-orange-500"
+                          : "bg-primary"
+                      }`}
+                      style={{ width: `${passwordStrength}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Terms Checkbox */}
+              <div className="flex items-start gap-2.5 pt-1">
+                <input
+                  id="terms"
+                  name="terms"
+                  type="checkbox"
+                  required
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  className="w-4 h-4 text-primary border-border rounded focus:ring-0 mt-0.5"
+                />
+                <label
+                  htmlFor="terms"
+                  className="text-xs sm:text-sm text-muted-foreground font-medium leading-relaxed cursor-pointer"
+                >
+                  I agree to the{" "}
+                  <Link
+                    href="/terms"
+                    className="font-semibold text-foreground hover:text-primary transition-colors"
+                  >
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    className="font-semibold text-foreground hover:text-primary transition-colors"
+                  >
+                    Commercial License Agreement
+                  </Link>
+                  .
+                </label>
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-primary text-secondary hover:bg-primary/90 font-bold rounded-lg text-sm sm:text-base py-3 transition-colors disabled:opacity-50"
+              >
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-secondary border-t-transparent rounded-full animate-spin" />
+                    <span>Creating account...</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-center gap-2">
+                    <span>Complete Registration</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </div>
+                )}
+              </Button>
+
+              {/* OAuth Providers */}
+              <div className="pt-4 border-t border-border">
+                <OAuthButtons />
+              </div>
+            </form>
+          </div>
+
+          {/* Right Column: Platform Overview & Standards */}
+          <div className="hidden lg:flex lg:col-span-5 bg-muted/30 border-l border-border p-8 flex-col justify-between">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">
+                Creator Ecosystem
+              </div>
+              <h2 className="text-xl font-extrabold text-foreground tracking-tight mb-3">
+                Built for High-Growth Product Teams
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                Instant access to production-ready design systems, vector libraries, and developer-aligned component specs.
+              </p>
+
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded border border-border bg-card flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-foreground">
+                      Unlimited Vault Storage
+                    </div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">
+                      Permanent access to downloaded files and version updates.
+                    </div>
+                  </div>
                 </div>
 
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* General Error */}
-                  {errors.general && (
-                    <div className="bg-destructive/10 border-2 border-destructive/30 text-destructive px-4 py-3 rounded-2xl flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 shrink-0 mt-0.5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="font-black">{errors.general}</span>
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded border border-border bg-card flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-foreground">
+                      Full Commercial Rights
                     </div>
-                  )}
-
-                  {/* Name & Email Row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Full Name */}
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-xs font-black text-foreground mb-1.5"
-                      >
-                        Full Name
-                      </label>
-                      <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        autoComplete="name"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={`w-full px-4 py-2.5 border-2 ${
-                          errors.name
-                            ? "border-destructive focus:border-destructive"
-                            : "border-border focus:border-primary"
-                        } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
-                        placeholder="John Doe"
-                      />
-                      {errors.name && (
-                        <p className="mt-1 text-xs text-destructive font-black">
-                          {errors.name}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-xs font-black text-foreground mb-1.5"
-                      >
-                        Email Address
-                      </label>
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        required
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={`w-full px-4 py-2.5 border-2 ${
-                          errors.email
-                            ? "border-destructive focus:border-destructive"
-                            : "border-border focus:border-primary"
-                        } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
-                        placeholder="john@example.com"
-                      />
-                      {errors.email && (
-                        <p className="mt-1 text-xs text-destructive font-black">
-                          {errors.email}
-                        </p>
-                      )}
+                    <div className="text-xs sm:text-sm text-muted-foreground">
+                      Use in unlimited client engagements and commercial products.
                     </div>
                   </div>
+                </div>
 
-                  {/* Password Row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Password */}
-                    <div>
-                      <label
-                        htmlFor="password"
-                        className="block text-xs font-black text-foreground mb-1.5"
-                      >
-                        Password
-                      </label>
-                      <div className="relative">
-                        <input
-                          id="password"
-                          name="password"
-                          type={showPassword ? "text" : "password"}
-                          autoComplete="new-password"
-                          required
-                          value={formData.password}
-                          onChange={handleChange}
-                          className={`w-full px-4 pr-10 py-2.5 border-2 ${
-                            errors.password
-                              ? "border-destructive focus:border-destructive"
-                              : "border-border focus:border-primary"
-                          } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
-                          placeholder="Create password"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {showPassword ? (
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                              />
-                            </svg>
-                          ) : (
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                              />
-                            </svg>
-                          )}
-                        </button>
-                      </div>
-                      {formData.password && (
-                        <div className="mt-1.5">
-                          <div className="h-2 bg-muted rounded-full overflow-hidden">
-                            <div
-                              className={`h-full transition-all duration-300 ${getPasswordStrengthColor()}`}
-                              style={{ width: `${passwordStrength}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      )}
-                      {errors.password && (
-                        <p className="mt-1 text-xs text-destructive font-black">
-                          {errors.password}
-                        </p>
-                      )}
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded border border-border bg-card flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-foreground">
+                      Standardized Formats
                     </div>
-
-                    {/* Confirm Password */}
-                    <div>
-                      <label
-                        htmlFor="confirmPassword"
-                        className="block text-xs font-black text-foreground mb-1.5"
-                      >
-                        Confirm Password
-                      </label>
-                      <div className="relative">
-                        <input
-                          id="confirmPassword"
-                          name="confirmPassword"
-                          type={showConfirmPassword ? "text" : "password"}
-                          autoComplete="new-password"
-                          required
-                          value={formData.confirmPassword}
-                          onChange={handleChange}
-                          className={`w-full px-4 pr-10 py-2.5 border-2 ${
-                            errors.confirmPassword
-                              ? "border-destructive focus:border-destructive"
-                              : "border-border focus:border-primary"
-                          } rounded-2xl focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all text-foreground placeholder-muted-foreground font-medium bg-background`}
-                          placeholder="Confirm password"
-                        />
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setShowConfirmPassword(!showConfirmPassword)
-                          }
-                          className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {showConfirmPassword ? (
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
-                              />
-                            </svg>
-                          ) : (
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                              />
-                            </svg>
-                          )}
-                        </button>
-                      </div>
-                      {!errors.confirmPassword &&
-                        formData.confirmPassword &&
-                        formData.password === formData.confirmPassword && (
-                          <p className="mt-1 text-xs text-primary flex items-center gap-1 font-black">
-                            <svg
-                              className="w-3 h-3"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Match
-                          </p>
-                        )}
-                      {errors.confirmPassword && (
-                        <p className="mt-1 text-xs text-destructive font-black">
-                          {errors.confirmPassword}
-                        </p>
-                      )}
+                    <div className="text-xs sm:text-sm text-muted-foreground">
+                      Organized tokens, Figma files, and CSS definitions.
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
 
-                  {/* Terms & Conditions */}
-                  <div className="flex items-start gap-2.5 bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
-                    <input
-                      id="terms"
-                      name="terms"
-                      type="checkbox"
-                      required
-                      className="mt-0.5 w-4 h-4 text-primary focus:ring-primary/20 border-border rounded"
-                    />
-                    <label
-                      htmlFor="terms"
-                      className="text-xs text-foreground leading-relaxed font-medium"
-                    >
-                      I agree to the{" "}
-                      <Link
-                        href="/terms"
-                        target="_blank"
-                        className="font-black text-primary hover:underline transition-colors"
-                      >
-                        Terms
-                      </Link>{" "}
-                      and{" "}
-                      <Link
-                        href="/privacy"
-                        target="_blank"
-                        className="font-black text-primary hover:underline transition-colors"
-                      >
-                        Privacy Policy
-                      </Link>
-                    </label>
+            <div className="pt-6 border-t border-border/60">
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <div className="text-base font-extrabold text-foreground">
+                    500+
                   </div>
-
-                  {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    disabled={isLoading || isGoogleLoading || isGitHubLoading}
-                    className="w-full h-14 text-base font-black bg-primary hover:bg-primary/90 shadow-2xl hover:shadow-primary/20 transform hover:scale-105 transition-all rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-secondary"
-                  >
-                    {isLoading ? (
-                      <div className="flex items-center justify-center gap-2">
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Creating account...
-                      </div>
-                    ) : (
-                      <>
-                        Create Account
-                        <svg
-                          className="w-4 h-4 ml-2"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 7l5 5m0 0l-5 5m5-5H6"
-                          />
-                        </svg>
-                      </>
-                    )}
-                  </Button>
-                </form>
-
-                {/* Mobile View - Show Features */}
-                <div className="lg:hidden mt-6 pt-5 border-t border-border">
-                  <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
-                      <div className="text-xl font-black text-primary mb-0.5">
-                        50+
-                      </div>
-                      <div className="text-xs font-black text-foreground">
-                        Categories
-                      </div>
-                    </div>
-                    <div className="bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
-                      <div className="text-xl font-black text-primary mb-0.5">
-                        100+
-                      </div>
-                      <div className="text-xs font-black text-foreground">
-                        Designers
-                      </div>
-                    </div>
-                    <div className="bg-primary/10 border-2 border-primary/20 rounded-2xl p-3">
-                      <div className="text-xl font-black text-primary mb-0.5">
-                        24/7
-                      </div>
-                      <div className="text-xs font-black text-foreground">
-                        Support
-                      </div>
-                    </div>
+                  <div className="text-xs text-muted-foreground uppercase font-semibold">
+                    Assets
+                  </div>
+                </div>
+                <div>
+                  <div className="text-base font-extrabold text-primary">
+                    10K+
+                  </div>
+                  <div className="text-xs text-muted-foreground uppercase font-semibold">
+                    Creators
+                  </div>
+                </div>
+                <div>
+                  <div className="text-base font-extrabold text-foreground">
+                    100%
+                  </div>
+                  <div className="text-xs text-muted-foreground uppercase font-semibold">
+                    Verified
                   </div>
                 </div>
               </div>
@@ -819,28 +562,10 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <style>{`
-        @keyframes blob {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(30px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-        }
-        .animate-blob {
-          animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
+      {/* Footer Info */}
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs sm:text-sm text-muted-foreground">
+        © {new Date().getFullYear()} LZ Fly. All rights reserved. Zero-clutter, crisp UI architecture.
+      </div>
     </div>
   );
 }

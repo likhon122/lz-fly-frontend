@@ -135,96 +135,110 @@ export default function PricingPlansPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header - Premium Glassmorphic */}
-      <div className="relative overflow-hidden rounded-3xl bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl shadow-xl dark:shadow-primary/20 border border-border/70 dark:border-[#1e1e1e]">
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent pointer-events-none"></div>
-        
-        <div className="relative p-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-foreground dark:text-foreground">
-                Pricing Plans
-              </h1>
-              <p className="mt-2 text-muted-foreground dark:text-muted-foreground/80">
-                Manage subscription plans
-              </p>
-            </div>
-            <Button
-              onClick={() => setShowModal(true)}
-              className="bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:shadow-lg dark:hover:shadow-primary/30 transition-all"
-            >
-              <Plus className="w-5 h-5 mr-2" />
-              Add Pricing Plan
-            </Button>
+      {/* Header */}
+      <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              Pricing Plans
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Manage subscription plans and feature packages
+            </p>
           </div>
+          <Button
+            onClick={() => setShowModal(true)}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Pricing Plan
+          </Button>
         </div>
       </div>
 
       {/* Plans Grid */}
       {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary/30 border-t-primary"></div>
-            <div className="absolute inset-0 rounded-full bg-primary/10 blur-xl"></div>
-          </div>
+        <div className="flex items-center justify-center h-64 border border-border rounded-xl bg-card">
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent" />
+        </div>
+      ) : plans.length === 0 ? (
+        <div className="rounded-xl border border-border bg-card p-12 text-center">
+          <p className="text-base font-semibold text-foreground mb-1">
+            No pricing plans found
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Create your first pricing plan using the button above.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {plans.map((plan: any) => (
             <div
               key={plan._id}
-              className="group relative bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-lg dark:shadow-primary/10 border border-border/70 dark:border-[#1e1e1e] overflow-hidden hover:shadow-xl dark:hover:shadow-primary/20 hover:scale-[1.02] transition-all duration-300"
+              className="rounded-xl border border-border bg-card overflow-hidden flex flex-col justify-between"
             >
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-              
-              <div className="relative bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 p-6 text-white shadow-lg dark:shadow-primary/20">
-                <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
-                <div className="flex items-baseline">
-                  <span className="text-3xl font-bold">{
-                    plan.currencyDisplay}{plan.finalPrice}</span>
-                  <span className="ml-2 text-white/80">/{plan.duration}</span>
-                </div>
-                {plan.discountPercentage > 0 && (
-                  <p className="mt-2 text-white/90">
-                    <span className="line-through">{plan.currencyDisplay}{plan.price}</span>
-                    <span className="ml-2 font-semibold bg-white/20 px-2 py-0.5 rounded-full text-sm">
-                      {plan.discountPercentage}% OFF
+              <div>
+                <div className="bg-muted/40 border-b border-border p-5">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-xl font-bold text-foreground">{plan.name}</h3>
+                    <span
+                      className={`px-2.5 py-0.5 rounded-md text-xs font-semibold ${
+                        plan.isActive
+                          ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20"
+                          : "bg-muted text-muted-foreground border border-border"
+                      }`}
+                    >
+                      {plan.isActive ? "Active" : "Inactive"}
                     </span>
-                  </p>
-                )}
-              </div>
-              <div className="relative p-6">
-                <p className="text-muted-foreground dark:text-muted-foreground/80 mb-4">{plan.description}</p>
-                <div className="space-y-2 mb-6">
-                  {plan.features?.map((feature: string, idx: number) => (
-                    <div key={idx} className="flex items-center text-sm">
-                      <CheckCircle className="w-4 h-4 text-primary dark:text-primary/90 mr-2 flex-shrink-0" />
-                      <span className="text-foreground dark:text-foreground/90">{feature}</span>
+                  </div>
+                  <div className="mt-3 flex items-baseline">
+                    <span className="text-3xl font-extrabold text-foreground">
+                      {plan.currencyDisplay || "$"}{plan.finalPrice}
+                    </span>
+                    <span className="ml-1.5 text-sm font-medium text-muted-foreground">/{plan.duration}</span>
+                  </div>
+                  {plan.discountPercentage > 0 && (
+                    <div className="mt-2 flex items-center gap-2 text-xs">
+                      <span className="text-muted-foreground line-through">
+                        {plan.currencyDisplay || "$"}{plan.price}
+                      </span>
+                      <span className="font-semibold text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                        {plan.discountPercentage}% OFF
+                      </span>
                     </div>
-                  ))}
+                  )}
                 </div>
-                <div className="flex items-center justify-between pt-4 border-t border-border/70 dark:border-[#1e1e1e]">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      plan.isActive
-                        ? "bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/40"
-                        : "bg-muted/50 dark:bg-muted/30 text-muted-foreground dark:text-muted-foreground/70 border border-border/50 dark:border-[#1e1e1e]"
-                    }`}
-                  >
-                    {plan.isActive ? "Active" : "Inactive"}
+                <div className="p-5">
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                    {plan.description}
+                  </p>
+                  <div className="space-y-2.5 mb-4">
+                    {plan.features?.map((feature: string, idx: number) => (
+                      <div key={idx} className="flex items-start text-sm">
+                        <CheckCircle className="w-4 h-4 text-primary mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="text-foreground">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="p-5 pt-0">
+                <div className="flex items-center justify-between pt-4 border-t border-border">
+                  <span className="text-xs text-muted-foreground font-medium">
+                    Max: {plan.maxDownloads === -1 ? "Unlimited" : `${plan.maxDownloads} downloads`}
                   </span>
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-1.5">
                     <button
                       onClick={() => handleEdit(plan)}
-                      className="p-2 text-primary dark:text-primary/90 hover:bg-primary/10 dark:hover:bg-primary/15 rounded-xl transition-all hover:shadow-md dark:hover:shadow-primary/20 border border-transparent hover:border-primary/30 dark:hover:border-primary/40"
+                      className="p-2 text-muted-foreground hover:text-foreground rounded-lg border border-border hover:bg-muted transition-colors"
+                      title="Edit Plan"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(plan._id)}
-                      className="p-2 text-red-500 dark:text-red-400 hover:bg-red-500/10 dark:hover:bg-red-500/15 rounded-xl transition-all hover:shadow-md dark:hover:shadow-red-500/20 border border-transparent hover:border-red-500/30 dark:hover:border-red-500/40"
+                      className="p-2 text-red-500 hover:text-red-600 rounded-lg border border-border hover:bg-red-500/10 transition-colors"
+                      title="Delete Plan"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -236,20 +250,17 @@ export default function PricingPlansPage() {
         </div>
       )}
 
-      {/* Modal - Premium Dark Mode */}
+      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
-          <div className="relative bg-card/95 dark:bg-[#141414]/95 backdrop-blur-xl rounded-2xl shadow-2xl dark:shadow-primary/30 border border-border/70 dark:border-[#1e1e1e] max-w-2xl w-full my-8">
-            {/* Gradient Glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent dark:from-primary/10 dark:via-transparent dark:to-transparent rounded-2xl pointer-events-none"></div>
-            
-            <div className="relative p-6 max-h-[80vh] overflow-y-auto">
-              <h2 className="text-2xl font-bold text-foreground dark:text-foreground mb-6">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-card rounded-xl border border-border max-w-2xl w-full my-8 overflow-hidden">
+            <div className="p-5 sm:p-6 max-h-[85vh] overflow-y-auto">
+              <h2 className="text-xl font-bold text-foreground mb-5 pb-3 border-b border-border">
                 {editingPlan ? "Edit Pricing Plan" : "Add New Pricing Plan"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
+                  <label className="block text-sm font-semibold text-foreground mb-1.5">
                     Plan Name *
                   </label>
                   <input
@@ -259,11 +270,11 @@ export default function PricingPlansPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
+                    className="w-full px-3.5 py-2 bg-background border border-border rounded-lg focus:outline-none focus:border-primary text-sm text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
+                  <label className="block text-sm font-semibold text-foreground mb-1.5">
                     Description *
                   </label>
                   <textarea
@@ -273,12 +284,12 @@ export default function PricingPlansPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
-                    className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all resize-none"
+                    className="w-full px-3.5 py-2 bg-background border border-border rounded-lg focus:outline-none focus:border-primary text-sm text-foreground placeholder:text-muted-foreground resize-none"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
+                    <label className="block text-sm font-semibold text-foreground mb-1.5">
                       Price *
                     </label>
                     <input
@@ -292,11 +303,11 @@ export default function PricingPlansPage() {
                           price: parseFloat(e.target.value),
                         })
                       }
-                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
+                      className="w-full px-3.5 py-2 bg-background border border-border rounded-lg focus:outline-none focus:border-primary text-sm text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
+                    <label className="block text-sm font-semibold text-foreground mb-1.5">
                       Discount (%)
                     </label>
                     <input
@@ -310,13 +321,13 @@ export default function PricingPlansPage() {
                           discountPercentage: parseFloat(e.target.value),
                         })
                       }
-                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
+                      className="w-full px-3.5 py-2 bg-background border border-border rounded-lg focus:outline-none focus:border-primary text-sm text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
+                    <label className="block text-sm font-semibold text-foreground mb-1.5">
                       Duration *
                     </label>
                     <select
@@ -325,14 +336,14 @@ export default function PricingPlansPage() {
                       onChange={(e) =>
                         setFormData({ ...formData, duration: e.target.value })
                       }
-                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground transition-all [&>option]:bg-background [&>option]:dark:bg-[#0a0a0a] [&>option]:text-foreground [&>option]:dark:text-foreground"
+                      className="w-full px-3.5 py-2 bg-background border border-border rounded-lg focus:outline-none focus:border-primary text-sm text-foreground"
                     >
                       <option value="monthly">Monthly</option>
                       <option value="yearly">Yearly</option>
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
+                    <label className="block text-sm font-semibold text-foreground mb-1.5">
                       Max Downloads
                     </label>
                     <input
@@ -344,12 +355,12 @@ export default function PricingPlansPage() {
                           maxDownloads: parseInt(e.target.value),
                         })
                       }
-                      className="w-full px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
+                      className="w-full px-3.5 py-2 bg-background border border-border rounded-lg focus:outline-none focus:border-primary text-sm text-foreground placeholder:text-muted-foreground"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground dark:text-foreground/90 mb-2">
+                  <label className="block text-sm font-semibold text-foreground mb-1.5">
                     Features
                   </label>
                   <div className="space-y-3">
@@ -365,35 +376,35 @@ export default function PricingPlansPage() {
                           }
                         }}
                         placeholder="Enter a feature..."
-                        className="flex-1 px-4 py-2 bg-background dark:bg-[#0a0a0a] border border-border/70 dark:border-[#1e1e1e] rounded-xl focus:ring-2 focus:ring-primary dark:focus:ring-primary/60 focus:border-transparent text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground/60 transition-all"
+                        className="flex-1 px-3.5 py-2 bg-background border border-border rounded-lg focus:outline-none focus:border-primary text-sm text-foreground placeholder:text-muted-foreground"
                       />
                       <Button
                         type="button"
                         onClick={handleAddFeature}
                         disabled={!currentFeature.trim()}
-                        className="px-4 py-2 bg-primary/90 dark:bg-primary/80 hover:bg-primary dark:hover:bg-primary/90 text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg dark:shadow-primary/20 transition-all"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg disabled:opacity-50"
                       >
                         Add Feature
                       </Button>
                     </div>
                     {formData.features.length > 0 && (
                       <div className="space-y-2">
-                        <p className="text-sm text-muted-foreground dark:text-muted-foreground/80 font-medium">
+                        <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">
                           Added Features:
                         </p>
-                        <div className="max-h-32 overflow-y-auto space-y-2 pr-2">
+                        <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1">
                           {formData.features.map((feature, index) => (
                             <div
                               key={index}
-                              className="flex items-center justify-between bg-muted/50 dark:bg-muted/30 backdrop-blur-sm px-3 py-2 rounded-xl border border-border/50 dark:border-[#1e1e1e] hover:bg-muted/70 dark:hover:bg-muted/40 transition-all"
+                              className="flex items-center justify-between bg-muted/40 px-3 py-2 rounded-lg border border-border"
                             >
-                              <span className="text-sm text-foreground dark:text-foreground/90">
+                              <span className="text-sm text-foreground">
                                 {feature}
                               </span>
                               <button
                                 type="button"
                                 onClick={() => handleRemoveFeature(index)}
-                                className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 ml-2 p-1 rounded-lg hover:bg-red-500/10 dark:hover:bg-red-500/15 transition-all"
+                                className="text-muted-foreground hover:text-red-500 p-1 rounded transition-colors"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -404,7 +415,7 @@ export default function PricingPlansPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center p-3 rounded-xl bg-muted/30 dark:bg-muted/20 border border-border/50 dark:border-[#1e1e1e]">
+                <div className="flex items-center p-3 rounded-lg bg-muted/30 border border-border">
                   <input
                     type="checkbox"
                     id="isActive"
@@ -412,29 +423,29 @@ export default function PricingPlansPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, isActive: e.target.checked })
                     }
-                    className="w-4 h-4 text-primary border-border/70 dark:border-[#1e1e1e] rounded focus:ring-2 focus:ring-primary dark:focus:ring-primary/60"
+                    className="w-4 h-4 text-primary border-border rounded focus:ring-primary"
                   />
                   <label
                     htmlFor="isActive"
-                    className="ml-2 text-sm font-medium text-foreground dark:text-foreground/90 cursor-pointer"
+                    className="ml-2.5 text-sm font-medium text-foreground cursor-pointer"
                   >
-                    Active
+                    Active Plan
                   </label>
                 </div>
-                <div className="flex space-x-3 pt-4">
+                <div className="flex space-x-3 pt-4 border-t border-border">
                   <Button
                     type="button"
                     onClick={handleCloseModal}
                     variant="outline"
-                    className="flex-1 border-border/70 dark:border-[#1e1e1e] hover:bg-muted/50 dark:hover:bg-muted/30"
+                    className="flex-1 rounded-lg border-border"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
-                    className="flex-1 bg-gradient-to-r from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 hover:shadow-lg dark:hover:shadow-primary/30 transition-all"
+                    className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg"
                   >
-                    {editingPlan ? "Update" : "Create"}
+                    {editingPlan ? "Update Plan" : "Create Plan"}
                   </Button>
                 </div>
               </form>
@@ -445,5 +456,3 @@ export default function PricingPlansPage() {
     </div>
   );
 }
-
-

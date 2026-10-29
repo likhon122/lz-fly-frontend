@@ -10,31 +10,31 @@ import {
   Download,
   Calendar,
   Package,
-  Sparkles,
   CheckCircle,
   Loader2,
-  AlertCircle,
+  Search,
   X,
   RefreshCw,
   Clock,
-  Infinity,
+  ExternalLink,
+  Layers,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react";
 
 import Link from "next/link";
 import Image from "next/image";
 import { Purchase, DesignForDownload } from "@/types/dashboard";
 import { useToast } from "@/components/ToastProvider";
+import { Button } from "@/components/ui/button";
 
 export default function AvailableDownloadsPage() {
   const [page, setPage] = useState(1);
-
-  const [filter, setFilter] = useState<"all" | "purchased" | "subscription">(
-    "all"
-  );
+  const [filter, setFilter] = useState<"all" | "purchased" | "subscription">("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch user's purchases with proper query params
   const purchasesQueryParams = useMemo(
     () => ({
       page: 1,
@@ -46,7 +46,6 @@ export default function AvailableDownloadsPage() {
   const { data: purchasesData, isLoading: purchasesLoading } =
     useGetMyPurchasesQuery(purchasesQueryParams);
 
-  // Memoize designs query params
   const designsQueryParams = useMemo(
     () => ({
       page,
@@ -58,7 +57,6 @@ export default function AvailableDownloadsPage() {
     [page, categoryFilter, searchQuery]
   );
 
-  // Fetch all designs (for subscription users and to show purchased designs)
   const {
     data: allDesignsData,
     isLoading: designsLoading,
@@ -70,7 +68,6 @@ export default function AvailableDownloadsPage() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const toast = useToast();
 
-  // Reset page when filters change
   useEffect(() => {
     if (page !== 1) {
       setPage(1);
@@ -81,7 +78,6 @@ export default function AvailableDownloadsPage() {
   const purchases = (purchasesData?.data || []) as Purchase[];
   const allDesigns = (allDesignsData?.data || []) as DesignForDownload[];
 
-  // Check if user has active subscription (status: completed and not expired)
   const activeSubscription = purchases.find(
     (p: Purchase) =>
       p.purchaseType === "subscription" &&
@@ -92,420 +88,334 @@ export default function AvailableDownloadsPage() {
 
   const hasActiveSubscription = !!activeSubscription;
 
-  // Get purchased designs - extract the design IDs from COMPLETED individual purchases
   const purchasedDesignIds = new Set(
     purchases
       .filter(
         (purchase: Purchase) =>
           purchase.purchaseType === "individual" &&
-          purchase.design &&
-          purchase.status === "completed" // Only completed purchases
+          purchase.status === "completed" &&
+          Boolean(purchase.design?._id)
       )
-      .map((p: any) => p.design?._id)
-      .filter(Boolean)
+      .map((purchase: Purchase) => purchase.design!._id)
   );
 
-  // Filter designs based on purchased IDs
-  const purchasedDesigns = allDesigns.filter((design) =>
-    purchasedDesignIds.has(design._id)
-  );
-  // Combine purchased designs with all designs if subscription
-  const availableDesigns =
-    filter === "purchased"
-      ? purchasedDesigns
-      : filter === "subscription" && hasActiveSubscription
-      ? allDesigns
-      : hasActiveSubscription
-      ? allDesigns // Show all designs for subscription users
-      : purchasedDesigns; // Show only purchased designs for non-subscription users
+  const availableDesigns = useMemo(() => {
+    let list: DesignForDownload[] = [];
 
-  // Remove duplicates
-  const uniqueDesigns = Array.from(
-    new Map(availableDesigns.map((d: DesignForDownload) => [d._id, d])).values()
-  );
+    if (hasActiveSubscription) {
+      list = allDesigns;
+    } else {
+      list = allDesigns.filter((design) => purchasedDesignIds.has(design._id));
+    }
 
-  const handleDownload = async (designId: string, title: string) => {
+    if (filter === "purchased") {
+      list = list.filter((design) => purchasedDesignIds.has(design._id));
+    } else if (filter === "subscription" && hasActiveSubscription) {
+      list = list.filter((design) => !purchasedDesignIds.has(design._id));
+    }
+
+    return list;
+  }, [allDesigns, purchasedDesignIds, hasActiveSubscription, filter]);
+
+  const handleDownload = async (designId: string) => {
     try {
       setDownloadingId(designId);
-      const result = await downloadDesign(designId).unwrap();
-
-      if (result.success && result.data?.downloadUrl) {
-        // Open download URL in new tab
-        window.open(result.data.downloadUrl, "_blank");
-
-        // Show success message with remaining downloads info
-        const remainingInfo =
-          result.data.remainingDownloads === "Unlimited"
-            ? "Unlimited downloads available"
-            : result.data.remainingDownloads === -1
-            ? "Unlimited downloads available"
-            : `${result.data.remainingDownloads} downloads remaining`;
-        toast.success(`Download started for "${title}"! ${remainingInfo}`);
-      } else {
-        toast.info(result.message || "Download started successfully!");
-      }
-    } catch (error) {
-      const apiError = error as { data?: { message?: string } };
-      toast.error(
-        apiError?.data?.message || "Download failed. Please try again."
-      );
+      const blob = await downloadDesign(designId).unwrap();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `design-${designId}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success("Download started successfully");
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to initiate download");
     } finally {
       setDownloadingId(null);
     }
   };
 
-  const handleClearFilters = () => {
-    setCategoryFilter("");
-    setSearchQuery("");
-    setFilter("all");
-    setPage(1);
-  };
-
   const isLoading = purchasesLoading || designsLoading;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">
-          Available Downloads
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Access all designs you can download
-        </p>
-      </div>
+    <div className="space-y-8">
+      {/* Breadcrumb Navigation */}
+      <nav>
+        <div className="flex items-center space-x-2 text-sm font-semibold">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Home
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Dashboard
+          </Link>
+          <span className="text-muted-foreground/40">/</span>
+          <span className="text-foreground">Available Downloads</span>
+        </div>
+      </nav>
 
-      {/* Subscription Status Banner */}
-      <div
-        className={`rounded-lg p-5 ${
-          hasActiveSubscription ? "bg-primary" : "bg-primary"
-        } text-white`}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            {hasActiveSubscription ? (
-              <CheckCircle className="w-10 h-10" />
-            ) : (
-              <Sparkles className="w-10 h-10" />
-            )}
-            <div>
-              <h3 className="text-lg font-bold">
-                {hasActiveSubscription
-                  ? "Active Subscription"
-                  : "No Active Subscription"}
-              </h3>
-              <p className="mt-1 text-sm opacity-90">
-                {hasActiveSubscription && activeSubscription ? (
-                  <>
-                    {activeSubscription.remainingDownloads === -1 ||
-                    activeSubscription.remainingDownloads === 999999
-                      ? "Unlimited downloads"
-                      : `${activeSubscription.remainingDownloads} downloads remaining`}{" "}
-                    • {activeSubscription.pricingPlan?.name || "Current Plan"}
-                  </>
-                ) : (
-                  "Subscribe to get unlimited access to all designs"
-                )}
-              </p>
-              {hasActiveSubscription &&
-                activeSubscription?.subscriptionEndDate && (
-                  <p className="mt-1 text-xs opacity-80 flex items-center">
-                    <Clock className="w-3 h-3 mr-1" />
-                    Expires:{" "}
-                    {new Date(
-                      activeSubscription.subscriptionEndDate
-                    ).toLocaleDateString()}
-                  </p>
-                )}
-            </div>
+      {/* Header Section (Matching Categories Style) */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded border border-border bg-muted/40 text-foreground text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2.5">
+            File Vault
           </div>
-          {hasActiveSubscription && activeSubscription ? (
-            <div className="text-right">
-              <p className="text-4xl font-bold">
-                {activeSubscription.remainingDownloads === -1 ||
-                activeSubscription.remainingDownloads === 999999 ? (
-                  <Infinity className="w-10 h-10 mx-auto" />
-                ) : (
-                  activeSubscription.remainingDownloads
-                )}
-              </p>
-              <p className="text-sm opacity-90">Downloads</p>
-            </div>
-          ) : (
-            <Link
-              href="/pricing"
-              className="px-6 py-2.5 bg-card text-primary font-semibold rounded-lg hover:bg-muted/50 transition-colors text-sm"
-            >
-              View Plans
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+            Available Downloads
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1.5 max-w-xl leading-relaxed">
+            Instant download access to all individually purchased files and
+            active subscription assets.
+          </p>
+        </div>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => refetch()}
+            disabled={isLoading}
+            className="px-4 py-2.5 bg-card border border-border rounded-lg hover:bg-muted text-sm font-semibold text-foreground transition-colors flex items-center gap-2 disabled:opacity-50"
+          >
+            <RefreshCw
+              className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            <span>Refresh</span>
+          </button>
+          {!hasActiveSubscription && (
+            <Link href="/pricing">
+              <Button className="bg-primary text-primary-foreground font-semibold rounded-lg text-sm px-4 py-2.5 hover:bg-primary/90 transition-colors">
+                Unlock All via Subscription
+              </Button>
             </Link>
           )}
         </div>
       </div>
 
-      {/* Filter Tabs and Search */}
-      <div className="bg-card rounded-lg border border-border p-4 space-y-4">
-        {/* Filter Tabs */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setFilter("all")}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
-                filter === "all"
-                  ? "bg-primary text-white"
-                  : "bg-muted text-foreground hover:bg-gray-200"
-              }`}
-            >
-              All Designs
-            </button>
-            <button
-              onClick={() => setFilter("purchased")}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
-                filter === "purchased"
-                  ? "bg-primary text-white"
-                  : "bg-muted text-foreground hover:bg-gray-200"
-              }`}
-            >
-              Purchased ({purchasedDesigns.length})
-            </button>
-            {hasActiveSubscription && (
-              <button
-                onClick={() => setFilter("subscription")}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors text-sm ${
-                  filter === "subscription"
-                    ? "bg-primary text-white"
-                    : "bg-muted text-foreground hover:bg-gray-200"
-                }`}
-              >
-                <Sparkles className="w-4 h-4 inline-block mr-1" />
-                Subscription Access
-              </button>
-            )}
+      {/* Metrics Strip */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-6 border-b border-border">
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {availableDesigns.length}
           </div>
-
-          {/* Refresh Button */}
-          <button
-            onClick={() => refetch()}
-            className="p-2 text-muted-foreground hover:text-primary hover:bg-blue-50 rounded-lg transition-colors"
-            title="Refresh designs"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Ready to Download
+          </div>
         </div>
-
-        {/* Search and Category Filter */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <input
-            type="text"
-            placeholder="Search designs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-          />
-          <input
-            type="text"
-            placeholder="Filter by category..."
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-          />
-          <button
-            onClick={handleClearFilters}
-            className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2 text-sm font-medium"
-          >
-            <X className="w-4 h-4" />
-            <span>Clear Filters</span>
-          </button>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-primary">
+            {purchasedDesignIds.size}
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Single Licenses
+          </div>
+        </div>
+        <div className="border-r border-border/50 pr-4">
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            {hasActiveSubscription ? "Active" : "None"}
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Subscription
+          </div>
+        </div>
+        <div>
+          <div className="text-3xl sm:text-4xl font-extrabold text-foreground">
+            ZIP / Source
+          </div>
+          <div className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mt-1.5">
+            Production Ready
+          </div>
         </div>
       </div>
 
-      {/* Designs Grid */}
-      {isLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground text-sm">Loading your designs...</p>
-          </div>
+      {/* Filter & Search Toolbar */}
+      <div className="p-5 rounded-xl border border-border bg-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* Search */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search available files..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-8 py-2 text-sm bg-card border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none transition-colors"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
         </div>
-      ) : uniqueDesigns.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {uniqueDesigns.map((design: DesignForDownload) => {
+
+        {/* Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setFilter("all")}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${
+              filter === "all"
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-card text-muted-foreground border-border hover:bg-muted"
+            }`}
+          >
+            All Access
+          </button>
+          <button
+            onClick={() => setFilter("purchased")}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${
+              filter === "purchased"
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-card text-muted-foreground border-border hover:bg-muted"
+            }`}
+          >
+            Direct Purchases ({purchasedDesignIds.size})
+          </button>
+          {hasActiveSubscription && (
+            <button
+              onClick={() => setFilter("subscription")}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${
+                filter === "subscription"
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-card text-muted-foreground border-border hover:bg-muted"
+              }`}
+            >
+              Subscription Catalog
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Grid of Designs */}
+      {isLoading ? (
+        <div className="py-24 text-center">
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+          <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wider">
+            Loading downloadable assets...
+          </p>
+        </div>
+      ) : availableDesigns.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {availableDesigns.map((design) => {
             const isPurchased = purchasedDesignIds.has(design._id);
             const isDownloading = downloadingId === design._id;
-
-            // Safe helpers to support new backend shape while keeping compatibility
-            const preview =
-              (design as any)?.previewImageUrls?.[0] ||
-              (design as any)?.previewImageUrl ||
-              "";
-
-            const categoryName =
-              (design as any)?.mainCategory?.name ||
-              (design as any)?.subCategory?.name ||
-              design.category?.name ||
-              "Uncategorized";
-
-            const designerName =
-              (design as any)?.designer?.name ||
-              (design as any)?.designerName ||
-              "";
+            const previewUrl =
+              (design as any).previewImageUrls?.[0] || design.previewImageUrl;
 
             return (
               <div
                 key={design._id}
-                className="bg-card relative rounded-lg border border-border overflow-hidden hover:shadow-md transition-all group"
+                className="border border-border rounded-xl bg-card overflow-hidden flex flex-col hover:border-foreground/40 transition-colors"
               >
-                {/* Design Image */}
-                <Link
-                  href={`/designs/${design._id}`}
-                  className="block relative aspect-video overflow-hidden bg-muted"
-                >
-                  {preview ? (
+                {/* Thumbnail */}
+                <div className="relative aspect-[16/10] bg-muted border-b border-border overflow-hidden">
+                  {previewUrl ? (
                     <Image
-                      src={preview}
+                      src={previewUrl}
                       alt={design.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Package className="w-16 h-16 text-muted-foreground" />
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      <Layers className="w-10 h-10" />
                     </div>
                   )}
 
-                  {/* Access Badge */}
-                  <div className="absolute top-2 left-2">
+                  {/* Badge */}
+                  <div className="absolute top-3 left-3">
                     {isPurchased ? (
-                      <span className="px-2.5 py-1 bg-primary text-white text-xs font-semibold rounded-lg">
+                      <span className="px-2.5 py-1 rounded text-xs font-semibold bg-green-50 text-green-700 border border-green-200 dark:bg-green-950/40 dark:border-green-800 dark:text-green-400 uppercase tracking-wider">
                         Purchased
                       </span>
                     ) : (
-                      <span className="px-2.5 py-1 bg-primary text-white text-xs font-semibold rounded-lg flex items-center">
-                        <Sparkles className="w-3 h-3 mr-1" />
+                      <span className="px-2.5 py-1 rounded text-xs font-semibold bg-primary text-primary-foreground uppercase tracking-wider">
                         Subscription
                       </span>
                     )}
                   </div>
-                </Link>
-                {/* Price Badge */}
-                <div className="absolute top-3 right-3">
-                  <span className="bg-primary text-white text-sm px-3 py-1.5 rounded-md font-semibold shadow-sm">
-                    {design.currencyDisplay}
-                    {typeof design.discountedPrice === "number" && design.discountedPrice >= 0
-                      ? design.discountedPrice
-                      : design.basePrice}
-                  </span>
-                </div>
-                <div className="absolute top-12 right-3">
-                  <span className="bg-card text-muted-foreground text-sm px-2 py-1 rounded-md font-semibold shadow-sm line-through">
-                    {design.currencyDisplay}
-                    {typeof design.basePrice === "number" &&
-                    design.basePrice > 0 &&
-                    typeof design.discountedPrice === "number" &&
-                    design.discountedPrice >= 0 &&
-                    design.discountedPrice < design.basePrice
-                      ? design.basePrice
-                      : ""}
-                  </span>
                 </div>
 
-                {/* Design Info */}
-                <div className="p-4">
-                  <Link href={`/designs/${design._id}`}>
-                    <h3 className="text-base font-bold text-foreground mb-2 hover:text-primary transition-colors line-clamp-1">
+                {/* Details */}
+                <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                  <div>
+                    <h3 className="text-base font-bold text-foreground truncate">
                       {design.title}
                     </h3>
-                  </Link>
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                    {design.description}
-                  </p>
-
-                  <div className="flex items-center justify-between mb-3 text-sm text-muted-foreground">
-                    <span className="flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {new Date(design.createdAt).toLocaleDateString()}
-                    </span>
-                    <span className="px-2 py-1 bg-muted rounded text-xs font-medium">
-                      {categoryName}
-                    </span>
+                    <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 truncate">
+                      by {(design as any).designer?.name || (design as any).designerName || "LZ Designer"}
+                    </p>
                   </div>
 
-                  {/* Download Button */}
-                  <button
-                    onClick={() => handleDownload(design._id, design.title)}
-                    disabled={isDownloading || downloadLoading}
-                    className="w-full py-2.5 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm"
-                  >
-                    {isDownloading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Downloading...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Download className="w-4 h-4" />
-                        <span>Download Now</span>
-                      </>
-                    )}
-                  </button>
+                  <div className="flex items-center justify-between gap-3 pt-3 border-t border-border">
+                    <Link
+                      href={`/designs/${design._id}`}
+                      className="text-sm font-semibold text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+                    >
+                      <span>Details</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </Link>
+
+                    <Button
+                      onClick={() => handleDownload(design._id)}
+                      disabled={isDownloading || downloadLoading}
+                      className="bg-primary text-primary-foreground font-bold rounded-lg text-sm px-4 py-2 hover:bg-primary/90 disabled:opacity-50 transition-colors flex items-center gap-1.5"
+                    >
+                      {isDownloading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Generating...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Download className="w-4 h-4" />
+                          <span>Download</span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
       ) : (
-        <div className="bg-card rounded-lg border border-border p-12 text-center">
-          <AlertCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">
-            No designs available
+        <div className="p-14 text-center rounded-xl border border-border bg-card">
+          <Download className="w-12 h-12 text-muted-foreground/60 mx-auto mb-3" />
+          <h3 className="text-base font-bold text-foreground">
+            No downloadable assets found
           </h3>
-          <p className="text-muted-foreground mb-6 text-sm">
-            {filter === "purchased"
-              ? "You haven't purchased any designs yet."
-              : "Purchase designs or subscribe to start downloading!"}
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
+            {hasActiveSubscription
+              ? "No assets match your search query."
+              : "You have not purchased any individual assets yet, and do not have an active subscription."}
           </p>
-          <div className="flex items-center justify-center space-x-4">
-            <Link
-              href="/designs"
-              className="px-6 py-2.5 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors text-sm"
-            >
-              Browse Designs
+          <div className="mt-5 flex items-center justify-center gap-3">
+            <Link href="/designs">
+              <Button
+                variant="outline"
+                className="border-border hover:border-foreground/40 bg-card text-foreground font-semibold rounded-lg text-sm px-5 py-2.5 transition-colors"
+              >
+                Browse Designs
+              </Button>
             </Link>
             {!hasActiveSubscription && (
-              <Link
-                href="/pricing"
-                className="px-6 py-2.5 border border-border text-foreground font-medium rounded-lg hover:bg-muted/50 transition-colors text-sm"
-              >
-                View Pricing
+              <Link href="/pricing">
+                <Button className="bg-primary text-primary-foreground font-semibold rounded-lg text-sm px-5 py-2.5 hover:bg-primary/90 transition-colors">
+                  View Subscriptions
+                </Button>
               </Link>
             )}
           </div>
         </div>
       )}
-
-      {/* Pagination for subscription view */}
-      {hasActiveSubscription &&
-        allDesignsData?.pagination &&
-        allDesignsData.pagination.totalPages > 1 && (
-          <div className="flex items-center justify-center space-x-2">
-            <button
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-              className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-            >
-              Previous
-            </button>
-            <span className="px-4 py-2 text-foreground text-sm">
-              Page {page} of {allDesignsData.pagination.totalPages}
-            </span>
-            <button
-              onClick={() => setPage(page + 1)}
-              disabled={page >= allDesignsData.pagination.totalPages}
-              className="px-4 py-2 border border-border rounded-lg hover:bg-muted/50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-            >
-              Next
-            </button>
-          </div>
-        )}
     </div>
   );
 }

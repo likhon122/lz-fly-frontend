@@ -12,7 +12,6 @@ import {
   Eye,
   Search,
   TrendingUp,
-  DollarSign,
   Users,
   Calendar,
   CreditCard,
@@ -58,7 +57,7 @@ interface Purchase {
     duration?: string;
   };
   currencyDisplay?: string;
-  currencyCode?: string;  
+  currencyCode?: string;
   amount: number;
   currency?: string;
   status: PurchaseStatus;
@@ -143,14 +142,9 @@ export default function PurchasesPage() {
   );
 
   const { data, isLoading, refetch } = useGetAllPurchasesQuery(queryParams);
-
-  console.log(data);
-
   const { data: analyticsData } = useGetPurchaseAnalyticsQuery({
     period: "monthly",
   });
-
-  console.log(analyticsData);
 
   const [updateStatus, { isLoading: isUpdating }] =
     useUpdatePurchaseStatusMutation();
@@ -275,51 +269,51 @@ export default function PurchasesPage() {
   const getStatusColor = (status: PurchaseStatus | string) => {
     switch (status) {
       case "completed":
-        return "bg-green-100 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 dark:border-emerald-500/20";
+        return "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20";
       case "pending":
-        return "bg-yellow-100 text-yellow-700 border-amber-500/30 dark:border-amber-500/20";
+        return "bg-amber-500/10 text-amber-600 border border-amber-500/20";
       case "cancelled":
       case "refunded":
-        return "bg-red-100 text-red-600 dark:text-red-400 border-red-500/30 dark:border-red-500/20";
+        return "bg-red-500/10 text-red-600 border border-red-500/20";
       case "expired":
-        return "bg-muted text-foreground border-border";
+        return "bg-muted text-muted-foreground border border-border";
       default:
-        return "bg-muted text-foreground border-border";
+        return "bg-muted text-foreground border border-border";
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Purchase Management
-          </h1>
-          <p className="mt-2 text-muted-foreground">
-            Manage all customer purchases and subscriptions
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => refetch()}
-            disabled={isLoading}
-            className="px-4 py-2 bg-card border border-border rounded-xl hover:bg-muted/50 transition-colors flex items-center gap-2 disabled:opacity-50"
-          >
-            <RefreshCw
-              className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
-            />
-            <span className="text-sm font-medium">Refresh</span>
-          </button>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:shadow-xl dark:shadow-primary/10 transition-all flex items-center gap-2"
-          >
-            <Filter className="w-4 h-4" />
-            <span className="text-sm font-medium">
-              {showFilters ? "Hide" : "Show"} Filters
-            </span>
-          </button>
+      <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              Purchase Management
+            </h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Manage and monitor all customer purchases and subscriptions
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => refetch()}
+              disabled={isLoading}
+              className="px-4 py-2 bg-background border border-border rounded-lg hover:bg-muted text-foreground transition-colors flex items-center gap-2 text-sm font-medium disabled:opacity-50"
+            >
+              <RefreshCw
+                className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`}
+              />
+              <span>Refresh</span>
+            </button>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-colors flex items-center gap-2 text-sm"
+            >
+              <Filter className="w-4 h-4" />
+              <span>{showFilters ? "Hide" : "Show"} Filters</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -327,111 +321,113 @@ export default function PurchasesPage() {
       {analytics && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Total Revenue */}
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
+          <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              {/* < className="w-8 h-8 opacity-80" /> */}
-              <ArrowUpRight className="w-5 h-5" />
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Total Revenue
+              </span>
+              <ArrowUpRight className="w-4 h-4 text-emerald-600" />
             </div>
-            <h3 className="text-sm font-medium opacity-90">Total Revenue</h3>
-            <p className="text-2xl font-bold mt-1">
-              {purchases[0]?.currencyDisplay ?? "৳"}{analytics.totalRevenue?.toFixed(2) || "0.00"}
+            <p className="text-2xl font-bold text-foreground">
+              {purchases[0]?.currencyDisplay ?? "৳"}
+              {analytics?.totalRevenue != null ? analytics.totalRevenue.toFixed(2) : "0.00"}
             </p>
-            <p className="text-xs opacity-80 mt-1">All time earnings</p>
+            <p className="text-xs text-muted-foreground mt-1">All time earnings</p>
           </div>
 
           {/* Total Purchases */}
-          <div className="bg-gradient-to-br from-primary/70 via-primary to-primary/90 dark:from-primary/40 dark:via-primary/60 dark:to-primary/50 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
+          <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              <ShoppingCart className="w-8 h-8 opacity-80" />
-              <span className="text-xl font-bold">
-                 {analytics.totalPurchases || 0}
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Total Purchases
               </span>
+              <ShoppingCart className="w-4 h-4 text-primary" />
             </div>
-            <h3 className="text-sm font-medium opacity-90">Total Purchases</h3>
-            <p className="text-2xl font-bold mt-1">
+            <p className="text-2xl font-bold text-foreground">
               {analytics.totalPurchases || 0}
             </p>
-            <p className="text-xs opacity-80 mt-1">Lifetime orders</p>
+            <p className="text-xs text-muted-foreground mt-1">Lifetime orders</p>
           </div>
 
           {/* Completed */}
-          <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
+          <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              <CheckCircle className="w-8 h-8 opacity-80" />
-              <span className="text-xl font-bold">
-                {analytics.activePurchases || 0}
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Completed
               </span>
+              <CheckCircle className="w-4 h-4 text-emerald-600" />
             </div>
-            <h3 className="text-sm font-medium opacity-90">Completed</h3>
-            <p className="text-2xl font-bold mt-1">
+            <p className="text-2xl font-bold text-foreground">
               {analytics.activePurchases || 0}
             </p>
-            <p className="text-xs opacity-80 mt-1">Active purchases</p>
+            <p className="text-xs text-muted-foreground mt-1">Active purchases</p>
           </div>
 
           {/* Pending */}
-          <div className="bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
+          <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              <Clock className="w-8 h-8 opacity-80" />
-              <span className="text-xl font-bold">
-                {analytics.pendingPurchases || 0}
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Pending
               </span>
+              <Clock className="w-4 h-4 text-amber-600" />
             </div>
-            <h3 className="text-sm font-medium opacity-90">Pending</h3>
-            <p className="text-2xl font-bold mt-1">
+            <p className="text-2xl font-bold text-foreground">
               {analytics.pendingPurchases || 0}
             </p>
-            <p className="text-xs opacity-80 mt-1">Awaiting payment</p>
+            <p className="text-xs text-muted-foreground mt-1">Awaiting payment</p>
           </div>
 
           {/* Average Order Value */}
-          <div className="bg-gradient-to-br from-rose-500 to-red-600 rounded-xl p-4 sm:p-5 text-white shadow-xl dark:shadow-primary/10">
+          <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
-              <TrendingUp className="w-8 h-8 opacity-80" />
-              <ArrowUpRight className="w-5 h-5" />
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Avg Order Value
+              </span>
+              <TrendingUp className="w-4 h-4 text-primary" />
             </div>
-            <h3 className="text-sm font-medium opacity-90">Avg Order Value</h3>
-            <p className="text-2xl font-bold mt-1">
-              {purchases[0]?.currencyDisplay ?? "৳"}{analytics.averageOrderValue?.toFixed(2) || "0.00"}
+            <p className="text-2xl font-bold text-foreground">
+              {purchases[0]?.currencyDisplay ?? "৳"}
+              {analytics?.averageOrderValue != null ? analytics.averageOrderValue.toFixed(2) : "0.00"}
             </p>
-            <p className="text-xs opacity-80 mt-1">Per transaction</p>
+            <p className="text-xs text-muted-foreground mt-1">Per transaction</p>
           </div>
         </div>
       )}
 
       {/* Page Stats (from current filter) */}
       {stats && (
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200">
+        <div className="bg-card rounded-xl p-4 border border-border">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold text-primary">
-                {purchases[0]?.currencyDisplay ?? "৳"}{stats.totalRevenue.toFixed(2)}
+              <p className="text-2xl font-bold text-foreground">
+                {purchases[0]?.currencyDisplay ?? "৳"}
+                {stats.totalRevenue.toFixed(2)}
               </p>
-              <p className="text-xs text-muted-foreground">Page Revenue</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Page Revenue</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-primary">
+              <p className="text-2xl font-bold text-emerald-600">
                 {stats.completed}
               </p>
-              <p className="text-xs text-muted-foreground">Completed</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Completed</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-yellow-600">
+              <p className="text-2xl font-bold text-amber-600">
                 {stats.pending}
               </p>
-              <p className="text-xs text-muted-foreground">Pending</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Pending</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-red-500">
+              <p className="text-2xl font-bold text-red-600">
                 {stats.cancelled}
               </p>
-              <p className="text-xs text-muted-foreground">Cancelled</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Cancelled</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-primary">
+              <p className="text-2xl font-bold text-foreground">
                 {stats.conversionRate}%
               </p>
-              <p className="text-xs text-muted-foreground">Conversion</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Conversion</p>
             </div>
           </div>
         </div>
@@ -439,14 +435,14 @@ export default function PurchasesPage() {
 
       {/* Advanced Filters Panel */}
       {showFilters && (
-        <div className="bg-card rounded-xl shadow-sm border border-gray-100 p-4 sm:p-5">
+        <div className="bg-card rounded-xl border border-border p-4 sm:p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-foreground">
+            <h3 className="text-base font-semibold text-foreground">
               Advanced Filters
             </h3>
             <button
               onClick={clearFilters}
-              className="text-sm text-primary hover:text-purple-700 font-medium"
+              className="text-xs font-semibold text-primary hover:underline"
             >
               Clear All
             </button>
@@ -454,7 +450,7 @@ export default function PurchasesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Search */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
                 Search Customer
               </label>
               <div className="relative">
@@ -464,14 +460,14 @@ export default function PurchasesPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Name or email..."
-                  className="w-full pl-10 pr-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full pl-9 pr-3.5 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground"
                 />
               </div>
             </div>
 
             {/* Status Filter */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
                 Status
               </label>
               <select
@@ -479,7 +475,7 @@ export default function PurchasesPage() {
                 onChange={(e) =>
                   setStatusFilter(e.target.value as PurchaseStatus | "")
                 }
-                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
               >
                 <option value="">All Statuses</option>
                 <option value="pending">Pending</option>
@@ -492,7 +488,7 @@ export default function PurchasesPage() {
 
             {/* Type Filter */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
                 Purchase Type
               </label>
               <select
@@ -500,7 +496,7 @@ export default function PurchasesPage() {
                 onChange={(e) =>
                   setTypeFilter(e.target.value as PurchaseType | "")
                 }
-                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
               >
                 <option value="">All Types</option>
                 <option value="individual">Individual</option>
@@ -510,7 +506,7 @@ export default function PurchasesPage() {
 
             {/* Payment Method Filter */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
                 Payment Method
               </label>
               <select
@@ -518,7 +514,7 @@ export default function PurchasesPage() {
                 onChange={(e) =>
                   setPaymentMethodFilter(e.target.value as PaymentMethod | "")
                 }
-                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
               >
                 <option value="">All Methods</option>
                 <option value="credit_card">Credit Card</option>
@@ -531,8 +527,8 @@ export default function PurchasesPage() {
 
             {/* Min Amount */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Min Amount 
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
+                Min Amount
               </label>
               <input
                 type="number"
@@ -543,14 +539,14 @@ export default function PurchasesPage() {
                   )
                 }
                 placeholder="0.00"
-                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3.5 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground"
               />
             </div>
 
             {/* Max Amount */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
-                Max Amount 
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
+                Max Amount
               </label>
               <input
                 type="number"
@@ -561,33 +557,33 @@ export default function PurchasesPage() {
                   )
                 }
                 placeholder="999.99"
-                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3.5 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary placeholder:text-muted-foreground"
               />
             </div>
 
             {/* Start Date */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
                 Start Date
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
               />
             </div>
 
             {/* End Date */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-2">
+              <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
                 End Date
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
               />
             </div>
           </div>
@@ -595,74 +591,74 @@ export default function PurchasesPage() {
       )}
 
       {/* Purchases Table */}
-      <div className="bg-card rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
-            <p className="text-muted-foreground">Loading purchases...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent mb-3"></div>
+            <p className="text-sm text-muted-foreground">Loading purchases...</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Order ID
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Type
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Customer
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Item
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Payment
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Status
                   </th>
                   <th
-                    className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase cursor-pointer hover:text-primary"
+                    className="px-5 py-3.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground transition-colors"
                     onClick={() => handleSort("createdAt")}
                   >
                     <div className="flex items-center gap-1">
-                      Date
+                      <span>Date</span>
                       {sortBy === "createdAt" &&
                         (sortOrder === "asc" ? (
-                          <ChevronUp className="w-4 h-4" />
+                          <ChevronUp className="w-3.5 h-3.5" />
                         ) : (
-                          <ChevronDown className="w-4 h-4" />
+                          <ChevronDown className="w-3.5 h-3.5" />
                         ))}
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-right text-xs font-semibold text-muted-foreground uppercase">
+                  <th className="px-5 py-3.5 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-border">
                 {purchases.map((purchase: Purchase) => (
                   <tr
                     key={purchase._id}
-                    className="hover:bg-muted/50 transition-colors"
+                    className="hover:bg-muted/30 transition-colors"
                   >
-                    <td className="px-6 py-4">
-                      <p className="font-mono text-sm text-foreground font-semibold">
+                    <td className="px-5 py-3.5">
+                      <p className="font-mono text-xs font-bold text-foreground">
                         #{purchase._id.slice(-8).toUpperCase()}
                       </p>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold ${
                           purchase.purchaseType === "subscription"
-                            ? "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
-                            : "bg-gradient-to-r from-blue-100 to-indigo-100 text-primary"
+                            ? "bg-primary/10 text-primary border border-primary/20"
+                            : "bg-muted text-foreground border border-border"
                         }`}
                       >
                         {purchase.purchaseType === "subscription" ? (
@@ -670,16 +666,16 @@ export default function PurchasesPage() {
                         ) : (
                           <Package className="w-3 h-3" />
                         )}
-                        {purchase.purchaseType}
+                        <span className="capitalize">{purchase.purchaseType}</span>
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold text-sm">
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-xs">
                           {purchase.user?.name?.[0]?.toUpperCase() || "?"}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-foreground">
+                          <p className="text-sm font-semibold text-foreground">
                             {purchase.user?.name || "N/A"}
                           </p>
                           <p className="text-xs text-muted-foreground">
@@ -688,9 +684,9 @@ export default function PurchasesPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       <div>
-                        <p className="text-sm text-foreground">
+                        <p className="text-sm font-medium text-foreground">
                           {purchase.design?.title ||
                             purchase.pricingPlan?.name ||
                             "N/A"}
@@ -702,23 +698,24 @@ export default function PurchasesPage() {
                         </p>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <p className="text-lg font-bold text-foreground">
-                        {purchase.currencyDisplay ?? "৳"}{purchase.amount?.toFixed(2) || "0.00"}
+                    <td className="px-5 py-3.5">
+                      <p className="text-sm font-bold text-foreground">
+                        {purchase.currencyDisplay ?? "৳"}
+                        {purchase.amount?.toFixed(2) || "0.00"}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {purchase.currency?.toUpperCase() || "BDT"}
                       </p>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4 text-muted-foreground" />
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-1.5">
+                        <CreditCard className="w-3.5 h-3.5 text-muted-foreground" />
                         <span className="text-sm text-foreground capitalize">
                           {purchase.paymentMethod?.replace("_", " ") || "N/A"}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       <select
                         value={purchase.status}
                         onChange={(e) => {
@@ -735,9 +732,9 @@ export default function PurchasesPage() {
                           }
                         }}
                         disabled={isUpdating}
-                        className={`px-3 py-1 rounded-xl text-xs font-medium border-2 cursor-pointer transition-all ${getStatusColor(
+                        className={`px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer focus:outline-none transition-colors ${getStatusColor(
                           purchase.status
-                        )} hover:shadow-md disabled:opacity-50`}
+                        )} disabled:opacity-50`}
                       >
                         <option value="pending">Pending</option>
                         <option value="completed">Completed</option>
@@ -746,7 +743,7 @@ export default function PurchasesPage() {
                         <option value="refunded">Refunded</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-3.5">
                       <p className="text-sm text-foreground">
                         {new Date(purchase.createdAt).toLocaleDateString()}
                       </p>
@@ -757,13 +754,13 @@ export default function PurchasesPage() {
                         })}
                       </p>
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-5 py-3.5 text-right">
                       <button
                         onClick={() => setSelectedPurchase(purchase)}
-                        className="p-2 text-primary hover:bg-purple-50 rounded-xl transition-colors"
+                        className="p-1.5 text-muted-foreground hover:text-foreground rounded-lg border border-border hover:bg-muted transition-colors inline-flex items-center"
                         title="View Details"
                       >
-                        <Eye className="w-5 h-5" />
+                        <Eye className="w-4 h-4" />
                       </button>
                     </td>
                   </tr>
@@ -772,8 +769,8 @@ export default function PurchasesPage() {
             </table>
             {purchases.length === 0 && (
               <div className="text-center py-12">
-                <ShoppingCart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-muted-foreground">No purchases found</p>
+                <ShoppingCart className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">No purchases found</p>
               </div>
             )}
           </div>
@@ -786,17 +783,17 @@ export default function PurchasesPage() {
           <button
             onClick={() => setPage(page - 1)}
             disabled={page === 1}
-            className="px-4 py-2 border border-border rounded-xl hover:bg-muted/50 disabled:opacity-50"
+            className="px-4 py-2 border border-border rounded-lg bg-card hover:bg-muted text-sm font-medium text-foreground disabled:opacity-50 transition-colors"
           >
             Previous
           </button>
-          <span className="px-4 py-2 text-foreground">
+          <span className="px-4 py-2 text-sm text-muted-foreground font-medium">
             Page {page} of {data.pagination.pages}
           </span>
           <button
             onClick={() => setPage(page + 1)}
             disabled={page >= data.pagination.pages}
-            className="px-4 py-2 border border-border rounded-xl hover:bg-muted/50 disabled:opacity-50"
+            className="px-4 py-2 border border-border rounded-lg bg-card hover:bg-muted text-sm font-medium text-foreground disabled:opacity-50 transition-colors"
           >
             Next
           </button>
@@ -806,54 +803,50 @@ export default function PurchasesPage() {
       {/* Enhanced Detail Modal */}
       {selectedPurchase && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedPurchase(null)}
         >
           <div
-            className="bg-card rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-card rounded-xl border border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 sm:p-5 rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold">Purchase Details</h2>
-                  <p className="text-purple-100 text-sm mt-1">
-                    Order #{selectedPurchase._id.slice(-8).toUpperCase()}
-                  </p>
-                </div>
-                <div
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl ${getStatusColor(
-                    selectedPurchase.status
-                  )}`}
-                >
-                  {getStatusIcon(selectedPurchase.status)}
-                  <span className="font-semibold capitalize">
-                    {selectedPurchase.status}
-                  </span>
-                </div>
+            <div className="sticky top-0 bg-card border-b border-border p-4 sm:p-5 rounded-t-xl z-10 flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Purchase Details</h2>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Order #{selectedPurchase._id.slice(-8).toUpperCase()}
+                </p>
+              </div>
+              <div
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold ${getStatusColor(
+                  selectedPurchase.status
+                )}`}
+              >
+                {getStatusIcon(selectedPurchase.status)}
+                <span className="capitalize">{selectedPurchase.status}</span>
               </div>
             </div>
 
-            <div className="p-4 sm:p-5 space-y-6">
+            <div className="p-4 sm:p-6 space-y-5">
               {/* Customer Information */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-5 border border-primary/30 dark:border-primary/20">
-                <div className="flex items-center gap-3 mb-4">
-                  <Users className="w-6 h-6 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">
+              <div className="bg-muted/30 rounded-xl p-4 sm:p-5 border border-border">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-5 h-5 text-primary" />
+                  <h3 className="text-base font-semibold text-foreground">
                     Customer Information
                   </h3>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Name</p>
-                    <p className="text-foreground font-semibold mt-1">
+                    <p className="text-xs font-medium text-muted-foreground">Name</p>
+                    <p className="text-sm font-semibold text-foreground mt-0.5">
                       {selectedPurchase.user?.name || "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Email</p>
-                    <p className="text-foreground mt-1">
+                    <p className="text-xs font-medium text-muted-foreground">Email</p>
+                    <p className="text-sm font-medium text-foreground mt-0.5">
                       {selectedPurchase.user?.email || "N/A"}
                     </p>
                   </div>
@@ -861,58 +854,58 @@ export default function PurchasesPage() {
               </div>
 
               {/* Purchase Information */}
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 sm:p-5 border border-purple-200">
-                <div className="flex items-center gap-3 mb-4">
-                  <ShoppingCart className="w-6 h-6 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">
+              <div className="bg-muted/30 rounded-xl p-4 sm:p-5 border border-border">
+                <div className="flex items-center gap-2 mb-3">
+                  <ShoppingCart className="w-5 h-5 text-primary" />
+                  <h3 className="text-base font-semibold text-foreground">
                     Purchase Information
                   </h3>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">
+                    <p className="text-xs font-medium text-muted-foreground">
                       Purchase Type
                     </p>
-                    <p className="text-foreground font-semibold mt-1 capitalize">
+                    <p className="text-sm font-semibold text-foreground mt-0.5 capitalize">
                       {selectedPurchase.purchaseType}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Item</p>
-                    <p className="text-foreground font-semibold mt-1">
+                    <p className="text-xs font-medium text-muted-foreground">Item</p>
+                    <p className="text-sm font-semibold text-foreground mt-0.5">
                       {selectedPurchase.design?.title ||
                         selectedPurchase.pricingPlan?.name ||
                         "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">Amount</p>
-                    <p className="text-2xl font-bold text-primary mt-1">
-                      {selectedPurchase.currencyDisplay}{selectedPurchase.amount?.toFixed(2) || "0.00"}
+                    <p className="text-xs font-medium text-muted-foreground">Amount</p>
+                    <p className="text-lg font-bold text-foreground mt-0.5">
+                      {selectedPurchase.currencyDisplay}
+                      {selectedPurchase.amount?.toFixed(2) || "0.00"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">
+                    <p className="text-xs font-medium text-muted-foreground">
                       Currency
                     </p>
-                    <p className="text-foreground font-semibold mt-1">
+                    <p className="text-sm font-semibold text-foreground mt-0.5">
                       {selectedPurchase.currency?.toUpperCase() || "USD"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">
+                    <p className="text-xs font-medium text-muted-foreground">
                       Payment Method
                     </p>
-                    <p className="text-foreground font-semibold mt-1 capitalize">
-                      {selectedPurchase.paymentMethod?.replace("_", " ") ||
-                        "N/A"}
+                    <p className="text-sm font-semibold text-foreground mt-0.5 capitalize">
+                      {selectedPurchase.paymentMethod?.replace("_", " ") || "N/A"}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">
+                    <p className="text-xs font-medium text-muted-foreground">
                       Purchase Date
                     </p>
-                    <p className="text-foreground mt-1">
+                    <p className="text-sm text-foreground mt-0.5">
                       {new Date(
                         selectedPurchase.purchaseDate ||
                           selectedPurchase.createdAt
@@ -924,35 +917,35 @@ export default function PurchasesPage() {
 
               {/* Subscription Details (if applicable) */}
               {selectedPurchase.purchaseType === "subscription" && (
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 border border-emerald-500/30 dark:border-emerald-500/20">
-                  <div className="flex items-center gap-3 mb-4">
-                    <RefreshCw className="w-6 h-6 text-primary" />
-                    <h3 className="text-lg font-semibold text-foreground">
+                <div className="bg-muted/30 rounded-xl p-4 sm:p-5 border border-border">
+                  <div className="flex items-center gap-2 mb-3">
+                    <RefreshCw className="w-5 h-5 text-primary" />
+                    <h3 className="text-base font-semibold text-foreground">
                       Subscription Details
                     </h3>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">
                         Plan Name
                       </p>
-                      <p className="text-foreground font-semibold mt-1">
+                      <p className="text-sm font-semibold text-foreground mt-0.5">
                         {selectedPurchase.pricingPlan?.name || "N/A"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">
                         Duration
                       </p>
-                      <p className="text-foreground font-semibold mt-1">
+                      <p className="text-sm font-semibold text-foreground mt-0.5">
                         {selectedPurchase.pricingPlan?.duration || "N/A"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">
                         Start Date
                       </p>
-                      <p className="text-foreground mt-1">
+                      <p className="text-sm text-foreground mt-0.5">
                         {selectedPurchase.subscriptionStartDate
                           ? new Date(
                               selectedPurchase.subscriptionStartDate
@@ -961,10 +954,10 @@ export default function PurchasesPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">
                         End Date
                       </p>
-                      <p className="text-foreground mt-1">
+                      <p className="text-sm text-foreground mt-0.5">
                         {selectedPurchase.subscriptionEndDate
                           ? new Date(
                               selectedPurchase.subscriptionEndDate
@@ -973,18 +966,18 @@ export default function PurchasesPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">
                         Downloads Remaining
                       </p>
-                      <p className="text-2xl font-bold text-primary mt-1">
+                      <p className="text-lg font-bold text-foreground mt-0.5">
                         {selectedPurchase.remainingDownloads ?? "Unlimited"}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">
                         Activated At
                       </p>
-                      <p className="text-foreground mt-1">
+                      <p className="text-sm text-foreground mt-0.5">
                         {selectedPurchase.activatedAt
                           ? new Date(
                               selectedPurchase.activatedAt
@@ -998,23 +991,21 @@ export default function PurchasesPage() {
 
               {/* Billing Address */}
               {selectedPurchase.billingAddress && (
-                <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 sm:p-5 border border-orange-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Calendar className="w-6 h-6 text-orange-600" />
-                    <h3 className="text-lg font-semibold text-foreground">
+                <div className="bg-muted/30 rounded-xl p-4 sm:p-5 border border-border">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Calendar className="w-5 h-5 text-primary" />
+                    <h3 className="text-base font-semibold text-foreground">
                       Billing Address
                     </h3>
                   </div>
-                  <div className="space-y-2">
-                    <p className="text-foreground">
-                      {selectedPurchase.billingAddress.street}
-                    </p>
-                    <p className="text-foreground">
+                  <div className="space-y-1 text-sm text-foreground">
+                    <p>{selectedPurchase.billingAddress.street}</p>
+                    <p>
                       {selectedPurchase.billingAddress.city},{" "}
                       {selectedPurchase.billingAddress.state}{" "}
                       {selectedPurchase.billingAddress.zipCode}
                     </p>
-                    <p className="text-foreground font-semibold">
+                    <p className="font-semibold">
                       {selectedPurchase.billingAddress.country}
                     </p>
                   </div>
@@ -1022,34 +1013,36 @@ export default function PurchasesPage() {
               )}
 
               {/* Notes Section */}
-              <div className="bg-gradient-to-br from-gray-50 to-slate-50 rounded-xl p-4 sm:p-5 border border-border">
-                <div className="flex items-center gap-3 mb-4">
-                  <FileText className="w-6 h-6 text-muted-foreground" />
-                  <h3 className="text-lg font-semibold text-foreground">Notes</h3>
+              <div className="bg-muted/30 rounded-xl p-4 sm:p-5 border border-border">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-5 h-5 text-muted-foreground" />
+                  <h3 className="text-base font-semibold text-foreground">Notes</h3>
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {selectedPurchase.notes && (
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground mb-2">
+                      <p className="text-xs font-medium text-muted-foreground mb-1">
                         Customer Notes
                       </p>
-                      <p className="text-foreground bg-card p-3 rounded-xl border border-border">
+                      <p className="text-sm text-foreground bg-card p-3 rounded-lg border border-border">
                         {selectedPurchase.notes}
                       </p>
                     </div>
                   )}
                   {selectedPurchase.adminNotes && (
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground mb-2">
+                      <p className="text-xs font-medium text-muted-foreground mb-1">
                         Admin Notes
                       </p>
-                      <p className="text-foreground bg-amber-500/10 dark:bg-amber-500/15 p-3 rounded-xl border border-amber-500/30 dark:border-amber-500/20">
+                      <p className="text-sm text-foreground bg-amber-500/10 p-3 rounded-lg border border-amber-500/20">
                         {selectedPurchase.adminNotes}
                       </p>
                     </div>
                   )}
                   {!selectedPurchase.notes && !selectedPurchase.adminNotes && (
-                    <p className="text-muted-foreground italic">No notes available</p>
+                    <p className="text-sm text-muted-foreground italic">
+                      No notes available
+                    </p>
                   )}
                   <button
                     onClick={() => {
@@ -1058,9 +1051,9 @@ export default function PurchasesPage() {
                       setShowAdminNotesModal(true);
                       setSelectedPurchase(null);
                     }}
-                    className="px-4 py-2 bg-primary hover:bg-purple-700 text-white rounded-xl transition-colors flex items-center gap-2"
+                    className="px-3.5 py-1.5 bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold rounded-lg transition-colors inline-flex items-center gap-1.5"
                   >
-                    <FileText className="w-4 h-4" />
+                    <FileText className="w-3.5 h-3.5" />
                     Add Admin Notes
                   </button>
                 </div>
@@ -1068,10 +1061,10 @@ export default function PurchasesPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="sticky bottom-0 bg-muted/50 p-4 sm:p-5 rounded-b-2xl border-t border-border">
+            <div className="sticky bottom-0 bg-card p-4 sm:p-5 rounded-b-xl border-t border-border z-10">
               <button
                 onClick={() => setSelectedPurchase(null)}
-                className="w-full px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-semibold transition-all shadow-xl dark:shadow-primary/10 hover:shadow-2xl dark:shadow-primary/20"
+                className="w-full px-4 py-2.5 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg text-sm transition-colors"
               >
                 Close
               </button>
@@ -1085,7 +1078,7 @@ export default function PurchasesPage() {
         selectedPurchaseForNotes &&
         pendingStatusChange && (
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
             onClick={() => {
               setShowAdminNotesModal(false);
               setSelectedPurchaseForNotes(null);
@@ -1094,46 +1087,46 @@ export default function PurchasesPage() {
             }}
           >
             <div
-              className="bg-card rounded-2xl shadow-2xl max-w-lg w-full"
+              className="bg-card rounded-xl border border-border max-w-lg w-full overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-4 sm:p-5 rounded-t-2xl">
-                <h2 className="text-2xl font-bold">Update Purchase Status</h2>
-                <p className="text-purple-100 text-sm mt-1">
+              <div className="bg-muted/40 border-b border-border p-4 sm:p-5">
+                <h2 className="text-lg font-bold text-foreground">
+                  Update Purchase Status
+                </h2>
+                <p className="text-xs text-muted-foreground mt-0.5">
                   Order #{selectedPurchaseForNotes._id.slice(-8).toUpperCase()}{" "}
                   →{" "}
-                  <span className="font-semibold capitalize">
+                  <span className="font-semibold text-foreground capitalize">
                     {pendingStatusChange}
                   </span>
                 </p>
               </div>
               <div className="p-4 sm:p-5 space-y-4">
-                <div className="bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 dark:border-amber-500/20 rounded-xl p-4">
-                  <p className="text-sm text-yellow-800">
+                <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 text-sm text-amber-700 dark:text-amber-400">
+                  <p>
                     You are changing the status to{" "}
-                    <strong className="capitalize">
-                      {pendingStatusChange}
-                    </strong>
-                    . Please add any relevant notes below.
+                    <strong className="capitalize">{pendingStatusChange}</strong>.
+                    Please add any relevant notes below.
                   </p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
+                  <label className="block text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5">
                     Admin Notes (Optional)
                   </label>
                   <textarea
                     value={adminNotes}
                     onChange={(e) => setAdminNotes(e.target.value)}
                     placeholder="Add any internal notes about this status change..."
-                    rows={5}
+                    rows={4}
                     maxLength={500}
-                    className="w-full px-4 py-3 border border-border rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                    className="w-full px-3.5 py-2.5 border border-border rounded-lg bg-background text-sm text-foreground focus:outline-none focus:border-primary resize-none placeholder:text-muted-foreground"
                   />
-                  <p className="text-xs text-muted-foreground mt-2">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {adminNotes.length}/500 characters
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 pt-2">
                   <button
                     onClick={() => {
                       setShowAdminNotesModal(false);
@@ -1141,7 +1134,7 @@ export default function PurchasesPage() {
                       setPendingStatusChange(null);
                       setAdminNotes("");
                     }}
-                    className="flex-1 px-4 py-3 bg-muted hover:bg-gray-200 rounded-xl font-semibold text-foreground transition-colors"
+                    className="flex-1 px-4 py-2 bg-background border border-border hover:bg-muted rounded-lg font-semibold text-sm text-foreground transition-colors"
                   >
                     Cancel
                   </button>
@@ -1157,7 +1150,7 @@ export default function PurchasesPage() {
                       }
                     }}
                     disabled={isUpdating}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-semibold transition-all disabled:opacity-50"
+                    className="flex-1 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg font-semibold text-sm transition-colors disabled:opacity-50"
                   >
                     {isUpdating ? "Updating..." : "Update Status"}
                   </button>
@@ -1169,5 +1162,3 @@ export default function PurchasesPage() {
     </div>
   );
 }
-
-
