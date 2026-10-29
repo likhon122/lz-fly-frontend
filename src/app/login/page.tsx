@@ -19,6 +19,9 @@ import {
   Layers,
   ArrowRight,
   AlertCircle,
+  KeyRound,
+  Copy,
+  Check,
 } from "lucide-react";
 
 interface FormErrors {
@@ -40,6 +43,7 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -56,6 +60,22 @@ export default function LoginPage() {
         ...prev,
         [name]: "",
       }));
+    }
+  };
+
+  const handleFillSuperAdmin = () => {
+    setFormData({
+      email: "superadmin@gmail.com",
+      password: "SuperAdmin1234",
+    });
+    setErrors({});
+  };
+
+  const copyToClipboard = (text: string, field: string) => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
     }
   };
 
@@ -137,8 +157,76 @@ export default function LoginPage() {
                 Sign In
               </h1>
               <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-                Enter your registered credentials to access your dashboard and download vault.
+                Enter your credentials to access your user dashboard or admin control panel.
               </p>
+            </div>
+
+            {/* INTERVIEWER / REVIEWER DEMO CREDENTIALS CARD */}
+            <div className="mb-6 rounded-lg border border-primary/30 bg-muted/30 p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <KeyRound className="w-4 h-4 text-primary" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+                    Interviewer Demo Access
+                  </span>
+                </div>
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-primary text-primary-foreground uppercase tracking-wider">
+                  Super Admin
+                </span>
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Use these pre-configured credentials to evaluate the entire admin panel, revenue metrics, user management, and catalog controls:
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <div className="p-2.5 rounded border border-border bg-card flex flex-col justify-between">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground">Admin Email</span>
+                  <div className="flex items-center justify-between mt-1">
+                    <code className="text-foreground font-mono font-semibold text-xs">superadmin@gmail.com</code>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard("superadmin@gmail.com", "email")}
+                      className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+                      title="Copy email"
+                    >
+                      {copiedField === "email" ? (
+                        <Check className="w-3.5 h-3.5 text-green-600" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-2.5 rounded border border-border bg-card flex flex-col justify-between">
+                  <span className="text-[10px] uppercase font-bold text-muted-foreground">Password</span>
+                  <div className="flex items-center justify-between mt-1">
+                    <code className="text-foreground font-mono font-semibold text-xs">SuperAdmin1234</code>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard("SuperAdmin1234", "password")}
+                      className="text-muted-foreground hover:text-foreground p-1 transition-colors"
+                      title="Copy password"
+                    >
+                      {copiedField === "password" ? (
+                        <Check className="w-3.5 h-3.5 text-green-600" />
+                      ) : (
+                        <Copy className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleFillSuperAdmin}
+                className="w-full py-2 px-3 text-xs font-bold rounded border border-border bg-card hover:bg-muted text-foreground transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
+                <span>1-Click Auto-Fill Super Admin Credentials</span>
+              </button>
             </div>
 
             {/* General Error Banner */}
@@ -271,7 +359,7 @@ export default function LoginPage() {
                   </div>
                 ) : (
                   <div className="flex items-center justify-center gap-2">
-                    <span>Continue to Dashboard</span>
+                    <span>Sign In & Continue</span>
                     <ArrowRight className="w-4 h-4" />
                   </div>
                 )}
@@ -284,7 +372,7 @@ export default function LoginPage() {
             </form>
           </div>
 
-          {/* Right Column: Platform Overview & Integrity */}
+          {/* Right Column: Platform Overview & Admin Feature Highlights */}
           <div className="hidden lg:flex lg:col-span-5 bg-muted/30 border-l border-border p-8 flex-col justify-between">
             <div>
               <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">
@@ -304,10 +392,10 @@ export default function LoginPage() {
                   </div>
                   <div>
                     <div className="text-sm font-bold text-foreground">
-                      Protected Vault
+                      Super Admin Authority
                     </div>
                     <div className="text-xs sm:text-sm text-muted-foreground">
-                      Permanent access to all purchased files and invoices.
+                      Full access to pricing, purchases, user roles, downloads, and payments.
                     </div>
                   </div>
                 </div>
@@ -318,10 +406,10 @@ export default function LoginPage() {
                   </div>
                   <div>
                     <div className="text-sm font-bold text-foreground">
-                      500+ Production Assets
+                      Live Telemetry & Auditing
                     </div>
                     <div className="text-xs sm:text-sm text-muted-foreground">
-                      Organized across 50+ creative and technical disciplines.
+                      Real-time download stats, Stripe transactions, and review queues.
                     </div>
                   </div>
                 </div>
@@ -332,10 +420,10 @@ export default function LoginPage() {
                   </div>
                   <div>
                     <div className="text-sm font-bold text-foreground">
-                      Commercial Rights
+                      Instant Redirection
                     </div>
                     <div className="text-xs sm:text-sm text-muted-foreground">
-                      Deploy unlimited personal and client projects safely.
+                      Signing in with Super Admin automatically redirects to <code className="text-foreground font-mono">/admin</code>.
                     </div>
                   </div>
                 </div>
@@ -346,26 +434,26 @@ export default function LoginPage() {
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div>
                   <div className="text-base font-extrabold text-foreground">
-                    500+
+                    100%
                   </div>
                   <div className="text-xs text-muted-foreground uppercase font-semibold">
-                    Assets
+                    Admin Access
                   </div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-primary">
-                    100%
+                    Live
                   </div>
                   <div className="text-xs text-muted-foreground uppercase font-semibold">
-                    Verified
+                    Telemetry
                   </div>
                 </div>
                 <div>
                   <div className="text-base font-extrabold text-foreground">
-                    24/7
+                    RBAC
                   </div>
                   <div className="text-xs text-muted-foreground uppercase font-semibold">
-                    Availability
+                    Enabled
                   </div>
                 </div>
               </div>
